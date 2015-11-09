@@ -6,11 +6,11 @@ class SeaBlock :
 		self.__pressure  = pressure
 		self.__organisms = {}
 
-	def removeOrganism(id) :
+	def removeOrganism(self, id) :
 		del self.__organisms[id]
 
-	def addOrganism(id, Creature) :
+	def addOrganism(self, id, Creature) :
 		self.__organisms[id] = Creature
 
-	def setSunlight(val) :
+	def setSunlight(self, val) :
 		self.__sunlight = val
