@@ -8,3 +8,10 @@ TIME
 SPACE 
 -----
 2D (for Now, according to Nathan)
+
+
+
+Notes
+-----
+Where will we handle control flow, looping?
+

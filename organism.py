@@ -1,5 +1,5 @@
 
-class organism(threading.Thread):
+class Organism(threading.Thread):
     def __init__(self, location, ecosystem):
         threading.Thread.__init__(self)
         self.location = location
