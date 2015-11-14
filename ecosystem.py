@@ -1,6 +1,6 @@
 from sets import Set
 import location
-import seablock
+from seablock import SeaBlock
 
 class Ecosystem():
     def __init__(self, hdim, vdim):
@@ -9,15 +9,15 @@ class Ecosystem():
             row = []
             for j in range(vdim):
                 tempblock = SeaBlock()
-                row[j] = tempblock
-            self.ocean[i] = row
+                row.append(tempblock)
+            self.ocean.append(row)
         self.orgsList = Set()
 
     def reportDeath(self, organism):
         organism.join()
         self.orgsList.remove(organism)
 
-    def getSeaBlock(location):
+    def getSeaBlock(self, location):
         return self.ocean[location.row][location.col]
     
     

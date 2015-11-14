@@ -16,3 +16,16 @@ class SeaBlock :
 
 	def setSunlight(self, val) :
 		self.__sunlight = val
+
+        def getSalinity(self): return self.__salinity
+        def getSunlight(self): return self.__sunlight
+        def getOxygen(self): return self.__oxygen
+        def getPressure(self): return self.__pressure
+
+        def printAttributes(self):
+            print "Salinity: " + str(self.getSalinity())
+            print "Sunlight: " + str(self.getSunlight())
+            print "Oxygen: " + str(self.getOxygen())
+            print "Pressure: " + str(self.getPressure())
+
+

@@ -1,4 +1,5 @@
-from collections import namedtuple
-
-Location = namedtuple("Location", "row col")
+class Location:
+    def __init__(self, row, col):
+        self.row = row
+        self.col = col
 
