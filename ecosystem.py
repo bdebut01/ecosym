@@ -18,6 +18,7 @@ class Ecosystem():
     
     def loop(self):
         while True:
+            # + 1 b/c barrier itself is being counted
             self.barrier.setN(len(self.orgsList)+1)
             self.barrier.wait()
 
