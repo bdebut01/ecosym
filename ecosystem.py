@@ -15,11 +15,12 @@ class Ecosystem():
                 row.append(tempblock)
             self.ocean.append(row)
         self.orgsList = Set()
+    
     def loop(self):
         while True:
             self.barrier.setN(len(self.orgsList)+1)
             self.barrier.wait()
-            
+
     def addOrganism(self, org, loc):
         self.getSeaBlock(loc).addOrganism(org)
         self.orgsList.add(org)
