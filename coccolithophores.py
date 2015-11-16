@@ -9,7 +9,7 @@ class Coccolithophores(Organism):
     
     def performStandardAction(self):
         loc = self.ecosystem.getSeaBlock(self.location)
-        population + (population * (1/loc.sunlight))
+        population += (population * (1/loc.sunlight))
     
     def beEaten(Self):
         population = population - 15000
