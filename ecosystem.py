@@ -5,6 +5,7 @@ from seablock import SeaBlock
 class Ecosystem():
     def __init__(self, hdim, vdim):
         self.ocean = []
+        self.globalTime=0
         for i in range(hdim):
             row = []
             for j in range(vdim):

@@ -5,6 +5,7 @@ class Organism(threading.Thread):
         self.location = location
         self.lock = threading.Lock()
         self.ecosystem = ecosystem
+        self.timeCounter = ecosystem.globalTime
 
     def start(self) :
         # start doing things
@@ -20,5 +21,7 @@ class Organism(threading.Thread):
         die(self)
     
     def die(self):
+        if self.timeCounter != self.ecosystem.globalTime:
+        #barrier push
         self.ecosystem.reportDeath(self)
         self.exit() # Close this thread
