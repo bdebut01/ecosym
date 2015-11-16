@@ -1,11 +1,13 @@
 from sets import Set
 import location
+import Barrier
 from seablock import SeaBlock
 
 class Ecosystem():
     def __init__(self, hdim, vdim):
         self.ocean = []
         self.globalTime=0
+        self.barrier=Barrier(0)
         for i in range(hdim):
             row = []
             for j in range(vdim):
@@ -13,7 +15,10 @@ class Ecosystem():
                 row.append(tempblock)
             self.ocean.append(row)
         self.orgsList = Set()
-
+    def loop(self):
+        while True:
+            self.barrier.setN(len(self.orgsList)+1)
+            self.barrier.wait()
     def addOrganism(self, org, loc):
         self.getSeaBlock(loc).addOrganism(org)
         self.orgsList.add(org)
