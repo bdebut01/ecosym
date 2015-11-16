@@ -33,6 +33,9 @@ class Barrier:
 	def decrementN(self) :
 		self.n -= 1
 
+	def setN(self, n_) :
+		self.n = n_
+
 	# Threads essentially wait twice: for phase1 and phase2.
 	def wait(self) :
 		self.phase1()
