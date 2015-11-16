@@ -18,3 +18,4 @@ class Organism(threading.Thread):
     
     def die(self):
         self.ecosystem.reportDeath(self)
+        self.exit() # Close this thread
