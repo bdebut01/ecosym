@@ -21,3 +21,8 @@ class Ecosystem():
         return self.ocean[location.row][location.col]
     
     
+    def run(self) :
+        # start all organism threads
+        # as in
+        for org in self.orgsList() :
+            org.start()

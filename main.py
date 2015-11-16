@@ -9,6 +9,8 @@ def main(argv):
     block = ecosystem.getSeaBlock(loc)
     block.printAttributes()
 
+    ecosystem.run()
+
 if __name__ == '__main__':
     main(sys.argv)
 
