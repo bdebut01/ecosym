@@ -13,6 +13,9 @@ class Ecosystem():
             self.ocean.append(row)
         self.orgsList = Set()
 
+    def addOrganism(self, org, loc):
+        self.getSeaBlock(loc).addOrganism(org)
+        self.orgsList.add(org)
     def reportDeath(self, organism):
         organism.join()
         self.orgsList.remove(organism)
