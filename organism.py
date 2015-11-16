@@ -5,6 +5,9 @@ class Organism(threading.Thread):
         self.location = location
         self.lock = threading.Lock()
         self.ecosystem = ecosystem
+
+    def start(self) :
+        # start doing things
     
     def performStandardAction(self):
         #sit there
