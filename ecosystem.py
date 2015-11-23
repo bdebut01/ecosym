@@ -1,5 +1,5 @@
 from sets import Set
-import location
+from location import Location
 from barrier import Barrier
 from seablock import SeaBlock
 from threading import Semaphore
