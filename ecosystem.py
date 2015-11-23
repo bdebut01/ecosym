@@ -63,16 +63,16 @@ class Ecosystem():
     
     
     def startSimulation(self) :
-    # Automatically populating each seablock with an instance of coccolithophore
-    for i in range(self.hdim):
-        for j in range(self.vdim):
-            temp = coccolithophores(location(i,j), self)
-            self.addOrganism(temp, location(i,j))
-    # start all organism threads
-    # as in
-    for org in self.orgsList :
-        org.start()
-    # Start infinite control loop
-    loop() 
+        # Automatically populating each seablock with an instance of coccolithophore
+        for i in range(self.hdim):
+            for j in range(self.vdim):
+                temp = coccolithophores(location(i,j), self)
+                self.addOrganism(temp, location(i,j))
+        # start all organism threads
+        # as in
+        for org in self.orgsList :
+            org.start()
+        # Start infinite control loop
+        loop() 
 
 
