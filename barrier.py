@@ -1,3 +1,5 @@
+from threading import Semaphore
+
 # Barrier class, based heavily off of Allen's solution for a 
 #	'reusable barrier'
 class Barrier:
