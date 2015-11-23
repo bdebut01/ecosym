@@ -1,6 +1,6 @@
 from sets import Set
 import location
-import Barrier
+import barrier
 from seablock import SeaBlock
 
 class Ecosystem():
@@ -30,15 +30,15 @@ def moveOrganism(self, org, oldLoc, newLoc):
         newLoc.col += vdim
     while int(newLoc.col) >= vdim: #off east
         newLoc.col -= vdim
-while int(newLoc.row < 0): #off north
+    while int(newLoc.row < 0): #off north
         newLoc.row = 0-newLoc.row
         newLoc.col = newLoc.col + (hdim/2)
-            if newLoc.col >= vdim:
+        if newLoc.col >= vdim:
             newLoc.col -= vdim
     while newLoc.row >= hdim: #off south
         newLoc.row = hdim-newLoc.row #over the pole
         newLoc.col = newLoc.col + (hdim/2)
-            if newLoc.col >= vdim:
+        if newLoc.col >= vdim:
             newLoc.col -= vdim
 
 
