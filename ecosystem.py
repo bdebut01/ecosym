@@ -5,6 +5,8 @@ from seablock import SeaBlock
 from threading import Semaphore
 from coccolithophores import Coccolithophores
 
+import time
+
 class Ecosystem():
     def __init__(self, hdim, vdim):
         self.ocean = []
@@ -23,6 +25,7 @@ class Ecosystem():
     def loop(self):
         while True:
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
+            # time.sleep(TICK_TIME)
             # Print simulaiton for this tick, could embed this in a if i%amount == 0
             printSimulation();
             # This belongs at end of whatever happens in this loop
