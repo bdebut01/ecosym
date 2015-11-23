@@ -28,4 +28,6 @@ class Coccolithophores(Organism):
         population = population - 15000
         if population <= 0:
             die()
-    
+
+    def print_status(self):
+        print(self.population +"\n")
