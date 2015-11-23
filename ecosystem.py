@@ -62,10 +62,12 @@ class Ecosystem():
         return self.ocean[int(location.row)][int(location.col)]
     
     
-    def run(self) :
+    def startSimulation(self) :
         # start all organism threads
         # as in
         for org in self.orgsList :
             org.start()
+        # Start infinite control loop
+        loop() 
 
 

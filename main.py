@@ -9,7 +9,7 @@ def main(argv):
     block = ecosystem.getSeaBlock(loc)
     block.printAttributes()
 
-    ecosystem.run()
+    ecosystem.startSimulation()
 
 if __name__ == '__main__':
     main(sys.argv)
