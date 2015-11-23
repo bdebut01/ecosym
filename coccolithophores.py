@@ -25,7 +25,7 @@ class Coccolithophores(Organism):
         if (population<=0):
             die()
     
-    def beEaten(Self):
+    def beEaten(self):
         population = population - 15000
         if population <= 0:
             die()
