@@ -1,6 +1,7 @@
 import ecosystem
 import seablock
 import location
+from organism import Organism
 
 class Coccolithophores(Organism):
     def __init__(self, location, ecosystem):

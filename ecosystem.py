@@ -3,6 +3,7 @@ import location
 from barrier import Barrier
 from seablock import SeaBlock
 from threading import Semaphore
+from coccolithophores import Coccolithophores
 
 class Ecosystem():
     def __init__(self, hdim, vdim):
@@ -21,9 +22,9 @@ class Ecosystem():
     
     def loop(self):
         while True:
+            self.barrier.wait()
             # + 1 b/c barrier itself is being counted
             self.barrier.setN(len(self.orgsList)+1)
-            self.barrier.wait()
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
@@ -66,10 +67,11 @@ class Ecosystem():
         # Automatically populating each seablock with an instance of coccolithophore
         for i in range(self.hdim):
             for j in range(self.vdim):
-                temp = coccolithophores(location(i,j), self)
+                temp = Coccolithophores(location(i,j), self)
                 self.addOrganism(temp, location(i,j))
         # start all organism threads
         # as in
+        self.barrier.setN(len(self.orgsList)+1)
         for org in self.orgsList :
             org.start()
         # Start infinite control loop
