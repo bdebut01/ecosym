@@ -25,3 +25,6 @@ class Organism(threading.Thread):
         #barrier push
         self.ecosystem.reportDeath(self)
         self.exit() # Close this thread
+    
+    def printStatus(self):
+        # depends on type of organism
