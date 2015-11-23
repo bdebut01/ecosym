@@ -42,7 +42,10 @@ class Ecosystem():
             if newLoc.col >= vdim:
                 newLoc.col -= vdim
 
-
+    def printSimulation(self):
+        # Loop through private organism set, calling their private print methods
+        for org in self.orgsList:
+            org.printStatus()
 
     def addOrganism(self, org, loc):
         self.getSeaBlock(loc).addOrganism(org)
@@ -59,10 +62,12 @@ class Ecosystem():
         return self.ocean[int(location.row)][int(location.col)]
     
     
-    def run(self) :
+    def startSimulation(self) :
         # start all organism threads
         # as in
         for org in self.orgsList :
             org.start()
+        # Start infinite control loop
+        loop() 
 
 
