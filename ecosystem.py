@@ -49,6 +49,9 @@ def moveOrganism(self, org, oldLoc, newLoc):
     
     def reportDeath(self, organism):
         organism.join()
+        # remove from ocean block
+        self.getSeaBlock(organism.location).removeOrganism(organism) 
+        # remove from private organism list
         self.orgsList.remove(organism)
 
     def getSeaBlock(self, location):
