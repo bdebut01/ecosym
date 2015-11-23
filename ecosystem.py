@@ -63,6 +63,7 @@ class Ecosystem():
     
     
     def startSimulation(self) :
+    # Automatically populating each seablock with an instance of coccolithophore
     for i in range(self.hdim):
         for j in range(self.vdim):
             temp = coccolithophores(location(i,j), self)
