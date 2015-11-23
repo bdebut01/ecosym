@@ -69,8 +69,9 @@ class Ecosystem():
         # Automatically populating each seablock with an instance of coccolithophore
         for i in range(self.hdim):
             for j in range(self.vdim):
-                temp = Coccolithophores(location(i,j), self)
-                self.addOrganism(temp, location(i,j))
+                                        # not sure about capitalized L for location, is this legal?
+                temp = Coccolithophores(Location(i,j), self)
+                self.addOrganism(temp, Location(i,j))
         # start all organism threads
         # as in
         self.barrier.setN(len(self.orgsList)+1)
