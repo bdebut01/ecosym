@@ -20,9 +20,9 @@ class Coccolithophores(Organism):
         elif self.virusEfficiency >= 100000:
             self.virusWaxWane = -1
 
-    #possible: affect viruses in adjacent cells?
-    if (population<=0):
-        die()
+        #possible: affect viruses in adjacent cells?
+        if (population<=0):
+            die()
     
     def beEaten(Self):
         population = population - 15000
