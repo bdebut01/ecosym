@@ -22,7 +22,9 @@ class Ecosystem():
     
     def loop(self):
         while True:
-
+            # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
+            # Print simulaiton for this tick, could embed this in a if i%amount == 0
+            printSimulation();
             # This belongs at end of whatever happens in this loop
             self.barrier.wait()
             # + 1 b/c barrier itself is being counted
