@@ -1,7 +1,8 @@
 from sets import Set
 import location
-import barrier
+from barrier import Barrier
 from seablock import SeaBlock
+from threading import Semaphore
 
 class Ecosystem():
     def __init__(self, hdim, vdim):
@@ -61,7 +62,7 @@ class Ecosystem():
     def run(self) :
         # start all organism threads
         # as in
-        for org in self.orgsList() :
+        for org in self.orgsList :
             org.start()
 
 
