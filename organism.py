@@ -21,7 +21,7 @@ class Organism(threading.Thread):
         #sit there
     
     def beEaten(self):
-        die(self)
+        self.die(self)
     
     def die(self):
         if self.timeCounter != self.ecosystem.globalTime:
