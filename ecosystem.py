@@ -22,9 +22,9 @@ class Ecosystem():
     
     def loop(self):
         while True:
+            self.barrier.wait()
             # + 1 b/c barrier itself is being counted
             self.barrier.setN(len(self.orgsList)+1)
-            self.barrier.wait()
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
@@ -71,6 +71,7 @@ class Ecosystem():
                 self.addOrganism(temp, location(i,j))
         # start all organism threads
         # as in
+        self.barrier.setN(len(self.orgsList)+1)
         for org in self.orgsList :
             org.start()
         # Start infinite control loop
