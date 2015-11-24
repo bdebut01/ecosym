@@ -10,8 +10,8 @@ import time
 class Ecosystem():
     def __init__(self, hdim, vdim):
         self.ocean = []
-        self.globalTime=0
-        self.barrier=Barrier(0)
+        self.globalTime = 0
+        self.barrier = Barrier(0)
         self.hdim = hdim
         self.vdim = vdim
         for i in range(hdim):
@@ -21,7 +21,7 @@ class Ecosystem():
                 row.append(tempblock)
             self.ocean.append(row)
         self.orgsList = Set()
-    
+
     def loop(self):
         while True:
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat

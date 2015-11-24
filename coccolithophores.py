@@ -12,9 +12,11 @@ class Coccolithophores(Organism):
     
     def performStandardAction(self):
         loc = self.ecosystem.getSeaBlock(self.location)
-        population += (population * (1/loc.sunlight)) #reproduce photosynthetically
+        if loc.getSunlight() > 0:
+            self.population += (self.population * (1/loc.getSunlight())) #reproduce photosynthetically
+        
         self.population -= self.virusEfficiency
-        virusEfficiency += (virusWaxWane * (self.virusEfficiency/2)) #simple power-growth expand?
+        self.virusEfficiency += (self.virusWaxWane * (self.virusEfficiency/2)) #simple power-growth expand?
         #the tables turn
         if self.virusEfficiency <= 100:
             self.virusWaxWane = 1
@@ -22,7 +24,7 @@ class Coccolithophores(Organism):
             self.virusWaxWane = -1
 
         #possible: affect viruses in adjacent cells?
-        if (population<=0):
+        if (self.population <= 0):
             die()
     
     def beEaten(self):
