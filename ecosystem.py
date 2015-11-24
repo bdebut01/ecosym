@@ -64,7 +64,7 @@ class Ecosystem():
         self.orgsList.add(org)
     
     def reportDeath(self, organism):
-        organism.join()
+        #organism.join()
         # remove from ocean block
         self.getSeaBlock(organism.location).removeOrganism(organism) 
         # remove from private organism list
@@ -86,6 +86,7 @@ class Ecosystem():
         # as in
         print len(self.orgsList) + 1
         self.barrier.setN(len(self.orgsList)+1)
+        #self.barrier.setN(len(self.orgsList)+2) # adding two so that simulation stops after one time step, for testing
         for org in self.orgsList :
             print "Starting an organism"
             org.start()
