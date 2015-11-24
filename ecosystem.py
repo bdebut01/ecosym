@@ -42,19 +42,19 @@ class Ecosystem():
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             # time.sleep(TICK_TIME)
             # Print simulaiton for this tick, could embed this in a if i%amount == 0
-            self.printSimulation()
             def print_num_orgs():
                 print len(self.orgsList) + 1
             with_lock(self.orgsListMutex, print_num_orgs)
-            # This belongs at end of whatever happens in this loop
-            self.barrier.wait()
-            # + 1 b/c barrier itself is being counted
+            self.barrier.phase1()
+            self.printSimulation()
             def end_simulation():
                 if len(self.orgsList) + 1 <= 1:
                     print "Ending simulation"
                     sys.exit()
             with_lock(self.orgsListMutex, end_simulation)
+            # + 1 b/c barrier itself is being counted
             with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+            self.barrier.phase2()
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
