@@ -24,12 +24,14 @@ class Coccolithophores(Organism):
             self.virusWaxWane = -1
 
         #possible: affect viruses in adjacent cells?
-        if (self.population <= 0):
+        if self.population <= 0:
+            print "Dying"
             self.die()
     
     def beEaten(self):
         population = population - 15000
         if population <= 0:
+            print "Eaten"
             self.die()
 
     def printStatus(self):

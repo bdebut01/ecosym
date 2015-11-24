@@ -1,4 +1,5 @@
 from sets import Set
+import sys
 from location import Location
 from barrier import Barrier
 from seablock import SeaBlock
@@ -37,17 +38,22 @@ class Ecosystem():
     def loop(self):
         print "Before loop"
         while True:
-            print "In loop"
+            print "-----------------------In loop------------------------"
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             # time.sleep(TICK_TIME)
             # Print simulaiton for this tick, could embed this in a if i%amount == 0
             self.printSimulation()
-            def print_orgs():
+            def print_num_orgs():
                 print len(self.orgsList) + 1
-            with_lock(self.orgsListMutex, print_orgs)
+            with_lock(self.orgsListMutex, print_num_orgs)
             # This belongs at end of whatever happens in this loop
             self.barrier.wait()
             # + 1 b/c barrier itself is being counted
+            def end_simulation():
+                if len(self.orgsList) + 1 <= 1:
+                    print "Ending simulation"
+                    sys.exit()
+            with_lock(self.orgsListMutex, end_simulation)
             with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
 
     def moveOrganism(self, org, oldLoc, newLoc):
@@ -71,7 +77,6 @@ class Ecosystem():
         # Loop through private organism set, calling their private print methods
         def print_orgs():
             for org in self.orgsList:
-                print "Printing org stats"
                 org.printStatus()
         with_lock(self.orgsListMutex, print_orgs)
 
@@ -89,27 +94,22 @@ class Ecosystem():
     def getSeaBlock(self, location):
         return self.ocean[int(location.row)][int(location.col)]
     
-    
     def startSimulation(self) :
         # Automatically populating each seablock with an instance of coccolithophore
         for i in range(self.hdim):
             for j in range(self.vdim):
-                                        # not sure about capitalized L for location, is this legal?
                 temp = Coccolithophores(Location(i,j), self)
                 self.addOrganism(temp, Location(i,j))
-                print temp
-        # start all organism threads
-        # as in
-        def print_orgs():
-            print len(self.orgsList) + 1
-        with_lock(self.orgsListMutex, print_orgs)
+
         with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList)+1))
         #self.barrier.setN(len(self.orgsList)+2) # adding two so that simulation stops after one time step, for testing
+
+        # start all organism threads
         def start_orgs():
             for org in self.orgsList :
-                print "Starting an organism"
                 org.start()
         with_lock(self.orgsListMutex, start_orgs)
+
         # Start infinite control loop
         self.loop() 
 
