@@ -45,15 +45,20 @@ class Ecosystem():
             def print_num_orgs():
                 print len(self.orgsList) + 1
             with_lock(self.orgsListMutex, print_num_orgs)
+
+            # after phase 1, all orgs should be done with actions, ecosystem 
+            # can safely print status, do other maintenance
             self.barrier.phase1()
             self.printSimulation()
             def end_simulation():
+                # if there are no organisms alive, simulation is over
                 if len(self.orgsList) + 1 <= 1:
                     print "Ending simulation"
                     sys.exit()
             with_lock(self.orgsListMutex, end_simulation)
             # + 1 b/c barrier itself is being counted
             with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+            # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
 
     def moveOrganism(self, org, oldLoc, newLoc):
