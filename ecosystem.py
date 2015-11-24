@@ -3,9 +3,20 @@ from location import Location
 from barrier import Barrier
 from seablock import SeaBlock
 from threading import Semaphore
+from threading import Lock
 from coccolithophores import Coccolithophores
 
 import time
+
+def with_lock(lock, function):
+    lock.acquire()
+    try:
+        value = function()
+    finally:
+        lock.release()
+
+    return value
+
 
 class Ecosystem():
     def __init__(self, hdim, vdim):
@@ -21,6 +32,7 @@ class Ecosystem():
                 row.append(tempblock)
             self.ocean.append(row)
         self.orgsList = Set()
+        self.orgsListMutex = Lock()
 
     def loop(self):
         print "Before loop"
@@ -30,11 +42,13 @@ class Ecosystem():
             # time.sleep(TICK_TIME)
             # Print simulaiton for this tick, could embed this in a if i%amount == 0
             self.printSimulation()
-            print len(self.orgsList) + 1
+            def print_orgs():
+                print len(self.orgsList) + 1
+            with_lock(self.orgsListMutex, print_orgs)
             # This belongs at end of whatever happens in this loop
             self.barrier.wait()
             # + 1 b/c barrier itself is being counted
-            self.barrier.setN(len(self.orgsList) + 1)
+            with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
@@ -55,20 +69,22 @@ class Ecosystem():
 
     def printSimulation(self):
         # Loop through private organism set, calling their private print methods
-        for org in self.orgsList:
-            print "Printing org stats"
-            org.printStatus()
+        def print_orgs():
+            for org in self.orgsList:
+                print "Printing org stats"
+                org.printStatus()
+        with_lock(self.orgsListMutex, print_orgs)
 
     def addOrganism(self, org, loc):
         self.getSeaBlock(loc).addOrganism(org)
-        self.orgsList.add(org)
+        with_lock(self.orgsListMutex, lambda : self.orgsList.add(org))
     
     def reportDeath(self, organism):
         #organism.join()
         # remove from ocean block
         self.getSeaBlock(organism.location).removeOrganism(organism) 
         # remove from private organism list
-        self.orgsList.remove(organism)
+        with_lock(self.orgsListMutex, lambda : self.orgsList.remove(organism))
 
     def getSeaBlock(self, location):
         return self.ocean[int(location.row)][int(location.col)]
@@ -80,16 +96,20 @@ class Ecosystem():
             for j in range(self.vdim):
                                         # not sure about capitalized L for location, is this legal?
                 temp = Coccolithophores(Location(i,j), self)
-                print temp
                 self.addOrganism(temp, Location(i,j))
+                print temp
         # start all organism threads
         # as in
-        print len(self.orgsList) + 1
-        self.barrier.setN(len(self.orgsList)+1)
+        def print_orgs():
+            print len(self.orgsList) + 1
+        with_lock(self.orgsListMutex, print_orgs)
+        with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList)+1))
         #self.barrier.setN(len(self.orgsList)+2) # adding two so that simulation stops after one time step, for testing
-        for org in self.orgsList :
-            print "Starting an organism"
-            org.start()
+        def start_orgs():
+            for org in self.orgsList :
+                print "Starting an organism"
+                org.start()
+        with_lock(self.orgsListMutex, start_orgs)
         # Start infinite control loop
         self.loop() 
 
