@@ -8,7 +8,7 @@ class Organism(threading.Thread):
         self.ecosystem = ecosystem
         self.timeCounter = ecosystem.globalTime
 
-    def start(self) :
+    def run(self) :
         while True:
             self.performStandardAction()
             self.ecosystem.barrier.wait()

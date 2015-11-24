@@ -33,4 +33,5 @@ class Coccolithophores(Organism):
             die()
 
     def printStatus(self):
-        print(self.population +"\n")
+        print self.population
+

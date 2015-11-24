@@ -23,15 +23,18 @@ class Ecosystem():
         self.orgsList = Set()
 
     def loop(self):
+        print "Before loop"
         while True:
+            print "In loop"
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             # time.sleep(TICK_TIME)
             # Print simulaiton for this tick, could embed this in a if i%amount == 0
-            printSimulation();
+            self.printSimulation()
+            print len(self.orgsList) + 1
             # This belongs at end of whatever happens in this loop
             self.barrier.wait()
             # + 1 b/c barrier itself is being counted
-            self.barrier.setN(len(self.orgsList)+1)
+            self.barrier.setN(len(self.orgsList) + 1)
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
@@ -53,6 +56,7 @@ class Ecosystem():
     def printSimulation(self):
         # Loop through private organism set, calling their private print methods
         for org in self.orgsList:
+            print "Printing org stats"
             org.printStatus()
 
     def addOrganism(self, org, loc):
@@ -76,13 +80,16 @@ class Ecosystem():
             for j in range(self.vdim):
                                         # not sure about capitalized L for location, is this legal?
                 temp = Coccolithophores(Location(i,j), self)
+                print temp
                 self.addOrganism(temp, Location(i,j))
         # start all organism threads
         # as in
+        print len(self.orgsList) + 1
         self.barrier.setN(len(self.orgsList)+1)
         for org in self.orgsList :
+            print "Starting an organism"
             org.start()
         # Start infinite control loop
-        loop() 
+        self.loop() 
 
 
