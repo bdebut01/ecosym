@@ -34,32 +34,14 @@ class Ecosystem():
             self.ocean.append(row)
         self.orgsList = Set()
         self.orgsListMutex = Lock()
+        self.prepopulateCoccolithophores()
 
-    def loop(self):
-        print "Before loop"
-        while True:
-            print "-----------------------In loop------------------------"
-            # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
-            # time.sleep(TICK_TIME)
-            # Print simulaiton for this tick, could embed this in a if i%amount == 0
-            def print_num_orgs():
-                print len(self.orgsList) + 1
-            with_lock(self.orgsListMutex, print_num_orgs)
-
-            # after phase 1, all orgs should be done with actions, ecosystem 
-            # can safely print status, do other maintenance
-            self.barrier.phase1()
-            self.printSimulation()
-            def end_simulation():
-                # if there are no organisms alive, simulation is over
-                if len(self.orgsList) + 1 <= 1:
-                    print "Ending simulation"
-                    sys.exit()
-            with_lock(self.orgsListMutex, end_simulation)
-            # + 1 b/c barrier itself is being counted
-            with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
-            # reach barrier, allow everyone to go on to the next step
-            self.barrier.phase2()
+    def prepopulateCoccolithophores(self):
+        # Automatically populating each seablock with an instance of coccolithophore
+        for i in range(self.hdim):
+            for j in range(self.vdim):
+                temp = Coccolithophores(Location(i,j), self)
+                self.addOrganism(temp, Location(i,j))
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
@@ -95,27 +77,57 @@ class Ecosystem():
         self.getSeaBlock(organism.location).removeOrganism(organism) 
         # remove from private organism list
         with_lock(self.orgsListMutex, lambda : self.orgsList.remove(organism))
+        print "Death reported"
 
     def getSeaBlock(self, location):
         return self.ocean[int(location.row)][int(location.col)]
     
-    def startSimulation(self) :
-        # Automatically populating each seablock with an instance of coccolithophore
-        for i in range(self.hdim):
-            for j in range(self.vdim):
-                temp = Coccolithophores(Location(i,j), self)
-                self.addOrganism(temp, Location(i,j))
-
+    def startSimulation(self):
         with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList)+1))
         #self.barrier.setN(len(self.orgsList)+2) # adding two so that simulation stops after one time step, for testing
 
         # start all organism threads
-        def start_orgs():
-            for org in self.orgsList :
+        def startOrganisms():
+            for org in self.orgsList:
                 org.start()
-        with_lock(self.orgsListMutex, start_orgs)
+        with_lock(self.orgsListMutex, startOrganisms)
 
         # Start infinite control loop
         self.loop() 
 
+    def loop(self):
+        self.__simulationRunning = True  # making this a member variable so that
+                                         # it can be easily accessed within the
+                                         # end_simulation function defined below
+        while self.__simulationRunning:
+            print "-----------------------In loop------------------------"
+            # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
+            # time.sleep(TICK_TIME)
+
+            # after phase 1, all orgs should be done with actions, ecosystem 
+            # can safely print status, do other maintenance
+            self.barrier.phase1()
+            # Print simulaiton for this tick, could embed this in a if i%amount == 0
+            self.printSimulation()
+
+            with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
+            if self.__simulationRunning:
+                # + 1 b/c barrier itself is being counted
+                with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+
+            # reach barrier, allow everyone to go on to the next step
+            self.barrier.phase2()
+
+    # Used for debugging purposes
+    def printNumOrgs(self):
+        print len(self.orgsList) + 1
+
+    # terrible name for a function but i can't think of anything better. might
+    # refactor later.
+    def endSimulationIfNoOrganisms(self):
+        # if there are no organisms alive, simulation is over
+        print len(self.orgsList)
+        if len(self.orgsList) <= 0:
+            print "Ending simulation"
+            self.__simulationRunning = False
 

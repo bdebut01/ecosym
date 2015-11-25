@@ -9,14 +9,12 @@ class Organism(threading.Thread):
         self.ecosystem = ecosystem
         self.timeCounter = ecosystem.globalTime
 
+    # calling (the built-in threading function) start on a thread runs the run()
+    # function, so the actions we want the thread to run go in the run() func
     def run(self) :
         while True:
-            self.performStandardAction()
             self.ecosystem.barrier.wait()
-        # while(1)
-            # do things
-            # performStandardAction()
-            # barrier.wait()
+            self.performStandardAction()
     
     def performStandardAction(self):
         #sit there
@@ -34,6 +32,8 @@ class Organism(threading.Thread):
         #if self.timeCounter != self.ecosystem.globalTime:
         #barrier push
         self.ecosystem.reportDeath(self)
+        self.ecosystem.barrier.wait() # if we end the thread before calling
+                                      # barrier.wait(), we'll have deadlock
         sys.exit() # Close this thread
     
     def printStatus(self):

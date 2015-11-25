@@ -11,7 +11,7 @@ SPACE
 
 
 
-Notes
+TO DO
 -----
-Where will we handle control flow, looping?
+Add lock for printing to stdout
 

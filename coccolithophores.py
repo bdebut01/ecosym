@@ -15,25 +15,30 @@ class Coccolithophores(Organism):
         if loc.getSunlight() > 0:
             self.population += (self.population * (1/loc.getSunlight())) #reproduce photosynthetically
         
-        self.population -= self.virusEfficiency
-        self.virusEfficiency += (self.virusWaxWane * (self.virusEfficiency/2)) #simple power-growth expand?
+        ## commenting out virus stuff to simplify things until we get basic
+        ## simulation working. just decreasing population by constant amount
+        ## for now instead
+        #self.population -= self.virusEfficiency
+        #self.virusEfficiency += (self.virusWaxWane * (self.virusEfficiency/2)) #simple power-growth expand?
         #the tables turn
-        if self.virusEfficiency <= 100:
-            self.virusWaxWane = 1
-        elif self.virusEfficiency >= 100000:
-            self.virusWaxWane = -1
+        #if self.virusEfficiency <= 100:
+        #    self.virusWaxWane = 1
+        #elif self.virusEfficiency >= 100000:
+        #    self.virusWaxWane = -1
+        self.population -= 20000
 
         #possible: affect viruses in adjacent cells?
         if self.population <= 0:
             print "Dying"
             self.die()
+            print "Died"
     
     def beEaten(self):
-        population = population - 15000
+        self.population -= 5000
         if population <= 0:
             print "Eaten"
             self.die()
 
     def printStatus(self):
-        print "Population: " + str(self.population) + "; Location: " + str(self.location.row) + ", " + str(self.location.col)
+        print str(self.population) + " coccolithophores at ocean location (" + str(self.location.row) + ", " + str(self.location.col) + ")"
 
