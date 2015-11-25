@@ -14,8 +14,8 @@ class Barrier:
         self.mutex.acquire()
         self.count += 1
         if self.count == self.n : #number needed has been reached
-                self.turnstile2.acquire() #lock the second
-                self.turnstile.release() #unlock the first
+            self.turnstile2.acquire() #lock the second
+            self.turnstile.release() #unlock the first
         self.mutex.release()
         self.turnstile.acquire() #wait until it is freed
         self.turnstile.release() #release so the next thread can follow
@@ -24,8 +24,8 @@ class Barrier:
         self.mutex.acquire()
         self.count -= 1
         if self.count == 0 : #all threads have been thru
-                self.turnstile.acquire() #lock the first
-                self.turnstile2.release() #unlock the second
+            self.turnstile.acquire() #lock the first
+            self.turnstile2.release() #unlock the second
         self.mutex.release()
         self.turnstile2.acquire() #wait until it is free
         self.turnstile2.release() #release so the next thread can follow
