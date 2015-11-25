@@ -44,7 +44,7 @@ class Ecosystem():
         for i in range(self.hdim):
             for j in range(self.vdim):
                 plankton = Coccolithophores(Location(i,j), self)
-                self.addOrganism(plankton, Location(i,j))
+                self.addOrganism(plankton)
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
@@ -70,8 +70,8 @@ class Ecosystem():
                 org.printStatus()
         with_lock(self.orgsListMutex, print_orgs)
 
-    def addOrganism(self, org, loc):
-        self.getSeaBlock(loc).addOrganism(org)
+    def addOrganism(self, org):
+        self.getSeaBlock(org.location).addOrganism(org)
         with_lock(self.orgsListMutex, lambda : self.orgsList.add(org))
     
     def reportDeath(self, organism):
@@ -82,7 +82,7 @@ class Ecosystem():
         print "Death reported"
 
     def getSeaBlock(self, location):
-        return self.ocean[int(location.row)][int(location.col)]
+        return self.ocean[location.row][location.col]
     
     def startSimulation(self):
         with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))

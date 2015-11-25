@@ -21,6 +21,7 @@ class SeaBlock :
     def getSunlight(self): return self.__sunlight
     def getOxygen(self): return self.__oxygen
     def getPressure(self): return self.__pressure
+    def getOrganisms(self): return self.__organisms
 
     def printAttributes(self):
         print "Salinity: " + str(self.getSalinity())
