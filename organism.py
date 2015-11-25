@@ -20,7 +20,6 @@ class Organism(threading.Thread):
         #sit there
         return
     
-    
     def move(self):
         #sit there
         return

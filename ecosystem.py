@@ -21,27 +21,30 @@ def with_lock(lock, function):
 
 class Ecosystem():
     def __init__(self, hdim, vdim):
-        self.ocean = []
         self.globalTime = 0
         self.barrier = Barrier(0)
         self.hdim = hdim
         self.vdim = vdim
+        self.orgsList = Set()
+        self.orgsListMutex = Lock()
+        self.createOcean(hdim, vdim)
+        self.prepopulateCoccolithophores()
+    
+    def createOcean(self, hdim, vdim):
+        self.ocean = []
         for i in range(hdim):
             row = []
             for j in range(vdim):
                 tempblock = SeaBlock()
                 row.append(tempblock)
             self.ocean.append(row)
-        self.orgsList = Set()
-        self.orgsListMutex = Lock()
-        self.prepopulateCoccolithophores()
 
     def prepopulateCoccolithophores(self):
         # Automatically populating each seablock with an instance of coccolithophore
         for i in range(self.hdim):
             for j in range(self.vdim):
-                temp = Coccolithophores(Location(i,j), self)
-                self.addOrganism(temp, Location(i,j))
+                plankton = Coccolithophores(Location(i,j), self)
+                self.addOrganism(plankton, Location(i,j))
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
@@ -61,7 +64,7 @@ class Ecosystem():
                 newLoc.col -= vdim
 
     def printSimulation(self):
-        # Loop through private organism set, calling their private print methods
+        # Loop through private organism set, calling their print methods
         def print_orgs():
             for org in self.orgsList:
                 org.printStatus()
@@ -72,7 +75,6 @@ class Ecosystem():
         with_lock(self.orgsListMutex, lambda : self.orgsList.add(org))
     
     def reportDeath(self, organism):
-        #organism.join()
         # remove from ocean block
         self.getSeaBlock(organism.location).removeOrganism(organism) 
         # remove from private organism list
@@ -83,8 +85,7 @@ class Ecosystem():
         return self.ocean[int(location.row)][int(location.col)]
     
     def startSimulation(self):
-        with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList)+1))
-        #self.barrier.setN(len(self.orgsList)+2) # adding two so that simulation stops after one time step, for testing
+        with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
 
         # start all organism threads
         def startOrganisms():
