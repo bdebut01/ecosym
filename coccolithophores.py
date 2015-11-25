@@ -35,7 +35,7 @@ class Coccolithophores(Organism):
     
     def beEaten(self):
         self.population -= 15000
-        if population <= 0:
+        if self.population <= 0:
             print "Eaten"
             self.die()
 
