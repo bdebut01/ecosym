@@ -93,7 +93,7 @@ class Ecosystem():
             for i in num_and_what_creatures[key]: # for every creature of that species
                 # Instantiate organism using creature function dict, no location passed
                 #   so random will be chosen by constructor
-                temp_func = creature_funcs(int(key))
+                temp_func = creature_funcs[int(key)]
                 newOrganism = temp_func(self)
                 self.addOrganism(newOrganism)
                 break
