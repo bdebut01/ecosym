@@ -5,6 +5,7 @@ from barrier import Barrier
 from seablock import SeaBlock
 from threading import Semaphore
 from threading import Lock
+from foodchain import Foodchain
 from coccolithophores import Coccolithophores
 from bulbasaur        import Bulbasaur
 
@@ -51,8 +52,8 @@ class Ecosystem():
     def createFoodchain(self):
         # this is an example, we should change this as soon as we have actual
         # predators and prey
-        self.__foodchain.addRelationship(coccolithophore.Coccolithophore,
-                coccolithophore.Coccolithophore)
+        self.__foodchain = Foodchain()
+        self.__foodchain.addRelationship(Bulbasaur, Bulbasaur)
 
     # tells you if the predator can eat the potential prey (note: pass in an
     # an instance of an organism subclass. 

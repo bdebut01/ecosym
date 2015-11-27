@@ -11,10 +11,10 @@ class Foodchain():
     # <type 'shark.Shark'> (the way to call this, for example, is
     # addRelationship(shark.Shark, fish.Fish)
     def addRelationship(self, predator, prey):
-        if predTy in self.__foodchain:
-            self.__foodchain[predTy].append(preyTy)
+        if predator in self.__foodchain:
+            self.__foodchain[predator].append(prey)
         else:
-            self.__foodchain[predTy] = [preyTy]
+            self.__foodchain[predator] = [prey]
 
     # same thing as addRelationship but associates multiple prey with a predator
     # instead of just one type of prey
