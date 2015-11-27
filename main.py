@@ -1,5 +1,6 @@
 import sys
 from ecosystem import Ecosystem
+import ecosystem
 from seablock import SeaBlock
 from location import Location
 
@@ -18,10 +19,10 @@ def presetCreatures():
 	num_and_what_creatures = dict() # key is creature_id, value is quantity
 	# List off creature pairings
 	creatures[0] = "Coccolithophores"
-	creature_funcs[0] = Coccolithophores # Halp
+	creature_funcs[0] = coccolithophores.Coccolithophores # Halp
 	creatures[1] = "Quadralopsaurus"
 	creatures[2] = "Bulbasaur"
-	creature_funcs[2] = Bulbasaur
+	creature_funcs[2] = bulbasaur.Bulbasaur
 	creatures[3] = "These are test creatures"
 
 def inputLoop():
@@ -63,15 +64,14 @@ def inputCreatures():
 
 # Everything works if you just comment out creature stuff
 def main(argv):
- #   inputCreatures()
-    ecosystem = Ecosystem(10, 10)
-    loc = Location(3,4)
+	inputCreatures()
+	ecosystem = Ecosystem(10, 10)
+	loc = Location(3,4)
+	ecosystem.loadCreatures(num_and_what_creatures, creature_funcs)
 
-#    ecosystem.loadCreatures(num_and_what_creatures, creature_funcs)
-
-    block = ecosystem.getSeaBlock(loc)
-    block.printAttributes()
-    ecosystem.startSimulation()
+	block = ecosystem.getSeaBlock(loc)
+	block.printAttributes()
+    # ecosystem.startSimulation()
 
 if __name__ == '__main__':
     main(sys.argv)
