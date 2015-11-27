@@ -40,5 +40,6 @@ class Coccolithophores(Organism):
             self.die()
 
     def printStatus(self):
-        print str(self.population) + " coccolithophores at ocean location (" + str(self.location.row) + ", " + str(self.location.col) + ")"
+        print self.ecosystem.getEdiblePreyTypes(str(type(self)))
+        #print str(self.population) + " coccolithophores at ocean location (" + str(self.location.row) + ", " + str(self.location.col) + ")"
 
