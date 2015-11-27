@@ -68,8 +68,11 @@ class Ecosystem():
         # Loop thru num_and_what_creatures dictionary for which and quantities
         for key in num_and_what_creatures:
             for i in num_and_what_creatures[key]: # for every creature of that species
-                # newOrganism = creature_funcs(int(key))(self)
-                # self.addOrganism(newOrganism)
+                # Instantiate organism using creature function dict, no location passed
+                #   so random will be chosen by constructor
+                temp_func = creature_funcs(int(key))
+                newOrganism = temp_func(self)
+                self.addOrganism(newOrganism)
                 break
 
     def printSimulation(self):
