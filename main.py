@@ -2,6 +2,8 @@ import sys
 from ecosystem import Ecosystem
 from coccolithophores import Coccolithophores
 from bulbasaur 		  import Bulbasaur
+from shark import Shark
+from tuna import Tuna
 from seablock import SeaBlock
 from location import Location
 import coccolithophores
@@ -30,6 +32,10 @@ def presetCreatures():
 	creature_funcs[0] = Coccolithophores # Halp
 	creatures[1] = "Bulbasaur"
 	creature_funcs[1] = Bulbasaur
+        creatures[2] = "Shark"
+        creature_funcs[2] = Shark
+        creatures[3] = "Tuna"
+        creature_funcs[3] = Tuna
 
 # Can ignore me, I loop in stdin/stdout receiving organism IDs and quantities
 #	Stop when 'q' is read in
@@ -46,8 +52,9 @@ def inputLoop():
 	        	print "That key not found, ignoring"
 	        else:
 	        	# [0] is key, [1] is quantity
+                        value = int(value)
 	        	if int(key) in num_and_what_creatures: #already added so we're going to just increment
-	        		res = num_and_what_creatures[int(key)]
+	        		res = int(num_and_what_creatures[int(key)])
 	        		value += res
 	        	# Add the key and the value (whether it was affected or not by if statement)
 	        	num_and_what_creatures[int(key)] = value

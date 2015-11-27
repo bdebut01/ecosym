@@ -8,17 +8,10 @@ from threading import Lock
 from foodchain import Foodchain
 from coccolithophores import Coccolithophores
 from bulbasaur        import Bulbasaur
-
+from shark import Shark
+from tuna import Tuna
+from thread_functions import with_lock
 import time
-
-def with_lock(lock, function):
-    lock.acquire()
-    try:
-        value = function()
-    finally:
-        lock.release()
-
-    return value
 
 class Ecosystem():
     def __init__(self, hdim, vdim):
@@ -54,6 +47,7 @@ class Ecosystem():
         # predators and prey
         self.__foodchain = Foodchain()
         self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
+        self.__foodchain.addRelationship(Shark, Tuna)
 
     # tells you if the predator can eat the potential prey (note: pass in an
     # an instance of an organism subclass. 
@@ -85,7 +79,7 @@ class Ecosystem():
     def loadCreatures(self, num_and_what_creatures, creature_funcs):
         # Loop thru num_and_what_creatures dictionary for which species and quantities
         for key in num_and_what_creatures:
-            for i in num_and_what_creatures[key]: # for every creature of that species
+            for i in range(num_and_what_creatures[key]): # for every creature of that species
                 # Instantiate organism using creature function dict, no location passed
                 #   so random will be chosen by constructor
                 newOrganism = creature_funcs[int(key)](self)
@@ -106,8 +100,12 @@ class Ecosystem():
         # remove from ocean block
         self.getSeaBlock(organism.location).removeOrganism(organism) 
         # remove from private organism list
-        with_lock(self.orgsListMutex, lambda : self.orgsList.remove(organism))
-        print "Death reported"
+        def remove():
+            if organism in self.orgsList:
+                self.orgsList.remove(organism)
+        with_lock(self.orgsListMutex, remove)
+        if type(organism) != Coccolithophores:
+            print "Death reported"
 
     def getSeaBlock(self, location):
         return self.ocean[location.row][location.col]

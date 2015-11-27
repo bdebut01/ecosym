@@ -29,9 +29,9 @@ class Coccolithophores(Organism):
 
         #possible: affect viruses in adjacent cells?
         if self.population <= 0:
-            print "Dying"
+            #print "Dying"
             self.die()
-            print "Died"
+            #print "Died"
     
     def beEaten(self):
         self.population -= 15000
@@ -40,5 +40,6 @@ class Coccolithophores(Organism):
             self.die()
 
     def printStatus(self):
-        print str(self.population) + " coccolithophores at ocean location (" + str(self.location.row) + ", " + str(self.location.col) + ")"
+        #print str(self.population) + " coccolithophores at ocean location (" + str(self.location.row) + ", " + str(self.location.col) + ")"
+        return
 

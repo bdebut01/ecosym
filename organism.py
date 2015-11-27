@@ -8,8 +8,8 @@ class Organism(threading.Thread):
         threading.Thread.__init__(self)
         if location is None:
             random.seed()
-            i_loc = random.randint(0, ecosystem.hdim) # these are inclusive
-            j_loc = random.randint(0, ecosystem.vdim)
+            i_loc = random.randint(0, ecosystem.hdim - 1) # these are inclusive
+            j_loc = random.randint(0, ecosystem.vdim - 1)
             location = Location(i_loc, j_loc)
         self.location = location
         self.lock = threading.Lock()
@@ -32,7 +32,7 @@ class Organism(threading.Thread):
         return
     
     def beEaten(self):
-        self.die(self)
+        self.die()
     
     def die(self):
         #if self.timeCounter != self.ecosystem.globalTime:

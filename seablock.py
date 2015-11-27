@@ -1,4 +1,6 @@
 from sets import Set
+from thread_functions import with_lock
+from threading import Lock
 
 class SeaBlock :
     def __init__(self, salinity = 1, sun = 0, oxygen = 0, pressure = 0) :
@@ -7,12 +9,16 @@ class SeaBlock :
         self.__oxygen  	 = oxygen
         self.__pressure  = pressure
         self.__organisms = Set()
+        self.__orgsLock = Lock()
 
     def removeOrganism(self, organism) :
-        self.__organisms.remove(organism)
+        def remove():
+            if organism in self.__organisms:
+                self.__organisms.remove(organism)
+        with_lock(self.__orgsLock, remove)
 
     def addOrganism(self, Creature) :
-        self.__organisms.add(Creature)
+        with_lock(self.__orgsLock, lambda : self.__organisms.add(Creature))
 
     def setSunlight(self, val) :
         self.__sunlight = val
