@@ -4,8 +4,8 @@ import location
 from organism import Organism
 
 class Coccolithophores(Organism):
-    def __init__(self, location, ecosystem):
-        Organism.__init__(self, location, ecosystem)
+    def __init__(self, ecosystem, location):
+        Organism.__init__(self, ecosystem, location)
         self.population = 1000000
         self.virusWaxWane = -1 #starts waning strength virus
         self.virusEfficiency = 5000 #relatively weak

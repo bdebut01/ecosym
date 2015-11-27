@@ -6,6 +6,8 @@ from seablock import SeaBlock
 from threading import Semaphore
 from threading import Lock
 from coccolithophores import Coccolithophores
+from bulbasaur        import Bulbasaur
+
 import time
 
 def with_lock(lock, function):
@@ -42,7 +44,7 @@ class Ecosystem():
         # Automatically populating each seablock with an instance of coccolithophore
         for i in range(self.hdim):
             for j in range(self.vdim):
-                plankton = Coccolithophores(Location(i,j), self)
+                plankton = Coccolithophores(self, Location(i,j))
                 self.addOrganism(plankton)
 
     # creates a dictionary where the keys and vals are organism subclass
@@ -84,6 +86,14 @@ class Ecosystem():
             newLoc.col = newLoc.col + (hdim/2)
             if newLoc.col >= vdim:
                 newLoc.col -= vdim
+
+    def loadCreatures(self, num_and_what_creatures, creature_funcs):
+        # Loop thru num_and_what_creatures dictionary for which and quantities
+        for key in num_and_what_creatures:
+            for i in num_and_what_creatures[key]: # for every creature of that species
+                # newOrganism = creature_funcs(int(key))(self)
+                # self.addOrganism(newOrganism)
+                break
 
     def printSimulation(self):
         # Loop through private organism set, calling their print methods
