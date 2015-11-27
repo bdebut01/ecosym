@@ -13,9 +13,6 @@ class Tuna(Organism):
         self.lifespanTicks = 15 * 365 * 24 * 60 # years * days * hours * mins
 
     def performStandardAction(self):
-        if self.wasEaten == True:
-            self.die()
-
         if self.ticksAlive >= self.lifespanTicks:
             self.die() # die of old age
 

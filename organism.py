@@ -22,11 +22,12 @@ class Organism(threading.Thread):
     def run(self) :
         while True:
             self.ecosystem.barrier.wait()
+            if self.wasEaten == True:
+                self.die()
             self.performStandardAction()
     
     def performStandardAction(self):
-        if self.wasEaten == True:
-            self.die()
+        return
     
     def move(self):
         #sit there
