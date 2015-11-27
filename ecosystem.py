@@ -61,7 +61,7 @@ class Ecosystem():
     #      myFish = Fish(...)
     #      isEdible(myShark, myFish) # should return True
     def isEdible(self, predator, prey):
-        return self.__foodchain.isEdible(predator, prey)
+        return self.__foodchain.isEdible(type(predator), type(prey))
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc

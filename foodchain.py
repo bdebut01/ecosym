@@ -22,15 +22,11 @@ class Foodchain():
         for prey in listOfPrey:
             addRelationship(predator, prey)
 
-    # tells you if the predator can eat the potential prey (note: pass in an
+    # tells you if the predator can eat the potential prey (note: pass in a type of
     # an instance of an organism subclass. 
-    # e.g. myShark = Shark(...)
-    #      myFish = Fish(...)
-    #      isEdible(myShark, myFish) # should return True
-    def isEdible(self, predator, prey):
-        predTy = type(predator)
-        preyTy = type(prey)
-        if predTy in self.__foodchain and preyTy in self.__foodchain[predTy]:
+    # e.g. isEdible(shark.Shark, fish.Fish) should return True
+    def isEdible(self, pred, prey):
+        if pred in self.__foodchain and prey in self.__foodchain[pred]:
             return True
         else:
             return False
