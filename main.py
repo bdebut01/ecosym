@@ -1,6 +1,7 @@
 import sys
 from ecosystem import Ecosystem
-import ecosystem
+from coccolithophores import Coccolithophores
+from bulbasaur 		  import Bulbasaur
 from seablock import SeaBlock
 from location import Location
 import coccolithophores
@@ -19,12 +20,14 @@ def presetCreatures():
 	creatures = dict()
 	global num_and_what_creatures
 	num_and_what_creatures = dict() # key is creature_id, value is quantity
+	global creature_funcs
+	creature_funcs = dict()
 	# List off creature pairings
 	creatures[0] = "Coccolithophores"
-	creature_funcs[0] = coccolithophores.Coccolithophores # Halp
+	creature_funcs[0] = Coccolithophores # Halp
 	creatures[1] = "Quadralopsaurus"
 	creatures[2] = "Bulbasaur"
-	creature_funcs[2] = bulbasaur.Bulbasaur
+	creature_funcs[2] = Bulbasaur
 	creatures[3] = "These are test creatures"
 
 def inputLoop():
