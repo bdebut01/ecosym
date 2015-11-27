@@ -10,7 +10,7 @@ class Shark(Organism):
             self.sex = "F"
 
         self.ticksAlive = 0
-        self.lifespanTicks = 20 #* 365 * 24 * 60 # years * days * hours * mins
+        self.lifespanTicks = 20 * 365 * 24 * 60 # years * days * hours * mins
 
     def performStandardAction(self):
         if self.ticksAlive >= self.lifespanTicks:
@@ -22,7 +22,9 @@ class Shark(Organism):
             if type(org) == type(self): # found a fellow shark!
                 if org.sex != self.sex:
                     self.reproduce()
+                    break
             elif self.ecosystem.isEdible(self, org):
+                print "EATING!!!!!"
                 org.beEaten()
                 break
         self.ticksAlive += 1
@@ -33,6 +35,7 @@ class Shark(Organism):
         return
 
     def printStatus(self):
-        print "Shark here"
+        #print "Shark here"
+        return
                 
 

@@ -11,6 +11,9 @@ class Coccolithophores(Organism):
         self.virusEfficiency = 5000 #relatively weak
     
     def performStandardAction(self):
+        if self.wasEaten == True:
+            self.die()
+
         loc = self.ecosystem.getSeaBlock(self.location)
         if loc.getSunlight() > 0:
             self.population += (self.population * (1/loc.getSunlight())) #reproduce photosynthetically
@@ -36,8 +39,7 @@ class Coccolithophores(Organism):
     def beEaten(self):
         self.population -= 15000
         if self.population <= 0:
-            print "Eaten"
-            self.die()
+            self.wasEaten = True
 
     def printStatus(self):
         #print str(self.population) + " coccolithophores at ocean location (" + str(self.location.row) + ", " + str(self.location.col) + ")"

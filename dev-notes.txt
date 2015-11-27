@@ -13,3 +13,11 @@ a lock
 
 -- BEN SWAPPED THE ORDER OF Organism constructor arguments, beware!!
 	-> (he did this because he needed to make location argument optional)
+
+-- EATING:
+    -- a predator might try to eat an organism when it's asleep or in the middle
+       of an action. To deal with this, when a predator calls prey.beEaten(), it
+       just sets the prey's wasEaten variable to True. At the beginning of each
+       loop, an organism checks if it wasEaten and if it was, it dies or
+       decrements its population
+

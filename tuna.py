@@ -10,12 +10,14 @@ class Tuna(Organism):
             self.sex = "F"
 
         self.ticksAlive = 0
-        self.lifespanTicks = 20 #15 * 365 * 24 * 60 # years * days * hours * mins
+        self.lifespanTicks = 15 * 365 * 24 * 60 # years * days * hours * mins
 
     def performStandardAction(self):
+        if self.wasEaten == True:
+            self.die()
+
         if self.ticksAlive >= self.lifespanTicks:
             self.die() # die of old age
-            return
 
         myBlock = self.ecosystem.getSeaBlock(self.location)
         neighborOrgs = myBlock.getOrganisms()
@@ -24,7 +26,6 @@ class Tuna(Organism):
                 if org.sex != self.sex:
                     self.reproduce()
             elif self.ecosystem.isEdible(self, org):
-                print "EATING!!!!!!!!!!!!!!!"
                 org.beEaten()
         self.ticksAlive += 1
         self.ecosystem.barrier.wait()
@@ -34,6 +35,7 @@ class Tuna(Organism):
         return
 
     def printStatus(self):
-        print "Tuna here"
+        #print "Tuna here"
+        return
                 
 

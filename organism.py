@@ -12,6 +12,7 @@ class Organism(threading.Thread):
             j_loc = random.randint(0, ecosystem.vdim - 1)
             location = Location(i_loc, j_loc)
         self.location = location
+        self.wasEaten = False
         self.lock = threading.Lock()
         self.ecosystem = ecosystem
         self.timeCounter = ecosystem.globalTime
@@ -24,15 +25,15 @@ class Organism(threading.Thread):
             self.performStandardAction()
     
     def performStandardAction(self):
-        #sit there
-        return
+        if self.wasEaten == True:
+            self.die()
     
     def move(self):
         #sit there
         return
     
     def beEaten(self):
-        self.die()
+        self.wasEaten = True
     
     def die(self):
         #if self.timeCounter != self.ecosystem.globalTime:
