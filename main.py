@@ -14,22 +14,25 @@ global num_and_what_creatures
 global creature_funcs
 
 # ADD YOUR ORGANISM HERE, for recognition purposes
+# Look at bulbasaur for example, but it does mean don't repeat organism IDs
 def presetCreatures():
 	global creatures
-        global creature_funcs
+	global creature_funcs
 	creatures = dict()
 	global num_and_what_creatures
 	num_and_what_creatures = dict() # key is creature_id, value is quantity
 	global creature_funcs
 	creature_funcs = dict()
-	# List off creature pairings
+
+
+	# List off creature pairings, add your organism HERE
 	creatures[0] = "Coccolithophores"
 	creature_funcs[0] = Coccolithophores # Halp
-	creatures[1] = "Quadralopsaurus"
-	creatures[2] = "Bulbasaur"
-	creature_funcs[2] = Bulbasaur
-	creatures[3] = "These are test creatures"
+	creatures[1] = "Bulbasaur"
+	creature_funcs[1] = Bulbasaur
 
+# Can ignore me, I loop in stdin/stdout receiving organism IDs and quantities
+#	Stop when 'q' is read in
 def inputLoop():
 	while True:
 		user_input = raw_input()
