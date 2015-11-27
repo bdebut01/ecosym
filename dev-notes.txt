@@ -11,4 +11,5 @@ phase1 v phase2)
 -- Size of orgsList Set was getting changed in the middle of loop, so we added
 a lock
 
-
+-- BEN SWAPPED THE ORDER OF Organism constructor arguments, beware!!
+	-> (he did this because he needed to make location argument optional)

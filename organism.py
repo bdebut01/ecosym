@@ -1,9 +1,15 @@
 import threading
 import sys
+import random
 
 class Organism(threading.Thread):
-    def __init__(self, location, ecosystem):
+    def __init__(self, ecosystem, location=None):
         threading.Thread.__init__(self)
+        if location is None:
+            random.seed()
+            i_loc = random.randint(0, self.hdim) # these are inclusive
+            j_loc = random.randint(0, self.vdim)
+            location = Location(i_loc, j_loc)
         self.location = location
         self.lock = threading.Lock()
         self.ecosystem = ecosystem
