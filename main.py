@@ -4,6 +4,7 @@ from coccolithophores import Coccolithophores
 from bulbasaur 		  import Bulbasaur
 from seablock import SeaBlock
 from location import Location
+import coccolithophores
 
 # Import global variables for entire simulation, (e,g: creature dictionary)
 #import variables 
@@ -15,6 +16,7 @@ global creature_funcs
 # ADD YOUR ORGANISM HERE, for recognition purposes
 def presetCreatures():
 	global creatures
+        global creature_funcs
 	creatures = dict()
 	global num_and_what_creatures
 	num_and_what_creatures = dict() # key is creature_id, value is quantity

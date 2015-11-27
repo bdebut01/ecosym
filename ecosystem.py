@@ -5,6 +5,7 @@ from barrier import Barrier
 from seablock import SeaBlock
 from threading import Semaphore
 from threading import Lock
+from foodchain import Foodchain
 from coccolithophores import Coccolithophores
 from bulbasaur        import Bulbasaur
 
@@ -47,15 +48,12 @@ class Ecosystem():
                 plankton = Coccolithophores(self, Location(i,j))
                 self.addOrganism(plankton)
 
-    # creates a dictionary where the keys and vals are organism subclass
-    # types. The keys represent the "predators" and the
-    # vals are lists of the "prey" they can eat. e.g. it could tell you that
-    # a shark can eat a fish. that would look something like this:
-    # { <type 'shark.Shark'>: [<type 'fish.Fish'>] }
+
     def createFoodchain(self):
         # this is an example, we should change this as soon as we have actual
         # predators and prey
-        self.__foodchain = { str(Coccolithophores): [str(Coccolithophores)] }
+        self.__foodchain = Foodchain()
+        self.__foodchain.addRelationship(Bulbasaur, Bulbasaur)
 
     # tells you if the predator can eat the potential prey (note: pass in an
     # an instance of an organism subclass. 
@@ -63,12 +61,7 @@ class Ecosystem():
     #      myFish = Fish(...)
     #      isEdible(myShark, myFish) # should return True
     def isEdible(self, predator, prey):
-        predTy = type(predator)
-        preyTy = type(prey)
-        if predTy in self.__foodchain and preyTy in self.__foodchain[predTy]:
-            return True
-        else:
-            return False
+        return self.__foodchain.isEdible(predator, prey)
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
