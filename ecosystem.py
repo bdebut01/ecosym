@@ -80,16 +80,16 @@ class Ecosystem():
             if newLoc.col >= vdim:
                 newLoc.col -= vdim
 
+    # Called in main to load the creatures the user typed in before the simulation
+    #   starts running. 
     def loadCreatures(self, num_and_what_creatures, creature_funcs):
-        # Loop thru num_and_what_creatures dictionary for which and quantities
+        # Loop thru num_and_what_creatures dictionary for which species and quantities
         for key in num_and_what_creatures:
             for i in num_and_what_creatures[key]: # for every creature of that species
                 # Instantiate organism using creature function dict, no location passed
                 #   so random will be chosen by constructor
-                temp_func = creature_funcs[int(key)]
-                newOrganism = temp_func(self)
+                newOrganism = creature_funcs[int(key)](self)
                 self.addOrganism(newOrganism)
-                break
 
     def printSimulation(self):
         # Loop through private organism set, calling their print methods
