@@ -31,11 +31,10 @@ class Shark(Organism):
         self.ecosystem.barrier.wait()
 
     def reproduce(self):
-        # TBD
-        return
+        child = Shark(self.ecosystem, self.location)
+        self.ecosystem.addNewborn(child)
 
     def printStatus(self):
-        #print "Shark here"
         return
                 
 

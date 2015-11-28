@@ -12,6 +12,7 @@ from shark import Shark
 from tuna import Tuna
 from thread_functions import with_lock
 import time
+import random
 
 class Ecosystem():
     def __init__(self, hdim, vdim):
@@ -22,8 +23,10 @@ class Ecosystem():
         self.orgsList = Set()
         self.orgsListMutex = Lock()
         self.createOcean(hdim, vdim)
-        self.prepopulateCoccolithophores()
+        #self.prepopulateCoccolithophores()
         self.createFoodchain()
+        self.newborns = []
+        self.newbornsLock = Lock()
     
     def createOcean(self, hdim, vdim):
         self.ocean = []
@@ -40,7 +43,6 @@ class Ecosystem():
             for j in range(self.vdim):
                 plankton = Coccolithophores(self, Location(i,j))
                 self.addOrganism(plankton)
-
 
     def createFoodchain(self):
         # this is an example, we should change this as soon as we have actual
@@ -89,23 +91,26 @@ class Ecosystem():
         # Loop through private organism set, calling their print methods
         def print_orgs():
             for org in self.orgsList:
-                org.printStatus()
+                if org.isAlive():
+                    org.printStatus()
         with_lock(self.orgsListMutex, print_orgs)
 
     def addOrganism(self, org):
         self.getSeaBlock(org.location).addOrganism(org)
         with_lock(self.orgsListMutex, lambda : self.orgsList.add(org))
+
+    def addNewborn(self, newborn):
+        with_lock(self.newbornsLock, lambda : self.newborns.append(newborn))
     
     def reportDeath(self, organism):
         # remove from ocean block
         self.getSeaBlock(organism.location).removeOrganism(organism) 
         # remove from private organism list
         def remove():
-            if organism in self.orgsList:
-                self.orgsList.remove(organism)
+            self.orgsList.discard(organism)
         with_lock(self.orgsListMutex, remove)
-        if type(organism) != Coccolithophores:
-            print "Death reported"
+        #if type(organism) != Coccolithophores:
+        #    print str(type(organism)) + "Death reported"
 
     def getSeaBlock(self, location):
         return self.ocean[location.row][location.col]
@@ -131,19 +136,64 @@ class Ecosystem():
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             # time.sleep(TICK_TIME)
 
+            print "Value of barrier: " + str(self.barrier.n)
+            print "Len of orgs list before starting newborns: " + str(len(self.orgsList))
+            def startNewborns():
+                i = 0
+                j = 0
+                for org in self.orgsList:
+                    if not org.isAlive():
+                        org.start()
+                        i += 1
+                    else:
+                        j += 1
+                print "started " + str(i)
+                print "already active " + str(j)
+            with_lock(self.orgsListMutex, startNewborns)
+
             # after phase 1, all orgs should be done with actions, ecosystem 
             # can safely print status, do other maintenance
+            print "done phase 1"
             self.barrier.phase1()
+            print "def done phase 1"
             # Print simulaiton for this tick, could embed this in a if i%amount == 0
             self.printSimulation()
 
-            with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
-            if self.__simulationRunning:
-                # + 1 b/c barrier itself is being counted
-                with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+            if len(self.orgsList) + len(self.newborns) >= 1500:
+                numOrgsToRemove = random.randint(200, 300)
+                numNewbornsToRemove = random.randint(0, len(self.newborns) / 2)
+                if len(self.newborns) - numNewbornsToRemove > 200:
+                    numNewbornsToRemove = len(self.newborns) - 200
 
+                while len(self.orgsList) >= 1700:
+                    org = self.orgsList.pop()
+                    self.orgsList.add(org)
+                    self.reportDeath(org)
+
+                for i in range(numOrgsToRemove):
+                    org = self.orgsList.pop()
+                    self.orgsList.add(org)
+                    self.reportDeath(org)
+
+                for i in range(numNewbornsToRemove):
+                    self.newborns.pop()
+                print "Threads reduced"
+                    
+            for i in range(len(self.newborns)):
+                org = self.newborns.pop()
+                self.addOrganism(org)
+                #org.start()
+                if i == 0:
+                    print str(len(self.newborns)) + " Babies added"
+
+            # + 1 b/c barrier itself is being counted
+            with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+            print "set barrier to " + str(self.barrier.n)
+            self.newborns = []
+            with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
+            print "After phase 2"
 
     # Used for debugging purposes
     def printNumOrgs(self):
@@ -157,4 +207,6 @@ class Ecosystem():
         if len(self.orgsList) <= 0:
             print "Ending simulation"
             self.__simulationRunning = False
+        else:
+            print "Not ending sim"
 

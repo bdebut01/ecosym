@@ -23,7 +23,8 @@ class Barrier:
     def phase2(self) :
         self.mutex.acquire()
         self.count -= 1
-        if self.count == 0 : #all threads have been thru
+        if self.count <= 0 : #all threads have been thru
+            self.count = 0
             self.turnstile.acquire() #lock the first
             self.turnstile2.release() #unlock the second
         self.mutex.release()
