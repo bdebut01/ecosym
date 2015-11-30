@@ -28,7 +28,8 @@ class Tuna(Organism):
         self.ecosystem.barrier.wait()
 
     def reproduce(self):
-        # TBD
+        newTuna = tuna(self.ecosystem, self.location)
+        self.ecosystem.addOrganism(newtuna)
         return
 
     def printStatus(self):
