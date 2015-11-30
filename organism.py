@@ -14,6 +14,9 @@ class Organism(threading.Thread):
         self.location = location
         self.wasEaten = False
         self.lock = threading.Lock()
+        self.directionXImpact = 0
+        self.directionYImpact=0
+        self.movementImpact=0
         self.ecosystem = ecosystem
         self.timeCounter = ecosystem.globalTime
 
@@ -30,8 +33,11 @@ class Organism(threading.Thread):
         return
     
     def move(self):
-        #sit there
-        return
+    newX = self.loc.x+(directionXImpact*movementImpact)
+    newY = self.loc.y+(directionYImpact*movementImpact)
+    self.ecosystem.move(self.loc, Location(newX, newY))
+    self.loc=newLoc
+                return
     
     def beEaten(self):
         self.wasEaten = True
