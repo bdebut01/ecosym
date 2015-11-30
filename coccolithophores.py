@@ -18,15 +18,14 @@ class Coccolithophores(Organism):
         ## commenting out virus stuff to simplify things until we get basic
         ## simulation working. just decreasing population by constant amount
         ## for now instead
-        #self.population -= self.virusEfficiency
-        #self.virusEfficiency += (self.virusWaxWane * (self.virusEfficiency/2)) #simple power-growth expand?
+        self.population -= self.virusEfficiency
+        self.virusEfficiency += (self.virusWaxWane * (self.virusEfficiency/2)) #simple power-growth expand?
         #the tables turn
-        #if self.virusEfficiency <= 100:
-        #    self.virusWaxWane = 1
-        #elif self.virusEfficiency >= 100000:
-        #    self.virusWaxWane = -1
-        self.population -= 20000
-
+        if self.virusEfficiency <= 100:
+            self.virusWaxWane = 1
+        elif self.virusEfficiency >= 100000:
+            self.virusWaxWane = -1
+        
         #possible: affect viruses in adjacent cells?
         if self.population <= 0:
             #print "Dying"
