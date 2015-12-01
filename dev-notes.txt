@@ -21,3 +21,17 @@ a lock
        loop, an organism checks if it wasEaten and if it was, it dies or
        decrements its population
 
+-- REPRODUCTION:
+    -- If we reach the system's thread limit, some baby organisms won't get to
+        live. We essentially destroy them and no new organisms will be able to
+        be added unless other organisms die.
+        -- We do this by catching the exception raised when we try to start a
+            new thread but have reached the limit. There are probably better
+            ways to deal with this, but attempts at terminating random organism
+            threads and not just newborns resulted in deadlock. This is probably
+            the simplest way.
+    -- To reproduce, call ecosystem.addNewborn(babyOrganism), e.g. in the Shark
+        class:
+        baby = Shark(self.ecosystem, self.location)
+        self.ecosystem.addNewborn(baby)
+

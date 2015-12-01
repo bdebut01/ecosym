@@ -24,6 +24,8 @@ class Ecosystem():
         self.createOcean(hdim, vdim)
         self.prepopulateCoccolithophores()
         self.createFoodchain()
+        self.newborns = []
+        self.newbornsMutex = Lock()
     
     def createOcean(self, hdim, vdim):
         self.ocean = []
@@ -95,6 +97,9 @@ class Ecosystem():
     def addOrganism(self, org):
         self.getSeaBlock(org.location).addOrganism(org)
         with_lock(self.orgsListMutex, lambda : self.orgsList.add(org))
+
+    def addNewborn(self, newborn):
+        with_lock(self.newbornsMutex, lambda : self.newborns.append(newborn))
     
     def reportDeath(self, organism):
         # remove from ocean block
@@ -131,19 +136,46 @@ class Ecosystem():
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             # time.sleep(TICK_TIME)
 
-            # after phase 1, all orgs should be done with actions, ecosystem 
+            # after phase 1, all orgs sould be done with actions, ecosystem 
             # can safely print status, do other maintenance
             self.barrier.phase1()
-            # Print simulaiton for this tick, could embed this in a if i%amount == 0
+            # Print simulation for this tick, could embed this in a if i%amount == 0
             self.printSimulation()
 
+            self.addAndStartNewborns()
+            # + 1 b/c barrier itself is being counted
+            with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
-            if self.__simulationRunning:
-                # + 1 b/c barrier itself is being counted
-                with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
-
+            print "Entering phase 2"
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
+
+    def addAndStartNewborns(self):
+        for newborn in self.newborns:
+            self.addOrganism(newborn)
+
+        # need to set barrier's n before starting threads so that they immediately block
+        with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+
+        excessThreads = []
+        def startThreadsUpToLimit():
+            for org in self.orgsList:
+                if not org.isAlive():
+                    try:
+                        org.start()
+                    except Exception as e:
+                        excessThreads.append(org)
+        with_lock(self.orgsListMutex, startThreadsUpToLimit)
+
+        # if we've reached the thread limit, some newborns don't get to live
+        for thread in excessThreads:
+            self.reportDeath(thread)
+
+        # set the barrier again because if there were excess threads, n is incorrect
+        with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+
+        self.newborns = []
+
 
     # Used for debugging purposes
     def printNumOrgs(self):
