@@ -52,6 +52,28 @@ SPACE
 
 TO DO
 -----
-Add lock for printing to stdout
+- Add lock for printing to stdout
+- Better output
+- More organisms
+    - turtle
+    - tiny fish
+    - whale
+    - krill?
+    - octopus
+    - starfish
+    - crab
+    - lobster
+    - pipefish
+    - anglerfish
+    - american herring
+    - salmon
+    - cod
+    - sardines
+    - squid
+    - algae
+    - coral
+- Do we need to do more things with time?
+- Probability function for being eaten
+- More mutexes?
 
 
