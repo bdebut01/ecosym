@@ -75,5 +75,6 @@ TO DO
 - Do we need to do more things with time?
 - Probability function for being eaten
 - More mutexes?
+- Affect and/or use seablock's variables? e.g. oxygen
 
 
