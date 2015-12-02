@@ -19,18 +19,18 @@ class Tuna(Organism):
         myBlock = self.ecosystem.getSeaBlock(self.location)
         neighborOrgs = myBlock.getOrganisms()
         for org in neighborOrgs:
-            if type(org) == type(self): # found a fellow shark!
+            if type(org) == type(self): # found a fellow tuna!
                 if org.sex != self.sex:
                     self.reproduce()
+                    break
             elif self.ecosystem.isEdible(self, org):
                 org.beEaten()
+                break
         self.ticksAlive += 1
-        self.ecosystem.barrier.wait()
 
     def reproduce(self):
-        newTuna = tuna(self.ecosystem, self.location)
-        self.ecosystem.addOrganism(newtuna)
-        return
+        newTuna = Tuna(self.ecosystem, self.location)
+        self.ecosystem.addNewborn(newTuna)
 
     def printStatus(self):
         #print "Tuna here"

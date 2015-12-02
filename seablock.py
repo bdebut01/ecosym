@@ -27,7 +27,11 @@ class SeaBlock :
     def getSunlight(self): return self.__sunlight
     def getOxygen(self): return self.__oxygen
     def getPressure(self): return self.__pressure
-    def getOrganisms(self): return self.__organisms
+    def getOrganisms(self): 
+        def getOrgs():
+            orgsAsList = list(self.__organisms)
+            return orgsAsList[:] # return by value, not by reference
+        return with_lock(self.__orgsLock, getOrgs)
 
     def printAttributes(self):
         print "Salinity: " + str(self.getSalinity())

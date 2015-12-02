@@ -24,14 +24,11 @@ class Shark(Organism):
                     self.reproduce()
                     break
             elif self.ecosystem.isEdible(self, org):
-                print "EATING!!!!!"
                 org.beEaten()
                 break
         self.ticksAlive += 1
-        self.ecosystem.barrier.wait()
 
     def reproduce(self):
-        # TBD
         baby = Shark(self.ecosystem, self.location)
         self.ecosystem.addNewborn(baby)
 
