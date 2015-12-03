@@ -29,8 +29,7 @@ class Shrimp(Organism):
         #reproduce
         self.movementImpact=food/20000
         if self.movementImpact < 0: self.movementImpact=0
-        self.directionXImpact = random.uniform(-1,1)
-        self.directionYImpact = random.uniform(-1,1)
+        self.randomDirection()
         self.move()
         if self.hunger >= 100:
             self.hunger = 100
