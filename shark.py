@@ -4,7 +4,7 @@ from fish import Fish
 
 class Shark(Fish):
     def __init__(self, ecosystem, location = None, isNewborn = False):
-        Fish.__init__(self, ecosystem, 20, location, isNewborn)
+        Fish.__init__(self, ecosystem, 20, 10, location, isNewborn)
         self.survivalProbability = 1
 
     def reproduce(self):
