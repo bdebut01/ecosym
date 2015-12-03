@@ -50,13 +50,10 @@ class Ecosystem():
         # this is an example, we should change this as soon as we have actual
         # predators and prey
         self.__foodchain = Foodchain()
-<<<<<<< HEAD
         self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
         self.__foodchain.addRelationship(Manatee, Coccolithophores)
         self.__foodchain.addRelationship(Shark, Manatee)
-=======
         self.__foodchain.addRelationship(Shrimp, Coccolithophores)
->>>>>>> 9e47d0cda9c2130cf19b079cf5f285b48ddb047d
         self.__foodchain.addRelationship(Shark, Tuna)
 
     # tells you if the predator can eat the potential prey (note: pass in an
