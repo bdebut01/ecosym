@@ -20,7 +20,7 @@ class Organism(threading.Thread):
         self.movementImpact=0
         self.ecosystem = ecosystem
         self.timeCounter = ecosystem.globalTime
-        self.survivalProbability = 1 # probability of surviving being eaten
+        self.survivalProbability = 0 # probability of surviving being eaten
 
     # calling (the built-in threading function) start on a thread runs the run()
     # function, so the actions we want the thread to run go in the run() func
@@ -42,7 +42,7 @@ class Organism(threading.Thread):
     
     def beEaten(self):
         self.wasEaten = random_choice([True, False], 
-                [self.survivalProbability, 1 - self.survivalProbability])
+                [1 - self.survivalProbability, self.survivalProbability])
     
     def die(self):
         #if self.timeCounter != self.ecosystem.globalTime:
