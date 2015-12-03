@@ -8,6 +8,8 @@ from threading import Lock
 from foodchain import Foodchain
 from coccolithophores import Coccolithophores
 from bulbasaur        import Bulbasaur
+from manatee import Manatee
+from shrimp import Shrimp
 from shark import Shark
 from tuna import Tuna
 from helper_functions import with_lock
@@ -48,7 +50,13 @@ class Ecosystem():
         # this is an example, we should change this as soon as we have actual
         # predators and prey
         self.__foodchain = Foodchain()
+<<<<<<< HEAD
         self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
+        self.__foodchain.addRelationship(Manatee, Coccolithophores)
+        self.__foodchain.addRelationship(Shark, Manatee)
+=======
+        self.__foodchain.addRelationship(Shrimp, Coccolithophores)
+>>>>>>> 9e47d0cda9c2130cf19b079cf5f285b48ddb047d
         self.__foodchain.addRelationship(Shark, Tuna)
 
     # tells you if the predator can eat the potential prey (note: pass in an
@@ -62,19 +70,19 @@ class Ecosystem():
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
         while int(newLoc.col < 0): #off west
-            newLoc.col += vdim
-        while int(newLoc.col) >= vdim: #off east
-            newLoc.col -= vdim
+            newLoc.col += self.vdim
+        while int(newLoc.col) >= self.vdim: #off east
+            newLoc.col -= self.vdim
         while int(newLoc.row < 0): #off north
             newLoc.row = 0-newLoc.row
-            newLoc.col = newLoc.col + (hdim/2)
-            if newLoc.col >= vdim:
-                newLoc.col -= vdim
-        while newLoc.row >= hdim: #off south
-            newLoc.row = hdim-newLoc.row #over the pole
-            newLoc.col = newLoc.col + (hdim/2)
-            if newLoc.col >= vdim:
-                newLoc.col -= vdim
+            newLoc.col = newLoc.col + (self.hdim/2)
+            if newLoc.col >= self.vdim:
+                newLoc.col -= self.vdim
+        while newLoc.row >= self.hdim: #off south
+            newLoc.row = self.hdim-newLoc.row #over the pole
+            newLoc.col = newLoc.col + (self.hdim/2)
+            if newLoc.col >= self.vdim:
+                newLoc.col -= self.vdim
 
     # Called in main to load the creatures the user typed in before the simulation
     #   starts running. 
