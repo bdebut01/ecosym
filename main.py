@@ -4,6 +4,7 @@ from coccolithophores import Coccolithophores
 from bulbasaur 		  import Bulbasaur
 from shark import Shark
 from tuna import Tuna
+from shrimp import Shrimp
 from seablock import SeaBlock
 from location import Location
 import coccolithophores
@@ -30,8 +31,8 @@ def presetCreatures():
 	# List off creature pairings, add your organism HERE
 	creatures[0] = "Coccolithophores"
 	creature_funcs[0] = Coccolithophores # Halp
-	creatures[1] = "Bulbasaur"
-	creature_funcs[1] = Bulbasaur
+	creatures[1] = "Shrimp"
+	creature_funcs[1] = Shrimp
         creatures[2] = "Shark"
         creature_funcs[2] = Shark
         creatures[3] = "Tuna"
