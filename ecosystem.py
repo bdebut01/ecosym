@@ -10,7 +10,7 @@ from coccolithophores import Coccolithophores
 from bulbasaur        import Bulbasaur
 from shark import Shark
 from tuna import Tuna
-from thread_functions import with_lock
+from helper_functions import with_lock
 import time
 
 class Ecosystem():

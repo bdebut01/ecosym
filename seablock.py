@@ -1,5 +1,5 @@
 from sets import Set
-from thread_functions import with_lock
+from helper_functions import with_lock
 from threading import Lock
 
 class SeaBlock :
