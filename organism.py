@@ -33,6 +33,11 @@ class Organism(threading.Thread):
     
     def performStandardAction(self):
         return
+    #chooses a random direction to go
+    #to be skipped if you have a more sophisticated movement algorithm
+    def randomDirection(self):
+        self.directionXImpact = random.uniform(-1,1)
+        self.directionYImpact = random.uniform(-1,1)
     
     def move(self):
         newX = self.location.row+(self.directionXImpact*self.movementImpact)
