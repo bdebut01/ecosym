@@ -46,7 +46,7 @@ class Organism(threading.Thread):
         self.loc=Location(newX, newY)
     
     def beEaten(self):
-        self.wasEaten = random_choice([True, False], 
+        self.wasEaten = random_pick([True, False], 
                 [1 - self.survivalProbability, self.survivalProbability])
     
     def die(self):
