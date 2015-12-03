@@ -44,13 +44,13 @@ def userDeclareOceanSize():
 	while True:
 		user_input = raw_input()
 		if len(user_input.split(' ')) != 2: # Ignore inputs with anything but 2 values
-			print "Please input a valid ocean size, minimum 1 x 1"
+			print "Please input a valid ocean size, minimum 1 x 1, maximum block^2 is 900"
 			continue
 		else:
 			width, height = user_input.split(' ')
 			print "Height: " + str(height) + " Width: " + str(width)
-			if not width.isdigit() or not height.isdigit() or int(width) < 1 or int(height) < 1:
-				print "Minimum height and width is 1, try again"
+			if not width.isdigit() or not height.isdigit() or int(width) < 1 or int(height) < 1 or int(width) * int(height) > 900:
+				print "Minimum height and width is 1, max block^2 is 900, try again"
 			else:
 				print "OK, ocean width: " + str(width) + " ocean height: " + str(height)
 				print '\n' 
