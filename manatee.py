@@ -17,11 +17,13 @@ class Manatee(Organism):
 		# Who knew? Manatees can live up to 60 years old
 		self.lifespanTicks = 60 * 365 * 24 * 60 # years * days * hours * mins
 		self.survivalProbability = 0.2 # don't think they are the best survivors
+		self.movementImpact = .1
+		self.hunger = 50
 
 	def performStandardAction(self):
 		if self.ticksAlive >= self.lifespanTicks:
 			self.die() # die of old age
-
+		prey = None
 		myBlock = self.ecosystem.getSeaBlock(self.location)
 		neighborOrgs = myBlock.getOrganisms()
 		for org in neighborOrgs:
@@ -30,8 +32,16 @@ class Manatee(Organism):
 					self.reproduce()
 					break
 			elif self.ecosystem.isEdible(self, org):
-				org.beEaten()
+				prey = org
 				break
+		if prey != None:
+			food = prey.beEaten()
+			self.hunger -= (food/15000)
+		
+		self.hunger += 1 # every tick get 1 more hunger unit
+
+		if self.hunger > 100: # starve, (like normal animals, not like threads)
+			self.die()
 		self.ticksAlive += 1
 
 	def reproduce(self):
@@ -41,4 +51,3 @@ class Manatee(Organism):
 	def printStatus(self):
 		#print "Manatee here"
 		return
-

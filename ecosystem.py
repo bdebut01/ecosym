@@ -115,7 +115,7 @@ class Ecosystem():
                 self.orgsList.remove(organism)
         with_lock(self.orgsListMutex, remove)
         if type(organism) != Coccolithophores:
-            print "Death reported"
+            print "A " + str(type(organism)) + " died oh no!"
 
     def getSeaBlock(self, location):
         return self.ocean[location.row][location.col]
