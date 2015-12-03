@@ -63,19 +63,19 @@ class Ecosystem():
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
         while int(newLoc.col < 0): #off west
-            newLoc.col += vdim
-        while int(newLoc.col) >= vdim: #off east
-            newLoc.col -= vdim
+            newLoc.col += self.vdim
+        while int(newLoc.col) >= self.vdim: #off east
+            newLoc.col -= self.vdim
         while int(newLoc.row < 0): #off north
             newLoc.row = 0-newLoc.row
-            newLoc.col = newLoc.col + (hdim/2)
-            if newLoc.col >= vdim:
-                newLoc.col -= vdim
-        while newLoc.row >= hdim: #off south
-            newLoc.row = hdim-newLoc.row #over the pole
-            newLoc.col = newLoc.col + (hdim/2)
-            if newLoc.col >= vdim:
-                newLoc.col -= vdim
+            newLoc.col = newLoc.col + (self.hdim/2)
+            if newLoc.col >= self.vdim:
+                newLoc.col -= self.vdim
+        while newLoc.row >= self.hdim: #off south
+            newLoc.row = self.hdim-newLoc.row #over the pole
+            newLoc.col = newLoc.col + (self.hdim/2)
+            if newLoc.col >= self.vdim:
+                newLoc.col -= self.vdim
 
     # Called in main to load the creatures the user typed in before the simulation
     #   starts running. 
