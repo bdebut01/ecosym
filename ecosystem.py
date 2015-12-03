@@ -8,6 +8,7 @@ from threading import Lock
 from foodchain import Foodchain
 from coccolithophores import Coccolithophores
 from bulbasaur        import Bulbasaur
+from manatee import Manatee
 from shark import Shark
 from tuna import Tuna
 from helper_functions import with_lock
@@ -49,6 +50,8 @@ class Ecosystem():
         # predators and prey
         self.__foodchain = Foodchain()
         self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
+        self.__foodchain.addRelationship(Manatee, Coccolithophores)
+        self.__foodchain.addRelationship(Shark, Manatee)
         self.__foodchain.addRelationship(Shark, Tuna)
 
     # tells you if the predator can eat the potential prey (note: pass in an

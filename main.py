@@ -3,6 +3,7 @@ from ecosystem import Ecosystem
 from coccolithophores import Coccolithophores
 from bulbasaur 		  import Bulbasaur
 from shark import Shark
+from manatee import Manatee
 from tuna import Tuna
 from seablock import SeaBlock
 from location import Location
@@ -32,10 +33,12 @@ def presetCreatures():
 	creature_funcs[0] = Coccolithophores # Halp
 	creatures[1] = "Bulbasaur"
 	creature_funcs[1] = Bulbasaur
-        creatures[2] = "Shark"
-        creature_funcs[2] = Shark
-        creatures[3] = "Tuna"
-        creature_funcs[3] = Tuna
+	creatures[2] = "Shark"
+	creature_funcs[2] = Shark
+	creatures[3] = "Tuna"
+	creature_funcs[3] = Tuna
+	creatures[4] = "Manatee"
+	creature_funcs[4] = Manatee
 
 def userDeclareOceanSize():
 	print "--Input Ocean size--"
