@@ -33,7 +33,9 @@ class Coccolithophores(Organism):
             #print "Died"
     
     def beEaten(self):
-        self.population -= 15000
+        removed = self.population * 0.015
+        self.population -= removed
+        return removed
         if self.population <= 0:
             self.wasEaten = True
 
