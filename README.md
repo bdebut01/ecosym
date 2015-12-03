@@ -52,7 +52,7 @@ SPACE
 
 TO DO
 -----
-- Add lock for printing to stdout
+- Add lock for printing to stdout (actually we don't need this if we're only printing when organisms are done with a tick
 - Better output
 - More organisms
     - turtle
