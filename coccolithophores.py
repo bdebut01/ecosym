@@ -35,9 +35,9 @@ class Coccolithophores(Organism):
     def beEaten(self):
         removed = self.population * 0.015
         self.population -= removed
-        return removed
         if self.population <= 0:
             self.wasEaten = True
+        return removed
 
     def printStatus(self):
         #print str(self.population) + " coccolithophores at ocean location (" + str(self.location.row) + ", " + str(self.location.col) + ")"
