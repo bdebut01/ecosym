@@ -2,15 +2,19 @@ import random
 from organism import Organism
 
 class Tuna(Organism):
-    def __init__(self, ecosystem, location = None):
+    def __init__(self, ecosystem, location = None, isNewborn = False):
         Organism.__init__(self, ecosystem, location)
         if random.randint(0, 1) == 0:
             self.sex = "M"
         else:
             self.sex = "F"
 
-        self.ticksAlive = 0
         self.lifespanTicks = 15 * 365 * 24 * 60 # years * days * hours * mins
+        if isNewborn:
+            self.ticksAlive = 0
+        else:
+            self.ticksAlive = random.randint(0, self.lifespanTicks - 1)
+        self.survivalProbability = .7
 
     def performStandardAction(self):
         if self.ticksAlive >= self.lifespanTicks:
