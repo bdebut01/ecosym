@@ -69,7 +69,7 @@ def userDeclareOceanSize():
 
 # Can ignore me, I loop in stdin/stdout receiving organism IDs and quantities
 #	Stop when 'q' is read in
-def inputLoop(w, h):
+def inputLoop():
 	while True:
 		user_input = raw_input()
 		if user_input == 'q':
@@ -92,9 +92,21 @@ def inputLoop(w, h):
 	        	# Add the key and the value (whether it was affected or not by if statement)
 	        	num_and_what_creatures[int(key)] = value
 	        	print str(value) + " " + creatures[int(key)] + "s added"
-	return (w, h)	        	
+
+def getSimulationLengthFromUser():
+    print "---Input number of minutes of ocean life you'd like to simulate---"
+    print "------------------------------------------------------------------"
+    print "Example input: 60"
+    while True:
+        user_input = raw_input()
+        if not user_input.isdigit():
+            print "Please input an integer"
+        else:
+            return int(user_input)
+
 
 def inputCreatures():
+        simMins = getSimulationLengthFromUser()
 	# Have user input ocean size
 	width, height = userDeclareOceanSize()
 	# Load data structures with preset data
@@ -114,13 +126,14 @@ def inputCreatures():
 	print "Example input for 10 coccolithophores: "
 	print "0 10"
 	print ''
-	return inputLoop(width, height)
+        inputLoop()
+	return simMins, width, height
 
 # Everything works if you just comment out creature stuff
 def main(argv):
-	width, height = inputCreatures()
-	ecosystem = Ecosystem(width, height)
-	ecosystem.loadCreatures(num_and_what_creatures, creature_funcs)
+	simMins, width, height = inputCreatures()
+	ecosystem = Ecosystem(simMins, width, height)
+	ecosystem.loadCreatures(num_and_what_creatures, creature_funcs, creatures)
 
 	ecosystem.startSimulation()
 

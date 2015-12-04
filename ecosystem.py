@@ -19,8 +19,10 @@ import graphic_output
 global TICK_TIME
 
 class Ecosystem():
-    def __init__(self, hdim, vdim):
-        self.globalTime = 0
+    def __init__(self, simMins, hdim, vdim):
+        self.simulationRunning = False
+        self.maxSimTicks = simMins
+        self.globalTicks = 0
         self.barrier = Barrier(0)
         self.hdim = hdim
         self.vdim = vdim
@@ -31,6 +33,8 @@ class Ecosystem():
         self.createFoodchain()
         self.newborns = []
         self.newbornsMutex = Lock()
+        self.creatures = dict()
+        self.creature_funcs = dict()
         global TICK_TIME
         TICK_TIME = 1 # we're waiting on sec
     
@@ -94,7 +98,9 @@ class Ecosystem():
 
     # Called in main to load the creatures the user typed in before the simulation
     #   starts running. 
-    def loadCreatures(self, num_and_what_creatures, creature_funcs):
+    def loadCreatures(self, num_and_what_creatures, creature_funcs, creatures):
+        self.creatures = creatures
+        self.creature_funcs = creature_funcs
         # Loop thru num_and_what_creatures dictionary for which species and quantities
         for key in num_and_what_creatures:
             for i in range(num_and_what_creatures[key]): # for every creature of that species
@@ -129,17 +135,10 @@ class Ecosystem():
             print "A " + str(type(organism)) + " died because: " + reason
 
     def getSeaBlock(self, location):
-        print "row"
-        print location.row
-        print int(location.row)
-        print "hdim" + str(self.hdim)
-        print "col"
-        print location.col
-        print int(location.col)
-        print "vdim" + str(self.vdim)
         return self.ocean[int(location.row)][int(location.col)]
     
     def startSimulation(self):
+        self.simulationRunning = True
         with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
 
         # start all organism threads
@@ -150,12 +149,10 @@ class Ecosystem():
 
         # Start infinite control loop
         self.loop() 
+        sys.exit()
 
     def loop(self):
-        self.__simulationRunning = True  # making this a member variable so that
-                                         # it can be easily accessed within the
-                                         # end_simulation function defined below
-        while self.__simulationRunning:
+        while self.simulationRunning:
             print "-----------------------In loop------------------------"
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             time.sleep(TICK_TIME)
@@ -169,11 +166,38 @@ class Ecosystem():
                 #graphic_output.graphicsOutput(self.orgsList, "frame" +str(globalTicks) +".jpg")
             self.addAndStartNewborns()
             # + 1 b/c barrier itself is being counted
-            with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
-            print "Entering phase 2"
+
+            print self.globalTicks
+
+            with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+            self.globalTicks += 1
+
+            if self.globalTicks % 10 == 0:
+                self.printRealStats()
+
+            if self.globalTicks >= self.maxSimTicks:
+                self.simulationRunning = False
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
+
+        for org in self.orgsList:
+            org.join()
+
+        return 
+
+
+    def printRealStats(self):
+        print '----- DEETS -----'
+        for c in self.creature_funcs:
+            counter = 0
+            temp = self.creature_funcs[c]
+            for org in self.orgsList:
+                if type(org) == temp:
+                    counter += 1
+            print self.creatures[c] + " population: " + str(counter)
+        print '-----------------'
+        print ''
 
     def addAndStartNewborns(self):
         for newborn in self.newborns:
@@ -213,5 +237,5 @@ class Ecosystem():
         print len(self.orgsList)
         if len(self.orgsList) <= 0:
             print "Ending simulation"
-            self.__simulationRunning = False
+            self.simulationRunning = False
 

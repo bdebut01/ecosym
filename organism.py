@@ -19,13 +19,13 @@ class Organism(threading.Thread):
         self.directionYImpact=0
         self.movementImpact=0 # this is actually "speed" 
         self.ecosystem = ecosystem
-        self.timeCounter = ecosystem.globalTime
+        self.timeCounter = ecosystem.globalTicks
         self.survivalProbability = 0 # probability of surviving being eaten
 
     # calling (the built-in threading function) start on a thread runs the run()
     # function, so the actions we want the thread to run go in the run() func
     def run(self) :
-        while True:
+        while self.ecosystem.simulationRunning == True:
             self.ecosystem.barrier.wait()
             if self.wasEaten == True:
                 self.die('eaten!')
@@ -49,7 +49,7 @@ class Organism(threading.Thread):
                 [1 - self.survivalProbability, self.survivalProbability])
     
     def die(self, reason):
-        #if self.timeCounter != self.ecosystem.globalTime:
+        #if self.timeCounter != self.ecosystem.globalTicks:
         #barrier push
         self.ecosystem.reportDeath(self, reason)
         self.ecosystem.barrier.wait() # if we end the thread before calling
@@ -59,4 +59,8 @@ class Organism(threading.Thread):
     def printStatus(self):
         # depends on type of organism
         print "Testing"
+
+    def kill(self):
+        """ Should only be used by ecosystem """
+        sys.exit()
 
