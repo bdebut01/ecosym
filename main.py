@@ -120,7 +120,7 @@ def inputCreatures():
 def main(argv):
 	width, height = inputCreatures()
 	ecosystem = Ecosystem(width, height)
-	ecosystem.loadCreatures(num_and_what_creatures, creature_funcs)
+	ecosystem.loadCreatures(num_and_what_creatures, creature_funcs, creatures)
 
 	ecosystem.startSimulation()
 
