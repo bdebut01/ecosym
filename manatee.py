@@ -42,6 +42,8 @@ class Manatee(Organism):
 
 		if self.hunger > 100: # starve, (like normal animals, not like threads)
 			self.die()
+		self.randomDirection()
+		self.move()
 		self.ticksAlive += 1
 
 	def reproduce(self):

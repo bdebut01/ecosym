@@ -36,6 +36,8 @@ class Fish(Organism):
             elif self.ecosystem.isEdible(self, org):
                 org.beEaten()
                 break
+        self.randomDirection()
+        self.move()
         self.ticksAlive += 1
 
     def printStatus(self):
