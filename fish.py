@@ -17,6 +17,7 @@ class Fish(Organism):
         else:
             self.ticksAlive = random.randint(0, self.lifespanTicks - 1)
 
+        self.hunger = 10 # going to starve after 20
         self.isMature = self.ticksAlive >= self.maturityTicks
 
     def performStandardAction(self):
@@ -35,7 +36,11 @@ class Fish(Organism):
                     break
             elif self.ecosystem.isEdible(self, org):
                 org.beEaten()
+                self.hunger -= 1
                 break
+        if self.hunger > 20:
+            self.die('starvation!')
+        self.hunger += 1 # every tick get 1 more hunger unit
         self.randomDirection()
         self.move()
         self.ticksAlive += 1
