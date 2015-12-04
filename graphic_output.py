@@ -27,13 +27,11 @@ def graphicsOutput(orgsList, filename):
                         pix_map[i,j] = (r, g, b)
     picture.save(filename)
     picture.show()
-    write_picture(pix_map, "test.csv")
+    # write_picture(pix_map, "test.csv")
 
 
 
 def graphics_location_block(loc):
-    print(str(loc.row), str(loc.col))
-    print(str(int(loc.row)*51) +str(int(loc.col)*51))
     return (int(loc.row)*51, int(loc.col)*51, 50, 50)
 
 def graphics_location(loc):
