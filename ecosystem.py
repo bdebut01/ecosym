@@ -85,6 +85,8 @@ class Ecosystem():
             newLoc.col = newLoc.col + (self.hdim/2)
             if newLoc.col >= self.vdim:
                 newLoc.col -= self.vdim
+        newLoc.col = newLoc.col % hdim
+        newLoc.row = newLoc.row % vdim 
         self.getSeaBlock(newLoc).addOrganism(org)
         return newLoc
 
@@ -125,6 +127,14 @@ class Ecosystem():
             print "A " + str(type(organism)) + " died because: " + reason
 
     def getSeaBlock(self, location):
+        print "row"
+        print location.row
+        print int(location.row)
+        print "hdim" + str(self.hdim)
+        print "col"
+        print location.col
+        print int(location.col)
+        print "vdim" + str(self.vdim)
         return self.ocean[int(location.row)][int(location.col)]
     
     def startSimulation(self):

@@ -14,6 +14,7 @@ class Shark(Fish):
 
     def printStatus(self):
         #print "Shark here"
+        print "Shark at " + str(self.location.row) + ", " + str(self.location.col)
         return
                 
 
