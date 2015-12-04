@@ -106,7 +106,7 @@ def getSimulationLengthFromUser():
 
 
 def inputCreatures():
-        simMins = getSimulationLengthFromUser()
+	simMins = getSimulationLengthFromUser()
 	# Have user input ocean size
 	width, height = userDeclareOceanSize()
 	# Load data structures with preset data
@@ -126,7 +126,7 @@ def inputCreatures():
 	print "Example input for 10 coccolithophores: "
 	print "0 10"
 	print ''
-        inputLoop()
+	inputLoop()
 	return simMins, width, height
 
 # Everything works if you just comment out creature stuff
