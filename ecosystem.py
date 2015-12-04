@@ -15,6 +15,8 @@ from tuna import Tuna
 from helper_functions import with_lock
 import time
 
+global TICK_TIME
+
 class Ecosystem():
     def __init__(self, hdim, vdim):
         self.globalTime = 0
@@ -28,6 +30,8 @@ class Ecosystem():
         self.createFoodchain()
         self.newborns = []
         self.newbornsMutex = Lock()
+        global TICK_TIME
+        TICK_TIME = 1 # we're waiting on sec
     
     def createOcean(self, hdim, vdim):
         self.ocean = []
@@ -118,7 +122,7 @@ class Ecosystem():
                 self.orgsList.remove(organism)
         with_lock(self.orgsListMutex, remove)
         if type(organism) != Coccolithophores:
-            print "Death reported"
+            print "A " + str(type(organism)) + " died oh no!"
 
     def getSeaBlock(self, location):
         return self.ocean[location.row][location.col]
@@ -139,10 +143,11 @@ class Ecosystem():
         self.__simulationRunning = True  # making this a member variable so that
                                          # it can be easily accessed within the
                                          # end_simulation function defined below
+        printSimulation()
         while self.__simulationRunning:
             print "-----------------------In loop------------------------"
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
-            # time.sleep(TICK_TIME)
+            time.sleep(TICK_TIME)
 
             # after phase 1, all orgs sould be done with actions, ecosystem 
             # can safely print status, do other maintenance

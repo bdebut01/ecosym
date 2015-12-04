@@ -17,7 +17,7 @@ class Organism(threading.Thread):
         self.lock = threading.Lock()
         self.directionXImpact = 0
         self.directionYImpact=0
-        self.movementImpact=0
+        self.movementImpact=0 # this is actually "speed" 
         self.ecosystem = ecosystem
         self.timeCounter = ecosystem.globalTime
         self.survivalProbability = 0 # probability of surviving being eaten
