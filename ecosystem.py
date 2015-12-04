@@ -14,6 +14,7 @@ from shark import Shark
 from tuna import Tuna
 from helper_functions import with_lock
 import time
+import graphic_output
 
 global TICK_TIME
 
@@ -161,7 +162,9 @@ class Ecosystem():
             self.barrier.phase1()
             # Print simulation for this tick, could embed this in a if i%amount == 0
             self.printSimulation()
-
+            if self.hdim==10 and self.vdim==10:
+                graphic_output.graphicsOutput(self.orgsList, "frame" +str(self.globalTicks) +".jpg")
+            
             self.addAndStartNewborns()
             # + 1 b/c barrier itself is being counted
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
@@ -178,7 +181,6 @@ class Ecosystem():
                 self.simulationRunning = False
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
-
         self.printRealStats()
 
         def endThreads():
@@ -187,7 +189,6 @@ class Ecosystem():
         with_lock(self.orgsListMutex, endThreads)
 
         return 
-
 
     def printRealStats(self):
         print '----- DEETS -----'
