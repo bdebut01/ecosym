@@ -179,8 +179,12 @@ class Ecosystem():
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
 
-        for org in self.orgsList:
-            org.join()
+        self.printRealStats()
+
+        def endThreads():
+            for org in self.orgsList:
+                org.join()
+        with_lock(self.orgsListMutex, endThreads)
 
         return 
 
