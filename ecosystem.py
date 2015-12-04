@@ -31,6 +31,8 @@ class Ecosystem():
         self.createFoodchain()
         self.newborns = []
         self.newbornsMutex = Lock()
+        self.creatures = dict()
+        self.creature_funcs = dict()
         global TICK_TIME
         TICK_TIME = 1 # we're waiting on sec
     
@@ -94,7 +96,9 @@ class Ecosystem():
 
     # Called in main to load the creatures the user typed in before the simulation
     #   starts running. 
-    def loadCreatures(self, num_and_what_creatures, creature_funcs):
+    def loadCreatures(self, num_and_what_creatures, creature_funcs, creatures):
+        self.creatures = creatures
+        self.creature_funcs = creature_funcs
         # Loop thru num_and_what_creatures dictionary for which species and quantities
         for key in num_and_what_creatures:
             for i in range(num_and_what_creatures[key]): # for every creature of that species
@@ -129,14 +133,6 @@ class Ecosystem():
             print "A " + str(type(organism)) + " died because: " + reason
 
     def getSeaBlock(self, location):
-        print "row"
-        print location.row
-        print int(location.row)
-        print "hdim" + str(self.hdim)
-        print "col"
-        print location.col
-        print int(location.col)
-        print "vdim" + str(self.vdim)
         return self.ocean[int(location.row)][int(location.col)]
     
     def startSimulation(self):
@@ -171,9 +167,24 @@ class Ecosystem():
             with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
             self.globalTicks += 1
+            if self.globalTicks % 10 == 0:
+                self.printRealStats()
             print "Entering phase 2"
+            # print "Entering phase 2"
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
+
+    def printRealStats(self):
+        print '----- DEETS -----'
+        for c in self.creature_funcs:
+            counter = 0
+            temp = self.creature_funcs[c]
+            for org in self.orgsList:
+                if type(org) == temp:
+                    counter += 1
+            print self.creatures[c] + " population: " + str(counter)
+        print '-----------------'
+        print ''
 
     def addAndStartNewborns(self):
         for newborn in self.newborns:
