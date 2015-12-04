@@ -41,6 +41,7 @@ class Fish(Organism):
         self.ticksAlive += 1
 
     def printStatus(self):
+        print "Shark at location " + str(self.location.row) + ", " + str(self.location.col)
         #print "Shark here"
         return
                 

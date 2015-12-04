@@ -85,7 +85,7 @@ class Ecosystem():
             newLoc.col = newLoc.col + (self.hdim/2)
             if newLoc.col >= self.vdim:
                 newLoc.col -= self.vdim
-        self.getSea(newLoc).addOrganism(org)
+        self.getSeaBlock(newLoc).addOrganism(org)
         return newLoc
 
     # Called in main to load the creatures the user typed in before the simulation
@@ -143,7 +143,6 @@ class Ecosystem():
         self.__simulationRunning = True  # making this a member variable so that
                                          # it can be easily accessed within the
                                          # end_simulation function defined below
-        printSimulation()
         while self.__simulationRunning:
             print "-----------------------In loop------------------------"
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
