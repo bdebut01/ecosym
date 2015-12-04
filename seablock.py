@@ -3,11 +3,13 @@ from helper_functions import with_lock
 from threading import Lock
 
 class SeaBlock :
-    def __init__(self, salinity = 1, sun = 0, oxygen = 0, pressure = 0) :
+    def __init__(self, salinity = 1, sun = 0, oxygen = 0, pressure = 0, currentXImpact=0, currentYImpact=0) :
         self.__salinity  = salinity
         self.__sunlight  = sun
         self.__oxygen  	 = oxygen
         self.__pressure  = pressure
+        self.__currentXImpact = currentXImpact
+        self.__currentYImpact = currentYImpact
         self.__organisms = Set()
         self.__orgsLock = Lock()
 
@@ -33,6 +35,10 @@ class SeaBlock :
             orgsAsList = list(self.__organisms)
             return orgsAsList[:] # return by value, not by reference
         return with_lock(self.__orgsLock, getOrgs)
+
+def getCurrent(self):
+    return (self.currentXImpact, currentYImpact)
+
 
     def printAttributes(self):
         print "Salinity: " + str(self.getSalinity())
