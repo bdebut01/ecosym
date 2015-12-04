@@ -29,7 +29,7 @@ class Coccolithophores(Organism):
         #possible: affect viruses in adjacent cells?
         if self.population <= 0:
             #print "Dying"
-            self.die()
+            self.die('population gone')
             #print "Died"
     
     def beEaten(self):

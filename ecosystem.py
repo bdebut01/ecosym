@@ -113,7 +113,7 @@ class Ecosystem():
     def addNewborn(self, newborn):
         with_lock(self.newbornsMutex, lambda : self.newborns.append(newborn))
     
-    def reportDeath(self, organism):
+    def reportDeath(self, organism, reason):
         # remove from ocean block
         self.getSeaBlock(organism.location).removeOrganism(organism) 
         # remove from private organism list
@@ -122,10 +122,10 @@ class Ecosystem():
                 self.orgsList.remove(organism)
         with_lock(self.orgsListMutex, remove)
         if type(organism) != Coccolithophores:
-            print "A " + str(type(organism)) + " died oh no!"
+            print "A " + str(type(organism)) + " died because: " + reason
 
     def getSeaBlock(self, location):
-        return self.ocean[location.row][location.col]
+        return self.ocean[int(location.row)][int(location.col)]
     
     def startSimulation(self):
         with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
