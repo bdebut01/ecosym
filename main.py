@@ -78,6 +78,9 @@ def inputLoop(w, h):
 			continue
 		else:
 			key, value = user_input.split(' ')
+			if not key.isdigit() or not value.isdigit():
+				print 'Plz give a digit, tanks'
+				continue
 	        if int(key) not in creatures:
 	        	print "That key not found, ignoring"
 	        else:
@@ -117,11 +120,8 @@ def inputCreatures():
 def main(argv):
 	width, height = inputCreatures()
 	ecosystem = Ecosystem(width, height)
-	loc = Location(3,4)
 	ecosystem.loadCreatures(num_and_what_creatures, creature_funcs)
 
-	block = ecosystem.getSeaBlock(loc)
-	block.printAttributes()
 	ecosystem.startSimulation()
 
 if __name__ == '__main__':

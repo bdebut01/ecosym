@@ -9,9 +9,9 @@ class Organism(threading.Thread):
         threading.Thread.__init__(self)
         if location is None:
             random.seed()
-            i_loc = random.randint(0, ecosystem.vdim - 1) # these are inclusive
-            j_loc = random.randint(0, ecosystem.hdim - 1)
-            location = Location(i_loc, j_loc)
+            row = random.randint(0, ecosystem.vdim - 1) # these are inclusive
+            col = random.randint(0, ecosystem.hdim - 1)
+            location = Location(row, col)
         self.location = location
         self.wasEaten = False
         self.lock = threading.Lock()

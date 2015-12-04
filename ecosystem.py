@@ -35,17 +35,17 @@ class Ecosystem():
     
     def createOcean(self, hdim, vdim):
         self.ocean = []
-        for i in range(hdim):
+        for i in range(vdim):# vdim == rows
             row = []
-            for j in range(vdim):
+            for j in range(hdim):# hdim == columns
                 tempblock = SeaBlock()
                 row.append(tempblock)
             self.ocean.append(row)
 
     def prepopulateCoccolithophores(self):
         # Automatically populating each seablock with an instance of coccolithophore
-        for i in range(self.hdim):
-            for j in range(self.vdim):
+        for i in range(self.vdim):
+            for j in range(self.hdim):
                 plankton = Coccolithophores(self, Location(i,j))
                 self.addOrganism(plankton)
 
@@ -86,8 +86,8 @@ class Ecosystem():
             newLoc.col = newLoc.col + (self.hdim/2)
             if newLoc.col >= self.vdim:
                 newLoc.col -= self.vdim
-        newLoc.col = newLoc.col % hdim
-        newLoc.row = newLoc.row % vdim 
+        newLoc.col = newLoc.col % self.hdim
+        newLoc.row = newLoc.row % self.vdim 
         self.getSeaBlock(newLoc).addOrganism(org)
         return newLoc
 
