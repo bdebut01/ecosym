@@ -18,8 +18,9 @@ import time
 global TICK_TIME
 
 class Ecosystem():
-    def __init__(self, hdim, vdim):
-        self.globalTime = 0
+    def __init__(self, simMins, hdim, vdim):
+        self.maxSimTicks = simMins
+        self.globalTicks = 0
         self.barrier = Barrier(0)
         self.hdim = hdim
         self.vdim = vdim
@@ -154,7 +155,7 @@ class Ecosystem():
         self.__simulationRunning = True  # making this a member variable so that
                                          # it can be easily accessed within the
                                          # end_simulation function defined below
-        while self.__simulationRunning:
+        while self.maxSimTicks > self.globalTicks and self.__simulationRunning:
             print "-----------------------In loop------------------------"
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             time.sleep(TICK_TIME)
@@ -169,6 +170,7 @@ class Ecosystem():
             # + 1 b/c barrier itself is being counted
             with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
+            self.globalTicks += 1
             print "Entering phase 2"
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
