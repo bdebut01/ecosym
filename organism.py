@@ -25,7 +25,7 @@ class Organism(threading.Thread):
     # calling (the built-in threading function) start on a thread runs the run()
     # function, so the actions we want the thread to run go in the run() func
     def run(self) :
-        while True:
+        while self.ecosystem.simulationRunning == True:
             self.ecosystem.barrier.wait()
             if self.wasEaten == True:
                 self.die('eaten!')
@@ -59,4 +59,8 @@ class Organism(threading.Thread):
     def printStatus(self):
         # depends on type of organism
         print "Testing"
+
+    def kill(self):
+        """ Should only be used by ecosystem """
+        sys.exit()
 

@@ -19,6 +19,7 @@ global TICK_TIME
 
 class Ecosystem():
     def __init__(self, simMins, hdim, vdim):
+        self.simulationRunning = False
         self.maxSimTicks = simMins
         self.globalTicks = 0
         self.barrier = Barrier(0)
@@ -136,6 +137,7 @@ class Ecosystem():
         return self.ocean[int(location.row)][int(location.col)]
     
     def startSimulation(self):
+        self.simulationRunning = True
         with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
 
         # start all organism threads
@@ -146,12 +148,10 @@ class Ecosystem():
 
         # Start infinite control loop
         self.loop() 
+        sys.exit()
 
     def loop(self):
-        self.__simulationRunning = True  # making this a member variable so that
-                                         # it can be easily accessed within the
-                                         # end_simulation function defined below
-        while self.maxSimTicks > self.globalTicks and self.__simulationRunning:
+        while self.simulationRunning:
             print "-----------------------In loop------------------------"
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             time.sleep(TICK_TIME)
@@ -164,15 +164,26 @@ class Ecosystem():
 
             self.addAndStartNewborns()
             # + 1 b/c barrier itself is being counted
-            with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
+
+            print self.globalTicks
+
+            with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
             self.globalTicks += 1
+
             if self.globalTicks % 10 == 0:
                 self.printRealStats()
-            print "Entering phase 2"
-            # print "Entering phase 2"
+
+            if self.globalTicks >= self.maxSimTicks:
+                self.simulationRunning = False
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
+
+        for org in self.orgsList:
+            org.join()
+
+        return 
+
 
     def printRealStats(self):
         print '----- DEETS -----'
@@ -224,5 +235,5 @@ class Ecosystem():
         print len(self.orgsList)
         if len(self.orgsList) <= 0:
             print "Ending simulation"
-            self.__simulationRunning = False
+            self.simulationRunning = False
 
