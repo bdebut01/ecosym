@@ -36,7 +36,7 @@ class Shrimp(Organism):
             self.population -= 1 #beginning to die of starvation
         if self.population <= 0:
             #print "Dying"
-            self.die()
+            self.die('population gone')
             #print "Died"
     
     def beEaten(self):

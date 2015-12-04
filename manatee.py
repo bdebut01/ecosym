@@ -22,7 +22,7 @@ class Manatee(Organism):
 
 	def performStandardAction(self):
 		if self.ticksAlive >= self.lifespanTicks:
-			self.die() # die of old age
+			self.die('old age!') # die of old age
 		prey = None
 		myBlock = self.ecosystem.getSeaBlock(self.location)
 		neighborOrgs = myBlock.getOrganisms()
@@ -41,7 +41,7 @@ class Manatee(Organism):
 		self.hunger += 1 # every tick get 1 more hunger unit
 
 		if self.hunger > 100: # starve, (like normal animals, not like threads)
-			self.die()
+			self.die('starvation!')
 		self.randomDirection()
 		self.move()
 		self.ticksAlive += 1

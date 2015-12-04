@@ -28,7 +28,7 @@ class Organism(threading.Thread):
         while True:
             self.ecosystem.barrier.wait()
             if self.wasEaten == True:
-                self.die()
+                self.die('eaten!')
             self.performStandardAction()
     
     def performStandardAction(self):
@@ -48,10 +48,10 @@ class Organism(threading.Thread):
         self.wasEaten = random_pick([True, False], 
                 [1 - self.survivalProbability, self.survivalProbability])
     
-    def die(self):
+    def die(self, reason):
         #if self.timeCounter != self.ecosystem.globalTime:
         #barrier push
-        self.ecosystem.reportDeath(self)
+        self.ecosystem.reportDeath(self, reason)
         self.ecosystem.barrier.wait() # if we end the thread before calling
                                       # barrier.wait(), we'll have deadlock
         sys.exit() # Close this thread

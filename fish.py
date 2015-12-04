@@ -21,7 +21,7 @@ class Fish(Organism):
 
     def performStandardAction(self):
         if self.ticksAlive >= self.lifespanTicks:
-            self.die() # die of old age
+            self.die('old age!') # die of old age
 
         if self.isMature == False and self.ticksAlive >= self.maturityTicks:
             self.isMature = True
