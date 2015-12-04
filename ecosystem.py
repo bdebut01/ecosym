@@ -58,6 +58,7 @@ class Ecosystem():
         self.__foodchain.addRelationship(Manatee, Coccolithophores)
         self.__foodchain.addRelationship(Shark, Manatee)
         self.__foodchain.addRelationship(Shrimp, Coccolithophores)
+        self.__foodchain.addRelationship(Tuna, Shrimp)
         self.__foodchain.addRelationship(Shark, Tuna)
 
     # tells you if the predator can eat the potential prey (note: pass in an
@@ -191,7 +192,7 @@ class Ecosystem():
 
         # if we've reached the thread limit, some newborns don't get to live
         for thread in excessThreads:
-            self.reportDeath(thread)
+            self.reportDeath(thread, 'too many threads')
 
         # set the barrier again because if there were excess threads, n is incorrect
         with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
