@@ -42,8 +42,7 @@ class Organism(threading.Thread):
     def move(self):
         newX = self.location.row+(self.directionXImpact*self.movementImpact)
         newY = self.location.col+(self.directionYImpact*self.movementImpact)
-        self.ecosystem.moveOrganism(self, self.location, Location(newX, newY))
-        self.loc=Location(newX, newY)
+        self.location=self.ecosystem.moveOrganism(self, self.location, Location(newX, newY))
     
     def beEaten(self):
         self.wasEaten = random_pick([True, False], 

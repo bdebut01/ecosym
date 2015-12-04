@@ -66,6 +66,7 @@ class Ecosystem():
 
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
+        self.getSeaBlock(oldLoc).removeOrganism(org)
         while int(newLoc.col < 0): #off west
             newLoc.col += self.vdim
         while int(newLoc.col) >= self.vdim: #off east
@@ -80,6 +81,8 @@ class Ecosystem():
             newLoc.col = newLoc.col + (self.hdim/2)
             if newLoc.col >= self.vdim:
                 newLoc.col -= self.vdim
+        self.getSea(newLoc).addOrganism(org)
+        return newLoc
 
     # Called in main to load the creatures the user typed in before the simulation
     #   starts running. 
