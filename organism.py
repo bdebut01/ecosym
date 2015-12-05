@@ -62,7 +62,5 @@ class Organism(threading.Thread):
         # depends on type of organism
         print "Testing"
 
-    def kill(self):
-        """ Should only be used by ecosystem """
-        sys.exit()
+
 

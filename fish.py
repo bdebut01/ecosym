@@ -31,7 +31,7 @@ class Fish(Organism):
         neighborOrgs = myBlock.getOrganisms()
         for org in neighborOrgs:
             if type(org) == type(self): # found a fellow shark!
-                if self.isMature and org.sex != self.sex and org.isMature:
+                if self.isMature and org.isMature and self.sex == "F" and org.sex == "M":
                     self.reproduce()
                     break
             elif self.ecosystem.isEdible(self, org):
