@@ -152,7 +152,9 @@ class Ecosystem():
 
     def loop(self):
         while self.simulationRunning:
-            print "-----------------------In loop------------------------"
+            print "-------------------------------------------------------"
+            print "----------------------- Tick " + str(self.globalTicks) + " ------------------------"
+            print "-------------------------------------------------------"
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             time.sleep(TICK_TIME)
 
@@ -165,12 +167,11 @@ class Ecosystem():
                 graphic_output.graphicsOutput(self.orgsList, "frame" +str(self.globalTicks) +".jpg")
             
             self.addAndStartNewborns()
-            # + 1 b/c barrier itself is being counted
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
 
-            print self.globalTicks
-
+            # + 1 b/c ecosystem itself is being counted
             with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+
             self.globalTicks += 1
 
             if self.globalTicks % 10 == 0:
@@ -178,8 +179,10 @@ class Ecosystem():
 
             if self.globalTicks >= self.maxSimTicks:
                 self.simulationRunning = False
+
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
+
         self.printRealStats()
 
         def endThreads():
@@ -227,17 +230,11 @@ class Ecosystem():
 
         self.newborns = []
 
-
-    # Used for debugging purposes
-    def printNumOrgs(self):
-        print len(self.orgsList) + 1
-
     # terrible name for a function but i can't think of anything better. might
     # refactor later.
     def endSimulationIfNoOrganisms(self):
         # if there are no organisms alive, simulation is over
-        print len(self.orgsList)
         if len(self.orgsList) <= 0:
-            print "Ending simulation"
+            print "No more organisms; ending simulation"
             self.simulationRunning = False
 

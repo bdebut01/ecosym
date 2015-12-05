@@ -94,7 +94,7 @@ def inputLoop():
 	        	print str(value) + " " + creatures[int(key)] + "s added"
 
 def getSimulationLengthFromUser():
-    print "---Input number of minutes of ocean life you'd like to simulate---"
+    print "---Input number of minutes of marine life you'd like to simulate---"
     print "------------------------------------------------------------------"
     print "Example input: 60"
     while True:
@@ -102,6 +102,7 @@ def getSimulationLengthFromUser():
         if not user_input.isdigit():
             print "Please input an integer"
         else:
+            print "OK, " + user_input + " simulation minutes"
             return int(user_input)
 
 
