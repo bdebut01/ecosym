@@ -1,0 +1,3 @@
+Fix the issue where stopping the sim after specified number of ticks doesn't
+work if more than one type of organism is still running
+

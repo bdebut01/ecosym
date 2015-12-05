@@ -27,6 +27,8 @@ class Organism(threading.Thread):
     def run(self) :
         while self.ecosystem.simulationRunning == True:
             self.ecosystem.barrier.wait()
+            if self.ecosystem.simulationRunning == False: # in case sim ended while thread was blocked
+                break
             if self.wasEaten == True:
                 self.die('eaten!')
             self.performStandardAction()
