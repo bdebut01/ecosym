@@ -52,8 +52,8 @@ class Starfish(Organism):
                     if self.isMature and org.isMature and self.sex == "F" and org.sex == "M":
                         self.reproduce()
                         break
-            if self.hunger > 20:
-                self.die('starvation!')
+        if self.hunger > 20:
+            self.die('starvation!')
         self.hunger += 1 # every tick get 1 more hunger unit
         self.randomDirection()
         self.move()
