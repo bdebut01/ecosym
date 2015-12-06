@@ -116,6 +116,7 @@ class Ecosystem():
             for org in self.orgsList:
                 org.printStatus()
         with_lock(self.orgsListMutex, print_orgs)
+        print str(len(self.orgsList)) + " organisms alive"
 
     def addOrganism(self, org):
         self.getSeaBlock(org.location).addOrganism(org)
