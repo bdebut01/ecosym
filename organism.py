@@ -3,6 +3,7 @@ import sys
 import random
 from location import Location
 from helper_functions import random_pick
+from helper_functions import with_lock
 
 class Organism(threading.Thread):
     def __init__(self, ecosystem, location=None):
@@ -14,7 +15,7 @@ class Organism(threading.Thread):
             location = Location(row, col)
         self.location = location
         self.wasEaten = False
-        self.lock = threading.Lock()
+        self.beEatenLock = threading.Lock()
         self.directionXImpact = 0
         self.directionYImpact=0
         self.movementImpact=0 # this is actually "speed" 
@@ -47,9 +48,14 @@ class Organism(threading.Thread):
         self.location=self.ecosystem.moveOrganism(self, self.location, Location(newX, newY))
     
     def beEaten(self):
-        self.wasEaten = random_pick([True, False], 
-                [1 - self.survivalProbability, self.survivalProbability])
-        return self.wasEaten
+        def getEaten():
+            if not self.wasEaten: # in case we've already been eaten
+                self.wasEaten = random_pick([True, False], 
+                        [1 - self.survivalProbability, self.survivalProbability])
+                return self.wasEaten
+            else:
+                return False # though you were eaten, the org calling beEaten wasn't the one who ate you
+        return with_lock(self.beEatenLock, getEaten)
     
     def die(self, reason):
         #if self.timeCounter != self.ecosystem.globalTicks:

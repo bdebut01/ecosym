@@ -2,6 +2,7 @@ import ecosystem
 import seablock
 import location
 from organism import Organism
+from helper_functions import with_lock
 
 class Coccolithophores(Organism):
     def __init__(self, ecosystem, location=None):
@@ -33,11 +34,16 @@ class Coccolithophores(Organism):
             #print "Died"
     
     def beEaten(self):
-        removed = self.population * 0.0015
-        self.population -= removed
-        if self.population <= 0:
-            self.wasEaten = True
-        return removed
+        def getEaten():
+            if not self.wasEaten:
+                removed = self.population * 0.0015
+                self.population -= removed
+                if self.population <= 0:
+                    self.wasEaten = True
+                return removed
+            else:
+                return 0
+        return with_lock(self.beEatenLock, getEaten)
 
     def printStatus(self):
         #print str(self.population) + " coccolithophores at ocean location (" + str(self.location.row) + ", " + str(self.location.col) + ")"

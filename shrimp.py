@@ -3,6 +3,7 @@ import seablock
 import location
 import random
 from organism import Organism
+from helper_functions import with_lock
 
 class Shrimp(Organism):
     def __init__(self, ecosystem, location=None):
@@ -40,9 +41,16 @@ class Shrimp(Organism):
             #print "Died"
     
     def beEaten(self):
-        self.population -= 1
-        if self.population <= 0:
-            self.wasEaten = True
+        def getEaten():
+            if not self.wasEaten:
+                self.population -= 1
+                if self.population <= 0:
+                    self.wasEaten = True
+                return True
+            else:
+                return False
+        return with_lock(self.beEatenLock, getEaten)
+
 
     def printStatus(self):
         #print str(self.population) + " shrimp at ocean location (" + str(self.location.row) + ", " + str(self.location.col) + ")"
