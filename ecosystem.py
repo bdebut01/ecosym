@@ -62,7 +62,7 @@ class Ecosystem():
         self.__foodchain = Foodchain()
         self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
         self.__foodchain.addRelationship(Manatee, Coccolithophores)
-        self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna])
+        self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna, Starfish])
         self.__foodchain.addRelationship(Shrimp, Coccolithophores)
         self.__foodchain.addMultiRelationship(Tuna, [Shrimp, Starfish])
         self.__foodchain.addRelationship(Starfish, Coccolithophores)
