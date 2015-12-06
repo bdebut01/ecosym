@@ -49,6 +49,7 @@ class Organism(threading.Thread):
     def beEaten(self):
         self.wasEaten = random_pick([True, False], 
                 [1 - self.survivalProbability, self.survivalProbability])
+        return self.wasEaten
     
     def die(self, reason):
         #if self.timeCounter != self.ecosystem.globalTicks:

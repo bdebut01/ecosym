@@ -35,9 +35,10 @@ class Fish(Organism):
                     self.reproduce()
                     break
             elif self.hunger > 0 and self.ecosystem.isEdible(self, org):
-                org.beEaten()
-                self.hunger -= 1
-                break
+                ate = org.beEaten()
+                if ate: # if the prey didn't manage to get away
+                    self.hunger -= 1
+                    break
         if self.hunger > 20:
             self.die('starvation!')
         self.hunger += 1 # every tick get 1 more hunger unit
