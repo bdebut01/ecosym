@@ -3,6 +3,7 @@ from shrimp import Shrimp
 from tuna import Tuna
 from shark import Shark
 from manatee import Manatee
+from starfish import Starfish
 from PIL import Image
 from location import Location
 import random
@@ -13,6 +14,8 @@ shrimpColor = (236, 69, 240)
 tunaColor = (255, 251, 10)
 sharkColor = (235, 23, 17)
 manateeColor = (103, 242, 232)
+seastarColor = (238,128,21)
+
 
 def graphicsOutput(orgsList, filename, rows, cols):
     vdim = 51*rows
@@ -74,10 +77,19 @@ def graphicsOutput(orgsList, filename, rows, cols):
             pixels = printCircle(x, y, 15, hdim, vdim)
             for i in pixels:
                 pix_map[i] = manateeColor
-    print("saving picture")
+        if type(org) == Starfish:
+            loc = org.location
+            x, y = graphics_location(loc)
+            for i in range(x-2, x+3):
+                if i < 0: continue
+                if i > vdim: break
+                for j in range(y-4, y+5):
+                    if j < 0: continue
+                    if j > hdim: break
+                    pix_map[i,j] = seastarColor
     picture.save(filename)
-    picture.show()
-    write_picture(pix_map, "test.csv", hdim, vdim)
+    #picture.show()
+    #write_picture(pix_map, "test.csv", hdim, vdim)
 
 
 
