@@ -5,6 +5,7 @@ from shark import Shark
 from manatee import Manatee
 from starfish import Starfish
 from grouper import Grouper
+from herring import Herring
 from PIL import Image
 from location import Location
 import random
@@ -17,7 +18,7 @@ sharkColor = (235, 23, 17)
 manateeColor = (103, 242, 232)
 seastarColor = (238,128,21)
 grouperColor = (196,188,169)
-
+herringColor = (138, 215, 110)
 
 def graphicsOutput(orgsList, filename, rows, cols):
     vdim = 51*rows
@@ -103,6 +104,16 @@ def graphicsOutput(orgsList, filename, rows, cols):
                     if j < 0: continue
                     if j > hdim: break
                     pix_map[i,j] = grouperColor
+        if type(org) == Herring:
+            loc = org.location
+            x, y = graphics_location(loc)
+            for i in range(x-2, x+3):
+                if i < 0: continue
+                if i > vdim: break
+                for j in range(y-4, y+5):
+                    if j < 0: continue
+                    if j > hdim: break
+                    pix_map[i,j] = herringColor
     picture.save(filename)
     #picture.show()
     #write_picture(pix_map, "test.csv", hdim, vdim)
