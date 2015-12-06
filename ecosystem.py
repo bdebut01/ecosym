@@ -12,6 +12,7 @@ from shrimp import Shrimp
 from shark import Shark
 from tuna import Tuna
 from starfish import Starfish
+from herring import Herring
 from helper_functions import with_lock
 import time
 import graphic_output
