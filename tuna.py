@@ -14,7 +14,7 @@ class Tuna(Fish):
 
     def printStatus(self):
         #print "Tuna here"
-        print "Tuna at " + str(self.location.row) + ", " + str(self.location.col)
+        # print "Tuna at " + str(self.location.row) + ", " + str(self.location.col)
         return
                 
 
