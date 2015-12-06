@@ -39,6 +39,7 @@ class Ecosystem():
         self.creature_funcs = dict()
         global TICK_TIME
         TICK_TIME = 1 # we're waiting on sec
+        self.stdoutLock = Lock()
     
     def createOcean(self, hdim, vdim):
         self.ocean = []
@@ -136,7 +137,9 @@ class Ecosystem():
             if organism in self.orgsList:
                 self.orgsList.remove(organism)
         with_lock(self.orgsListMutex, remove)
-        print "A " + type(organism).__name__.lower() + " died because: " + reason
+        def printDeath():
+            print "A " + type(organism).__name__.lower() + " died because: " + reason
+        with_lock(self.stdoutLock, printDeath)
 
     def getSeaBlock(self, location):
         return self.ocean[int(location.row)][int(location.col)]
@@ -184,10 +187,11 @@ class Ecosystem():
             if self.globalTicks >= self.maxSimTicks:
                 self.simulationRunning = False
 
+            self.printRealStats()
+
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
 
-        self.printRealStats()
 
         def endThreads():
             for org in self.orgsList:
