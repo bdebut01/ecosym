@@ -12,6 +12,7 @@ from manatee import Manatee
 from shrimp import Shrimp
 from shark import Shark
 from tuna import Tuna
+from starfish import Starfish
 from helper_functions import with_lock
 import time
 import graphic_output
@@ -61,10 +62,10 @@ class Ecosystem():
         self.__foodchain = Foodchain()
         self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
         self.__foodchain.addRelationship(Manatee, Coccolithophores)
-        self.__foodchain.addRelationship(Shark, Manatee)
+        self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna, Starfish])
         self.__foodchain.addRelationship(Shrimp, Coccolithophores)
-        self.__foodchain.addRelationship(Tuna, Shrimp)
-        self.__foodchain.addRelationship(Shark, Tuna)
+        self.__foodchain.addMultiRelationship(Tuna, [Shrimp, Starfish])
+        self.__foodchain.addRelationship(Starfish, Coccolithophores)
 
     # tells you if the predator can eat the potential prey (note: pass in an
     # an instance of an organism subclass. 

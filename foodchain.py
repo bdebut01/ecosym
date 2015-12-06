@@ -20,7 +20,7 @@ class Foodchain():
     # instead of just one type of prey
     def addMultiRelationship(self, predator, listOfPrey):
         for prey in listOfPrey:
-            addRelationship(predator, prey)
+            self.addRelationship(predator, prey)
 
     # tells you if the predator can eat the potential prey (note: pass in a type of
     # an instance of an organism subclass. 

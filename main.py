@@ -6,6 +6,7 @@ from shark import Shark
 from manatee import Manatee
 from tuna import Tuna
 from shrimp import Shrimp
+from starfish import Starfish
 from seablock import SeaBlock
 from location import Location
 import coccolithophores
@@ -46,6 +47,8 @@ def presetCreatures():
 	creature_funcs[3] = Tuna
 	creatures[4] = "Manatee"
 	creature_funcs[4] = Manatee
+	creatures[5] = "Starfish"
+	creature_funcs[5] = Starfish
 
 def userDeclareOceanSize():
 	print "--Input Ocean size--"
@@ -104,7 +107,6 @@ def getSimulationLengthFromUser():
         else:
             print "OK, " + user_input + " simulation minutes"
             return int(user_input)
-
 
 def inputCreatures():
 	simMins = getSimulationLengthFromUser()
