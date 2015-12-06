@@ -59,7 +59,7 @@ class Ecosystem():
         # this is an example, we should change this as soon as we have actual
         # predators and prey
         self.__foodchain = Foodchain()
-        self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
+        # self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
         self.__foodchain.addRelationship(Manatee, Coccolithophores)
         self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna, Starfish])
         self.__foodchain.addRelationship(Shrimp, Coccolithophores)
