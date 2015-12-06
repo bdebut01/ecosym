@@ -62,7 +62,7 @@ class Ecosystem():
         self.__foodchain = Foodchain()
         self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
         self.__foodchain.addRelationship(Manatee, Coccolithophores)
-        self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna])
+        self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna, Starfish])
         self.__foodchain.addRelationship(Shrimp, Coccolithophores)
         self.__foodchain.addMultiRelationship(Tuna, [Shrimp, Starfish])
         self.__foodchain.addRelationship(Starfish, Coccolithophores)
@@ -165,8 +165,7 @@ class Ecosystem():
             self.barrier.phase1()
             # Print simulation for this tick, could embed this in a if i%amount == 0
             self.printSimulation()
-            if self.hdim==10 and self.vdim==10:
-                graphic_output.graphicsOutput(self.orgsList, "frame" +str(self.globalTicks) +".jpg")
+            graphic_output.graphicsOutput(self.orgsList, "frame" +str(self.globalTicks) +".jpg", self.hdim, self.vdim)
             
             self.addAndStartNewborns()
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
