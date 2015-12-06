@@ -159,10 +159,12 @@ class Ecosystem():
         sys.exit()
 
     def loop(self):
+        print "-------------------------------------------------------"
+        print "----------------------- Tick 0 ------------------------"
+        print "-------------------------------------------------------"
+
         while self.simulationRunning:
-            print "-------------------------------------------------------"
-            print "----------------------- Tick " + str(self.globalTicks) + " ------------------------"
-            print "-------------------------------------------------------"
+
             # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
             time.sleep(TICK_TIME)
 
@@ -187,10 +189,18 @@ class Ecosystem():
             if self.globalTicks >= self.maxSimTicks:
                 self.simulationRunning = False
 
-            self.printRealStats()
+            if self.simulationRunning:
+                print "-------------------------------------------------------"
+                print "----------------------- Tick " + str(self.globalTicks) + " ------------------------"
+                print "-------------------------------------------------------"
 
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
+
+        print "------------------------------------------------------"
+        print "------------------- Final Results --------------------"
+        print "------------------------------------------------------"
+        self.printRealStats()
 
 
         def endThreads():

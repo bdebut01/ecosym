@@ -9,8 +9,8 @@ class Grouper(Fish):
         self.movementImpact = .4
 
     def reproduce(self):
-        newTuna = Tuna(self.ecosystem, self.location, True)
-        self.ecosystem.addNewborn(newTuna)
+        newGrouper = Grouper(self.ecosystem, self.location, True)
+        self.ecosystem.addNewborn(newGrouper)
 
     def printStatus(self):
         #print "Tuna here"
