@@ -13,6 +13,7 @@ from grouper import Grouper
 from shark import Shark
 from tuna import Tuna
 from starfish import Starfish
+from herring import Herring
 from helper_functions import with_lock
 import time
 import graphic_output
@@ -38,6 +39,7 @@ class Ecosystem():
         self.creature_funcs = dict()
         global TICK_TIME
         TICK_TIME = 1 # we're waiting on sec
+        self.stdoutLock = Lock()
     
     def createOcean(self, hdim, vdim):
         self.ocean = []
@@ -65,8 +67,9 @@ class Ecosystem():
         self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna, Starfish, Grouper])
         self.__foodchain.addRelationship(Shrimp, Coccolithophores)
         self.__foodchain.addRelationship(Grouper, Shrimp)
-        self.__foodchain.addMultiRelationship(Tuna, [Shrimp, Grouper])
+        self.__foodchain.addMultiRelationship(Tuna, [Shrimp, Grouper, Herring])
         self.__foodchain.addRelationship(Starfish, Coccolithophores)
+        self.__foodchain.addMultiRelationship(Herring, [Shrimp])
 
     # tells you if the predator can eat the potential prey (note: pass in an
     # an instance of an organism subclass. 
@@ -134,7 +137,9 @@ class Ecosystem():
             if organism in self.orgsList:
                 self.orgsList.remove(organism)
         with_lock(self.orgsListMutex, remove)
-        print "A " + type(organism).__name__.lower() + " died because: " + reason
+        def printDeath():
+            print "A " + type(organism).__name__.lower() + " died because: " + reason
+        with_lock(self.stdoutLock, printDeath)
 
     def getSeaBlock(self, location):
         return self.ocean[int(location.row)][int(location.col)]
@@ -182,10 +187,11 @@ class Ecosystem():
             if self.globalTicks >= self.maxSimTicks:
                 self.simulationRunning = False
 
+            self.printRealStats()
+
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
 
-        self.printRealStats()
 
         def endThreads():
             for org in self.orgsList:
