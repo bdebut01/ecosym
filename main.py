@@ -1,7 +1,6 @@
 import sys
 from ecosystem import Ecosystem
 from coccolithophores import Coccolithophores
-from bulbasaur 		  import Bulbasaur
 from shark import Shark
 from manatee import Manatee
 from tuna import Tuna

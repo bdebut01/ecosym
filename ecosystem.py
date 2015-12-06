@@ -7,7 +7,6 @@ from threading import Semaphore
 from threading import Lock
 from foodchain import Foodchain
 from coccolithophores import Coccolithophores
-from bulbasaur        import Bulbasaur
 from manatee import Manatee
 from shrimp import Shrimp
 from shark import Shark
