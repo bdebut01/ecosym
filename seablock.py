@@ -36,8 +36,8 @@ class SeaBlock :
             return orgsAsList[:] # return by value, not by reference
         return with_lock(self.__orgsLock, getOrgs)
 
-def getCurrent(self):
-    return (self.currentXImpact, currentYImpact)
+    def getCurrent(self):
+        return (self.currentXImpact, currentYImpact)
 
 
     def printAttributes(self):

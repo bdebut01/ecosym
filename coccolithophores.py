@@ -6,7 +6,7 @@ from organism import Organism
 class Coccolithophores(Organism):
     def __init__(self, ecosystem, location=None):
         Organism.__init__(self, ecosystem, location)
-        self.population = 1000000
+        self.population = 10000000
         self.virusWaxWane = -1 #starts waning strength virus
         self.virusEfficiency = 5000 #relatively weak
     
@@ -33,7 +33,7 @@ class Coccolithophores(Organism):
             #print "Died"
     
     def beEaten(self):
-        removed = self.population * 0.015
+        removed = self.population * 0.0015
         self.population -= removed
         if self.population <= 0:
             self.wasEaten = True
