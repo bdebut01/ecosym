@@ -96,7 +96,10 @@ def inputLoop():
 	        		value += res
 	        	# Add the key and the value (whether it was affected or not by if statement)
 	        	num_and_what_creatures[int(key)] = value
-	        	print str(value) + " " + creatures[int(key)] + "s added"
+	        	if creatures[int(key)][-1] == 'r' or creatures[int(key)][-1] == 'k' or creatures[int(key)][-1] == 'e':
+	        		print str(value) + " " + creatures[int(key)] + "s added"	
+	        	else:
+	        		print str(value) + " " + creatures[int(key)] + " added"
 
 def getSimulationLengthFromUser():
     print "---Input number of minutes of marine life you'd like to simulate---"
