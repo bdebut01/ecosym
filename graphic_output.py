@@ -74,9 +74,14 @@ def graphicsOutput(orgsList, filename, rows, cols):
         if type(org) == Manatee:
             loc = org.location
             x, y = graphics_location(loc)
-            pixels = printCircle(x, y, 15, hdim, vdim)
-            for i in pixels:
-                pix_map[i] = manateeColor
+            for i in range(x-2, x+3):
+                if i < 0: continue
+                if i > vdim: break
+                for j in range(y-4, y+5):
+                    if j < 0: continue
+                    if j > hdim: break
+                    pix_map[i,j] = manateeColor
+
         if type(org) == Starfish:
             loc = org.location
             x, y = graphics_location(loc)
