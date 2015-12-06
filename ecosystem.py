@@ -66,8 +66,9 @@ class Ecosystem():
         self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna, Starfish, Grouper])
         self.__foodchain.addRelationship(Shrimp, Coccolithophores)
         self.__foodchain.addRelationship(Grouper, Shrimp)
-        self.__foodchain.addMultiRelationship(Tuna, [Shrimp, Grouper])
+        self.__foodchain.addMultiRelationship(Tuna, [Shrimp, Grouper, Herring])
         self.__foodchain.addRelationship(Starfish, Coccolithophores)
+        self.__foodchain.addMultiRelationship(Herring, [Shrimp])
 
     # tells you if the predator can eat the potential prey (note: pass in an
     # an instance of an organism subclass. 

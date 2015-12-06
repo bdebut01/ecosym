@@ -9,6 +9,7 @@ from shrimp import Shrimp
 from starfish import Starfish
 from seablock import SeaBlock
 from location import Location
+from herring import Herring
 import coccolithophores
 
 # Import global variables for entire simulation, (e,g: creature dictionary)
@@ -51,6 +52,8 @@ def presetCreatures():
 	creature_funcs[5] = Starfish
 	creatures[6] = "Grouper"
 	creature_funcs[6] = Grouper
+        creatures[7] = "Herring"
+        creature_funcs[7] = Herring
 
 def userDeclareOceanSize():
 	print "--Input Ocean size--"
