@@ -4,6 +4,7 @@ from coccolithophores import Coccolithophores
 from shark import Shark
 from manatee import Manatee
 from tuna import Tuna
+from grouper import Grouper
 from shrimp import Shrimp
 from starfish import Starfish
 from seablock import SeaBlock
@@ -48,6 +49,8 @@ def presetCreatures():
 	creature_funcs[4] = Manatee
 	creatures[5] = "Starfish"
 	creature_funcs[5] = Starfish
+	creatures[6] = "Grouper"
+	creature_funcs[6] = Grouper
 
 def userDeclareOceanSize():
 	print "--Input Ocean size--"
