@@ -48,7 +48,7 @@ class Starfish(Organism):
                     org.beEaten()
                     self.hunger -= 1
                     break
-                elif type(org) == type(self): # found a fellow shark!
+                elif type(org) == type(self): # found a fellow starfish!
                     if self.isMature and org.isMature and self.sex == "F" and org.sex == "M":
                         self.reproduce()
                         break

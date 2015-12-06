@@ -34,7 +34,7 @@ class Fish(Organism):
                 if self.isMature and org.isMature and self.sex == "F" and org.sex == "M":
                     self.reproduce()
                     break
-            elif self.ecosystem.isEdible(self, org):
+            elif self.hunger > 0 and self.ecosystem.isEdible(self, org):
                 org.beEaten()
                 self.hunger -= 1
                 break
