@@ -2,18 +2,30 @@ from coccolithophores import Coccolithophores
 from shrimp import Shrimp
 from tuna import Tuna
 from shark import Shark
+from manatee import Manatee
 from PIL import Image
 from location import Location
 import random
 
-def graphicsOutput(orgsList, filename):
-    picture = Image.new("RGB", (510, 510))
+#colors for each organism are specified here.
+#If an organism is not mentioned, it may have a more sophisticated mechanism.
+shrimpColor = (236, 69, 240)
+tunaColor = (255, 251, 10)
+sharkColor = (235, 23, 17)
+manateeColor = (103, 242, 232)
+
+def graphicsOutput(orgsList, filename, rows, cols):
+    vdim = 51*rows
+    hdim = 51*cols
+    picture = Image.new("RGB", (hdim, vdim))
     pix_map = picture.load()
-    for i in range(510):
+    print("Printing grid");
+    for i in range(hdim):
         if i%51 == 0 and i != 0:
-            for j in range(510): pix_map[i,j] = (255, 255, 255)
-        for j in range(510):
+            for j in range(vdim): pix_map[i,j] = (255, 255, 255)
+        for j in range(vdim):
             if j % 51 == 0 and j != 0: pix_map[i,j] = (255, 255, 255)
+    print("Printing orgs")
     for org in orgsList:
         if type(org) == Coccolithophores:
             loc = org.location
@@ -25,9 +37,47 @@ def graphicsOutput(orgsList, filename):
                         r, g, b = pix_map[i,j]
                         g = g+((255-g)*((2000000)/(255-g+1)))
                         pix_map[i,j] = (r, g, b)
+        if type(org) == Shrimp:
+            loc = org.location
+            x, y = graphics_location(loc)
+            
+            squaresize=1
+            if org.population > 40: squaresize=3
+            if org.population > 120: squaresize=5
+            if org.population > 180: squaresize=7
+            for i in range(x-squaresize, x+squaresize+1):
+                if i < 0: continue
+                if i > vdim: continue
+                for j in range(y-squaresize, y+squaresize+1):
+                    if j < 0: continue
+                    if j > hdim: break
+                    pix_map[i,j] = shrimpColor
+        if type(org) == Tuna:
+            loc = org.location
+            x, y = graphics_location(loc)
+            for i in range(x-2, x+3):
+                if i < 0: continue
+                if i > vdim: break
+                for j in range(y-4, y+5):
+                    if j < 0: continue
+                    if j > hdim: break
+                    pix_map[i,j] = tunaColor
+        if type(org) == Shark:
+            loc = org.location
+            x, y = graphics_location(loc)
+            pixels = printFishShape(x, y, hdim, vdim)
+            for i in pixels:
+                pix_map[i] = sharkColor
+        if type(org) == Manatee:
+            loc = org.location
+            x, y = graphics_location(loc)
+            pixels = printCircle(x, y, 15, hdim, vdim)
+            for i in pixels:
+                pix_map[i] = manateeColor
+    print("saving picture")
     picture.save(filename)
     picture.show()
-    # write_picture(pix_map, "test.csv")
+    write_picture(pix_map, "test.csv", hdim, vdim)
 
 
 
@@ -35,12 +85,42 @@ def graphics_location_block(loc):
     return (int(loc.row)*51, int(loc.col)*51, 50, 50)
 
 def graphics_location(loc):
-    return {int(loc.row*51), int(loc.col*51), 50, 50}
+    return (int(loc.row*51), int(loc.col*51))
 
-def write_picture(picture, filename):
+def printFishShape(x, y, hdim, vdim):
+    pixels = []
+    colLengths = [1, 1, 1, 2, 2, 3, 3, 2, 2, 1, 1, 0, 0]
+    #start 7 columns back, 3 for the tail
+    for i in range(x-7, x+6):
+        if i < 0: continue
+        if i > hdim: break
+        for j in range(y-colLengths[(i+7-x)], y+colLengths[(i+7-x)]+1):
+            if j < 0: continue
+            if j > hdim: break
+            pixels.append((i,j))
+    return pixels
+
+
+def printCircle(x, y, size, hdim, vdim):
+    pixels = []
+    semicircle = int(size/2)
+    decline = 1
+    colLength = 0
+    for i in range(x-semicircle, x+semicircle+1):
+        if i < 0: continue
+        if i > hdim: break
+        for j in range(y-colLength, y+colLength+1):
+            pixels.append((i,j))
+    colLength += decline
+    if colLength == semicircle: decline = -1
+    return pixels
+
+
+
+def write_picture(picture, filename, hdim, vdim):
     csv=open(filename, "w")
-    for i in range(510):
-        for j in range(510):
+    for i in range(hdim):
+        for j in range(vdim):
             r, g, b=picture[i,j]
             csv.write("" +str(r) +" " +str(g) +" " +str(b) +",")
         csv.write("\n")
