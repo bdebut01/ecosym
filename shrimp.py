@@ -28,7 +28,7 @@ class Shrimp(Organism):
         #standard increase in hunger
         self.hunger += (self.population / 20)
         #reproduce
-        self.movementImpact=food/2000
+        self.movementImpact=(20000-food)/20000
         if self.movementImpact < 0: self.movementImpact=0
         self.randomDirection()
         self.move()

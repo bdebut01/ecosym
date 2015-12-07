@@ -53,20 +53,20 @@ def graphicsOutput(orgsList, filename, rows, cols):
             if org.population > 180: squaresize=7
             for i in range(x-squaresize, x+squaresize+1):
                 if i < 0: continue
-                if i > vdim: continue
+                if i >= vdim: continue
                 for j in range(y-squaresize, y+squaresize+1):
                     if j < 0: continue
-                    if j > hdim: break
+                    if j >= hdim: break
                     pix_map[i,j] = shrimpColor
         if type(org) == Tuna:
             loc = org.location
             x, y = graphics_location(loc)
             for i in range(x-2, x+3):
                 if i < 0: continue
-                if i > vdim: break
+                if i >= vdim: break
                 for j in range(y-4, y+5):
                     if j < 0: continue
-                    if j > hdim: break
+                    if j >= hdim: break
                     pix_map[i,j] = tunaColor
         if type(org) == Shark:
             loc = org.location
@@ -77,42 +77,42 @@ def graphicsOutput(orgsList, filename, rows, cols):
         if type(org) == Manatee:
             loc = org.location
             x, y = graphics_location(loc)
-            for i in range(x-2, x+3):
+            for i in range(x-4, x+5):
                 if i < 0: continue
-                if i > vdim: break
+                if i >= vdim: break
                 for j in range(y-4, y+5):
                     if j < 0: continue
-                    if j > hdim: break
+                    if j >= hdim: break
                     pix_map[i,j] = manateeColor
         if type(org) == Starfish:
             loc = org.location
             x, y = graphics_location(loc)
             for i in range(x-2, x+3):
                 if i < 0: continue
-                if i > vdim: break
-                for j in range(y-4, y+5):
+                if i >= vdim: break
+                for j in range(y-2, y+3):
                     if j < 0: continue
                     if j > hdim: break
                     pix_map[i,j] = seastarColor
         if type(org) == Grouper:
             loc = org.location
             x, y = graphics_location(loc)
-            for i in range(x-2, x+3):
+            for i in range(x-4, x+5):
                 if i < 0: continue
-                if i > vdim: break
-                for j in range(y-4, y+5):
+                if i >= vdim: break
+                for j in range(y-2, y+3):
                     if j < 0: continue
-                    if j > hdim: break
+                    if j >= hdim: break
                     pix_map[i,j] = grouperColor
         if type(org) == Herring:
             loc = org.location
             x, y = graphics_location(loc)
-            for i in range(x-2, x+3):
+            for i in range(x-1, x+2):
                 if i < 0: continue
-                if i > vdim: break
+                if i >= vdim: break
                 for j in range(y-4, y+5):
                     if j < 0: continue
-                    if j > hdim: break
+                    if j >= hdim: break
                     pix_map[i,j] = herringColor
     picture.save(filename)
     #picture.show()
@@ -132,10 +132,10 @@ def printFishShape(x, y, hdim, vdim):
     #start 7 columns back, 3 for the tail
     for i in range(x-7, x+6):
         if i < 0: continue
-        if i > hdim: break
+        if i >= hdim: break
         for j in range(y-colLengths[(i+7-x)], y+colLengths[(i+7-x)]+1):
             if j < 0: continue
-            if j > hdim: break
+            if j >= hdim: break
             pixels.append((i,j))
     return pixels
 
@@ -147,7 +147,7 @@ def printCircle(x, y, size, hdim, vdim):
     colLength = 0
     for i in range(x-semicircle, x+semicircle+1):
         if i < 0: continue
-        if i > hdim: break
+        if i >= hdim: break
         for j in range(y-colLength, y+colLength+1):
             pixels.append((i,j))
     colLength += decline
