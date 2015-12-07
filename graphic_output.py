@@ -25,13 +25,11 @@ def graphicsOutput(orgsList, filename, rows, cols):
     hdim = 51*cols
     picture = Image.new("RGB", (hdim, vdim))
     pix_map = picture.load()
-    print("Printing grid");
     for i in range(hdim):
         if i%51 == 0 and i != 0:
             for j in range(vdim): pix_map[i,j] = (255, 255, 255)
         for j in range(vdim):
             if j % 51 == 0 and j != 0: pix_map[i,j] = (255, 255, 255)
-    print("Printing orgs")
     for org in orgsList:
         if type(org) == Coccolithophores:
             loc = org.location
