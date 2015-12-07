@@ -92,7 +92,7 @@ def graphicsOutput(orgsList, filename, rows, cols):
                 if i >= vdim: break
                 for j in range(y-2, y+3):
                     if j < 0: continue
-                    if j > hdim: break
+                    if j >= hdim: break
                     pix_map[i,j] = seastarColor
         if type(org) == Grouper:
             loc = org.location
