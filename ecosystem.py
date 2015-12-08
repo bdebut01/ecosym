@@ -173,7 +173,7 @@ class Ecosystem():
             self.barrier.phase1()
             # Print simulation for this tick, could embed this in a if i%amount == 0
             self.printSimulation()
-            #graphic_output.graphicsOutput(self.orgsList, "frame" +str(self.globalTicks) +".jpg", self.hdim, self.vdim)
+            graphic_output.graphicsOutput(self.orgsList, "frame" +str(self.globalTicks) +".jpg", self.hdim, self.vdim)
             
             self.addAndStartNewborns()
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
