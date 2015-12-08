@@ -159,9 +159,10 @@ class Ecosystem():
         sys.exit()
 
     def loop(self):
-        print "-------------------------------------------------------"
+        divider = "-" * (54 + len(str(self.globalTicks)))
+        print divider
         print "----------------------- Tick 0 ------------------------"
-        print "-------------------------------------------------------"
+        print divider
 
         while self.simulationRunning:
 
@@ -174,7 +175,7 @@ class Ecosystem():
             # Print simulation for this tick, could embed this in a if i%amount == 0
             self.printSimulation()
             try:
-                graphic_output.graphicsOutput(self.orgsList, "frames/frame" +str(self.globalTicks) +".jpg", self.hdim, self.vdim)
+                graphic_output.graphicsOutput(self.orgsList, "frame" +str(self.globalTicks) +".jpg", self.hdim, self.vdim)
             except Exception:
                 print "could not print this frame"
             
@@ -193,9 +194,10 @@ class Ecosystem():
                 self.simulationRunning = False
 
             if self.simulationRunning:
-                print "-------------------------------------------------------"
+                divider = "-" * (54 + len(str(self.globalTicks)))
+                print divider
                 print "----------------------- Tick " + str(self.globalTicks) + " ------------------------"
-                print "-------------------------------------------------------"
+                print divider
 
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()

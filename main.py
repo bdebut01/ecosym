@@ -105,8 +105,9 @@ def inputLoop():
 	        		print str(value) + " " + creatures[int(key)] + " added"
 
 def getSimulationLengthFromUser():
+    print "-------------------------------------------------------------------"
     print "---Input number of minutes of marine life you'd like to simulate---"
-    print "------------------------------------------------------------------"
+    print "-------------------------------------------------------------------"
     print "Example input: 60"
     while True:
         user_input = raw_input()
