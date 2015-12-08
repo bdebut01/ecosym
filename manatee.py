@@ -24,8 +24,7 @@ class Manatee(Organism):
 		if self.ticksAlive >= self.lifespanTicks:
 			self.die('old age!') # die of old age
 		prey = None
-		myBlock = self.ecosystem.getSeaBlock(self.location)
-		neighborOrgs = myBlock.getOrganisms()
+		neighborOrgs = self.ecosystem.getNeighbors(self)
 		for org in neighborOrgs:
 			if type(org) == type(self): # found a fellow manatee!
 				if org.sex != self.sex:
