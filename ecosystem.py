@@ -79,6 +79,9 @@ class Ecosystem():
     def isEdible(self, predator, prey):
         return self.__foodchain.isEdible(type(predator), type(prey))
 
+    def getNeighbors(self, org):
+        return self.getSeaBlock(org.location).getOrganisms()
+
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
         self.getSeaBlock(oldLoc).removeOrganism(org)

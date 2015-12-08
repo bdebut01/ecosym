@@ -27,8 +27,7 @@ class Fish(Organism):
         if self.isMature == False and self.ticksAlive >= self.maturityTicks:
             self.isMature = True
 
-        myBlock = self.ecosystem.getSeaBlock(self.location)
-        neighborOrgs = myBlock.getOrganisms()
+        neighborOrgs = self.ecosystem.getNeighbors(self)
         for org in neighborOrgs:
             if type(org) == type(self): # found a fellow shark!
                 if self.isMature and org.isMature and self.sex == "F" and org.sex == "M":
