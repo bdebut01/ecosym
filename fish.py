@@ -8,7 +8,8 @@ class Fish(Organism):
 
         self.lifespanTicks = lifespanYears * 365 * 24 * 60 # years * days * hours * mins
         self.maturityTicks = maturityYears * 365 * 24 * 60
-        self.hunger = 10 # going to starve after 20
+        self.hunger = 10
+        self.starvationLevel = 20
 
         self.__initializeSex()
         self.__initializeAgeAndMaturity(isNewborn)
@@ -39,6 +40,7 @@ class Fish(Organism):
             self.ticksAlive = random.randint(0, self.lifespanTicks - 1)
 
         self.isMature = self.ticksAlive >= self.maturityTicks
+
     def __updateMaturityLevel(self):
         if self.isMature == False and self.ticksAlive >= self.maturityTicks:
             self.isMature = True
@@ -58,8 +60,9 @@ class Fish(Organism):
                     break
 
     def __handleAndUpdateHunger(self):
-        if self.hunger > 20:
+        if self.hunger > self.starvationLevel:
             self.die('starvation!')
+
         self.hunger += 1 # every tick get 1 more hunger unit
 
     def __chooseDirectionAndMove(self):
