@@ -55,7 +55,8 @@ class Starfish(Organism):
 
     def __chooseDirectionAndMove(self):
         if self.ticksAlive % 3 == 0:
-            # every few ticks, choose a random direction
+            # every few ticks, choose a random direction (if we choose a random
+            # direction every tick, we pretty much end up going nowhere)
             self.randomDirection()
         self.move()
 

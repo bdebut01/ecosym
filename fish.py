@@ -2,6 +2,8 @@ import random
 from organism import Organism
 
 class Fish(Organism):
+    """ Defines behaviors common to most fish. Inherits from Organism. """
+
     def __init__(self, ecosystem, lifespanYears, maturityYears, location = None,
             isNewborn = False):
         Organism.__init__(self, ecosystem, location)
