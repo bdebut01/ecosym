@@ -10,7 +10,7 @@ class Grouper(Fish):
 
     def reproduce(self):
         newGrouper = Grouper(self.ecosystem, self.location, True)
-        self.ecosystem.addNewborn(newGrouper)
+        self.ecosystem.reportBirth(newGrouper)
 
     def printStatus(self):
         #print "Tuna here"

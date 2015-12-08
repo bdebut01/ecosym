@@ -58,7 +58,7 @@ class Manatee(Organism):
 
 	def reproduce(self):
 		babyMan = Manatee(self.ecosystem, self.location)
-		self.ecosystem.addNewborn(babyMan)
+		self.ecosystem.reportBirth(babyMan)
 
 	def checkMaturity(self):
 		# Reach maturity at 5 years for females, 9 years for male

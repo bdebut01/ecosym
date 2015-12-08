@@ -59,27 +59,28 @@ class Ecosystem():
 
 
     def createFoodchain(self):
-        # this is an example, we should change this as soon as we have actual
-        # predators and prey
         self.__foodchain = Foodchain()
-        # self.__foodchain.addRelationship(Bulbasaur, Coccolithophores)
+
+        # we use types as keys and values
         self.__foodchain.addRelationship(Manatee, Coccolithophores)
-        self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna, Starfish, Grouper])
+        self.__foodchain.addMultiRelationship(Shark, [Manatee, Tuna, Starfish, 
+            Grouper])
         self.__foodchain.addRelationship(Shrimp, Coccolithophores)
         self.__foodchain.addRelationship(Grouper, Shrimp)
         self.__foodchain.addMultiRelationship(Tuna, [Shrimp, Grouper, Herring])
         self.__foodchain.addRelationship(Starfish, Coccolithophores)
         self.__foodchain.addMultiRelationship(Herring, [Shrimp])
 
-    # tells you if the predator can eat the potential prey (note: pass in an
-    # an instance of an organism subclass. 
-    # e.g. myShark = Shark(...)
-    #      myFish = Fish(...)
-    #      isEdible(myShark, myFish) # should return True
     def isEdible(self, predator, prey):
+        """ Returns true if predator can eat prey. 
+            Args:
+            predator -- an instance of an Organism subclass
+            prey -- an instance of an Organism subclass
+        """
         return self.__foodchain.isEdible(type(predator), type(prey))
 
     def getNeighbors(self, org):
+        """ Returns a list of organisms in the same SeaBlock as org. """
         return self.getSeaBlock(org.location).getOrganisms()
 
     def moveOrganism(self, org, oldLoc, newLoc):
@@ -129,10 +130,19 @@ class Ecosystem():
         self.getSeaBlock(org.location).addOrganism(org)
         with_lock(self.orgsListMutex, lambda : self.orgsList.add(org))
 
-    def addNewborn(self, newborn):
+    def reportBirth(self, newborn):
+        """ Notifies ecosystem that newborn was born 
+            Args:
+            newborn -- an instance of an Organism subclass
+        """
         with_lock(self.newbornsMutex, lambda : self.newborns.append(newborn))
     
     def reportDeath(self, organism, reason):
+        """ Notifies ecosystem that organism died
+            Args:
+            organism -- the instance of an Organism subclass that died
+            reason -- reason for death as string
+        """
         # remove from ocean block
         self.getSeaBlock(organism.location).removeOrganism(organism) 
         # remove from private organism list

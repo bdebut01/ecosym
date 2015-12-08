@@ -32,7 +32,7 @@ class Starfish(Organism):
 
     def reproduce(self):
         baby = Starfish(self.ecosystem, self.location, True)
-        self.ecosystem.addNewborn(baby)
+        self.ecosystem.reportBirth(baby)
 
     def printStatus(self):
         return

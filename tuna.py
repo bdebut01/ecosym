@@ -10,7 +10,7 @@ class Tuna(Fish):
 
     def reproduce(self):
         newTuna = Tuna(self.ecosystem, self.location, True)
-        self.ecosystem.addNewborn(newTuna)
+        self.ecosystem.reportBirth(newTuna)
 
     def printStatus(self):
         #print "Tuna here"

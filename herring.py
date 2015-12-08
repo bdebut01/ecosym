@@ -10,7 +10,7 @@ class Herring(Fish):
 
     def reproduce(self):
         baby = Herring(self.ecosystem, self.location, True)
-        self.ecosystem.addNewborn(baby)
+        self.ecosystem.reportBirth(baby)
 
     def printStatus(self):
         return

@@ -32,10 +32,10 @@ Miscellaneous:
             ways to deal with this, but attempts at terminating random organism
             threads and not just newborns resulted in deadlock. This is probably
             the simplest way.
-    - To reproduce, call ecosystem.addNewborn(babyOrganism), e.g. in the Shark
+    - To reproduce, call ecosystem.reportBirth(babyOrganism), e.g. in the Shark
         class:
         baby = Shark(self.ecosystem, self.location)
-        self.ecosystem.addNewborn(baby)
+        self.ecosystem.reportBirth(baby)
 
 
 TIME

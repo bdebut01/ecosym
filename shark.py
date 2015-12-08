@@ -10,7 +10,7 @@ class Shark(Fish):
 
     def reproduce(self):
         baby = Shark(self.ecosystem, self.location, True)
-        self.ecosystem.addNewborn(baby)
+        self.ecosystem.reportBirth(baby)
 
     def printStatus(self):
         #print "Shark here"
