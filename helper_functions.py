@@ -13,16 +13,18 @@ def with_lock(lock, function):
 
 
 def random_pick(some_list, probabilities):
-    """ Function written by Kevin Park and Peter Cogolo, as seen in Python
-        Cookbook, 2nd Editions: http://bit.ly/1QfSwDs
-        Chooses an option from some_list based on the probability from
+    """ Chooses an option from some_list based on the probability from
         probabilities that has the same index.
+        
+        Written by Kevin Park and Peter Cogolo, as seen in Python
+        Cookbook, 2nd Editions: http://bit.ly/1QfSwDs
 
         Args:
         some_list -- a list of items
         probabilities -- a list of probabilities as integers or floats. Should
             be of the same length as some_list. If not, the shorter list will
             be truncated to match the length of the longer list.
+        Returns: the option from some_list chosen
     """
     x = random.uniform(0, 1)
     cumulative_probability = 0.0
