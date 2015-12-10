@@ -21,25 +21,34 @@ import graphic_output
 global TICK_TIME
 
 class Ecosystem():
+    # Creates an Ecosystem that can simulate a marine ecosystem
+    # Args:
+    # simMins -- maximum number of ticks to run simulation for
+    # hdim -- width of body of water (i.e. horizontal dimension)
+    # vdim -- height of body of water (i.e. vertical dimension)
     def __init__(self, simMins, hdim, vdim):
+        global TICK_TIME
+        TICK_TIME = 1 # we're waiting one sec per tick
+
         self.simulationRunning = False
         self.maxSimTicks = simMins
-        self.globalTicks = 0
-        self.barrier = Barrier(0)
+        self.globalTicks = 0 # num ticks the simulation has been running for
         self.hdim = hdim
         self.vdim = vdim
-        self.orgsList = Set()
+
+        self.orgsList = Set()   # Organisms alive/running in simulation
         self.orgsListMutex = Lock()
-        self.createOcean(hdim, vdim)
-        self.prepopulateCoccolithophores()
-        self.createFoodchain()
-        self.newborns = []
+        self.newborns = []      # Organisms born during current tick
         self.newbornsMutex = Lock()
         self.creatures = dict()
         self.creature_funcs = dict()
-        global TICK_TIME
-        TICK_TIME = 1 # we're waiting on sec
-        self.stdoutLock = Lock()
+
+        self.createOcean(hdim, vdim)
+        self.prepopulateCoccolithophores()
+        self.createFoodchain()
+
+        self.barrier = Barrier(0) # for synchronization between ticks
+        self.stdoutLock = Lock()  # for printing to stdout
     
     # Creates a 2D array of Seablocks with parameters passed in
     def createOcean(self, hdim, vdim):
@@ -54,7 +63,6 @@ class Ecosystem():
     # The "grass" of the ocean, the whole ocean is filled with
     #   coccolithophores, so prepopulate ocean with them in every block.
     def prepopulateCoccolithophores(self):
-        # Automatically populating each seablock with an instance of coccolithophore
         for i in range(self.vdim):
             for j in range(self.hdim):
                 plankton = Coccolithophores(self, Location(i,j))
@@ -175,32 +183,25 @@ class Ecosystem():
         sys.exit()
 
     def loop(self):
-        divider = "-" * (54 + len(str(self.globalTicks)))
-        print divider
-        print "----------------------- Tick 0 ------------------------"
-        print divider
+        self.printDivider()
 
         while self.simulationRunning:
-
             # sleep for TICK_TIME, so entire simulation has a normal heartbeat
             time.sleep(TICK_TIME)
 
-            # after phase 1, all orgs should be done with actions, ecosystem 
-            # can safely print status, do other maintenance
+            # after phase1, orgs are done with actions, we can do maintenance 
             self.barrier.phase1()
-            # Print simulation for this tick, could embed this in a if i%amount == 0
+
             self.printSimulation()
-            try:
-                graphic_output.graphicsOutput(self.orgsList, "frame" + 
-			str(self.globalTicks) +".jpg", self.hdim, self.vdim)
-            except Exception:
-                print "could not print this frame"
+            graphic_output.graphicsOutput(self.orgsList, "frame" + 
+                    str(self.globalTicks) +".jpg", self.hdim, self.vdim)
             
             self.addAndStartNewborns()
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
 
-            # + 1 b/c ecosystem itself is being counted
-            with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+            # + 1 because ecosystem itself is being counted
+            numThreads = len(self.orgsList) + 1
+            with_lock(self.orgsListMutex, lambda : self.barrier.setN(numThreads))
 
             self.globalTicks += 1
 	    
@@ -213,19 +214,12 @@ class Ecosystem():
                 self.simulationRunning = False
 
             if self.simulationRunning:
-                divider = "-" * (54 + len(str(self.globalTicks)))
-                print divider
-                print "----------------------- Tick " + str(self.globalTicks) \
-		  + " ------------------------"
-                print divider
+                self.printDivider()
 
             # reach barrier, allow everyone to go on to the next step
             self.barrier.phase2()
 
-        print "------------------------------------------------------"
-        print "------------------- Final Results --------------------"
-        print "------------------------------------------------------"
-        self.printRealStats()
+        self.printFinalStats()
 
 	# End all threads
         def endThreads():
@@ -234,6 +228,19 @@ class Ecosystem():
         with_lock(self.orgsListMutex, endThreads)
 
         return 
+
+    def printDivider(self):
+        divider = "-" * (54 + len(str(self.globalTicks)))
+        print divider
+        print "----------------------- Tick " + str(self.globalTicks) \
+          + " ------------------------"
+        print divider
+
+    def printFinalStats(self):
+        print "------------------------------------------------------"
+        print "------------------- Final Results --------------------"
+        print "------------------------------------------------------"
+        self.printRealStats()
 
     def printRealStats(self):
         print '----- DEETS -----'
