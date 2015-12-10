@@ -60,42 +60,42 @@ def userDeclareOceanSize():
 	else:
 	    width, height = user_input.split(' ')
 	    print "Height: " + str(height) + " Width: " + str(width)
-	    if not width.isdigit() or not height.isdigit() or int(width) < 1 or int(height) < 1 or int(width) * int(height) > 900:
+	    if not width.isdigit() or not height.isdigit() or int(width) < 1 \
+	       or int(height) < 1  or int(width) * int(height) > 900:
 		print "Minimum height and width is 1, max block^2 is 900, try again"
 	    else:
 		print "OK, ocean width: " + str(width) + " ocean height: " + str(height)
 		print '\n' 
 		return (int(width), int(height))
-	    #continue
 
 # Can ignore me, I loop in stdin/stdout receiving organism IDs and quantities
 #	Stop when 'q' is read in
 def inputLoop():
-	while True:
-		user_input = raw_input()
-		if user_input == 'q':
-			break
-		if len(user_input.split(' ')) != 2: # Ignore inputs with anything but 2 values
-			continue
-		else:
-			key, value = user_input.split(' ')
-			if not key.isdigit() or not value.isdigit():
-				print 'Plz give a digit, tanks'
-				continue
-	        if int(key) not in creatures:
-	        	print "That key not found, ignoring"
-	        else:
-	        	# [0] is key, [1] is quantity
-                        value = int(value)
-	        	if int(key) in num_and_what_creatures: #already added so we're going to just increment
-	        		res = int(num_and_what_creatures[int(key)])
-	        		value += res
-	        	# Add the key and the value (whether it was affected or not by if statement)
-	        	num_and_what_creatures[int(key)] = value
-	        	if creatures[int(key)][-1] == 'r' or creatures[int(key)][-1] == 'k' or creatures[int(key)][-1] == 'e':
-	        		print str(value) + " " + creatures[int(key)] + "s added"	
-	        	else:
-	        		print str(value) + " " + creatures[int(key)] + " added"
+    while True:
+	user_input = raw_input()
+	if user_input == 'q':
+	    break
+	if len(user_input.split(' ')) != 2: # Ignore inputs with anything but 2 values
+	    continue
+	else:
+	    key, value = user_input.split(' ')
+	    if not key.isdigit() or not value.isdigit():
+		    print 'Plz give a digit, tanks'
+		    continue
+	if int(key) not in creatures:
+	    print "That key not found, ignoring"
+	else:
+	    # [0] is key, [1] is quantity
+	    value = int(value)
+	    if int(key) in num_and_what_creatures: # already added so we're going to just increment
+		res = int(num_and_what_creatures[int(key)])
+		value += res
+	    # Add the key and the value (whether it was affected or not by if statement)
+	    num_and_what_creatures[int(key)] = value
+	    if creatures[int(key)][-1] == 'r' or creatures[int(key)][-1] == 'k' or creatures[int(key)][-1] == 'e':
+		print str(value) + " " + creatures[int(key)] + "s added"	
+	    else:
+		print str(value) + " " + creatures[int(key)] + " added"
 
 def getSimulationLengthFromUser():
     print "-------------------------------------------------------------------"
@@ -111,36 +111,37 @@ def getSimulationLengthFromUser():
             return int(user_input)
 
 def inputCreatures():
-	simMins = getSimulationLengthFromUser()
-	# Have user input ocean size
-	width, height = userDeclareOceanSize()
-	# Load data structures with preset data
-	print "---Input Creatures---"
-	print "---------------------"
-	print '\n'
-	presetCreatures()
-	# Redeclare because we are modifying them in this function
-	global creatures
-	global num_and_what_creatures
-	# Rattle off the dictionary of known creature to name pairings
-	print "Known creatures:"
-	for c in creatures:
-		print (str(c) + ": " + creatures[c])
-	print ''
-	print "Input desired creatures ids & quantity separated by newline, enter \'q' to stop input"
-	print "Example input for 10 coccolithophores: "
-	print "0 10"
-	print ''
-	inputLoop()
-	return simMins, width, height
+    # User input simulation duration in ticks
+    simMins = getSimulationLengthFromUser()
+    # Have user input ocean size
+    width, height = userDeclareOceanSize()
+    # Load data structures with preset data
+    print "---Input Creatures---"
+    print "---------------------"
+    print '\n'
+    presetCreatures()
+    # Redeclare because we are modifying them in this function
+    global creatures
+    global num_and_what_creatures
+    # Rattle off the dictionary of known creature-name pairings
+    print "Known creatures:"
+    for c in creatures:
+	    print (str(c) + ": " + creatures[c])
+    print ''
+    print "Input desired creatures ids & quantity \
+	   separated by newline, enter \'q' to stop input"
+    print "Example input for 10 coccolithophores: "
+    print "0 10"
+    print ''
+    inputLoop()
+    return simMins, width, height
 
-# Everything works if you just comment out creature stuff
 def main(argv):
-	simMins, width, height = inputCreatures()
-	ecosystem = Ecosystem(simMins, width, height)
-	ecosystem.loadCreatures(num_and_what_creatures, creature_funcs, creatures)
+    simMins, width, height = inputCreatures()
+    ecosystem = Ecosystem(simMins, width, height)
+    ecosystem.loadCreatures(num_and_what_creatures, creature_funcs, creatures)
 
-	ecosystem.startSimulation()
+    ecosystem.startSimulation()
 
 if __name__ == '__main__':
     main(sys.argv)
