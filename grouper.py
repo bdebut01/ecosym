@@ -2,6 +2,9 @@ import random
 from organism import Organism
 from fish import Fish
 
+# Example of how easy it is to add a new organism, 
+#    in this case, a fish so it inherits from Fish
+#    sub-class
 class Grouper(Fish):
     def __init__(self, ecosystem, location = None, isNewborn = False):
         Fish.__init__(self, ecosystem, 3, 1, location)
@@ -13,8 +16,8 @@ class Grouper(Fish):
         self.ecosystem.reportBirth(newGrouper)
 
     def printStatus(self):
-        #print "Tuna here"
-        # print "Tuna at " + str(self.location.row) + ", " + str(self.location.col)
+        #print "Grouper here"
+        # print "Grouper at " + str(self.location.row) + ", " + str(self.location.col)
         return
                 
 
