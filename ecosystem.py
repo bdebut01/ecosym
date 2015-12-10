@@ -41,6 +41,7 @@ class Ecosystem():
         TICK_TIME = 1 # we're waiting on sec
         self.stdoutLock = Lock()
     
+    # Creates a 2D array of Seablocks with parameters passed in
     def createOcean(self, hdim, vdim):
         self.ocean = []
         for i in range(vdim):# vdim == rows
@@ -49,7 +50,9 @@ class Ecosystem():
                 tempblock = SeaBlock()
                 row.append(tempblock)
             self.ocean.append(row)
-
+    
+    # The "grass" of the ocean, the whole ocean is filled with
+    #   coccolithophores, so prepopulate ocean with them in every block.
     def prepopulateCoccolithophores(self):
         # Automatically populating each seablock with an instance of coccolithophore
         for i in range(self.vdim):
@@ -57,7 +60,7 @@ class Ecosystem():
                 plankton = Coccolithophores(self, Location(i,j))
                 self.addOrganism(plankton)
 
-
+    # Add new organism food chain relationships here.
     def createFoodchain(self):
         self.__foodchain = Foodchain()
 
@@ -179,16 +182,17 @@ class Ecosystem():
 
         while self.simulationRunning:
 
-            # probably sleep for TICK_TIME, so entire simulation has a normal heartbeat
+            # sleep for TICK_TIME, so entire simulation has a normal heartbeat
             time.sleep(TICK_TIME)
 
-            # after phase 1, all orgs sould be done with actions, ecosystem 
+            # after phase 1, all orgs should be done with actions, ecosystem 
             # can safely print status, do other maintenance
             self.barrier.phase1()
             # Print simulation for this tick, could embed this in a if i%amount == 0
             self.printSimulation()
             try:
-                graphic_output.graphicsOutput(self.orgsList, "frame" +str(self.globalTicks) +".jpg", self.hdim, self.vdim)
+                graphic_output.graphicsOutput(self.orgsList, "frame" + 
+			str(self.globalTicks) +".jpg", self.hdim, self.vdim)
             except Exception:
                 print "could not print this frame"
             
@@ -199,17 +203,20 @@ class Ecosystem():
             with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
 
             self.globalTicks += 1
-
+	    
+	    # Print world stats every 10 ticks
             if self.globalTicks % 10 == 0:
                 self.printRealStats()
-
+	    
+  	    # If exceed the number of ticks set by user initially, stop simulation
             if self.globalTicks >= self.maxSimTicks:
                 self.simulationRunning = False
 
             if self.simulationRunning:
                 divider = "-" * (54 + len(str(self.globalTicks)))
                 print divider
-                print "----------------------- Tick " + str(self.globalTicks) + " ------------------------"
+                print "----------------------- Tick " + str(self.globalTicks)
+		  + " ------------------------"
                 print divider
 
             # reach barrier, allow everyone to go on to the next step
@@ -220,7 +227,7 @@ class Ecosystem():
         print "------------------------------------------------------"
         self.printRealStats()
 
-
+	# End all threads
         def endThreads():
             for org in self.orgsList:
                 org.join()
