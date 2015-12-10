@@ -13,7 +13,8 @@ class Manatee(Organism):
 
         # Set gender
         self.sex = "M" if random.randint(0, 1) == 0 else "F"
-
+	
+	# Only needed for random age setter, but either way, check maturity
         self.checkMaturity()
 
         # Who knew? Manatees can live up to 60 years old
@@ -26,7 +27,8 @@ class Manatee(Organism):
     def performStandardAction(self):
         if self.ticksAlive >= self.lifespanTicks:
             self.die('old age!') # die of old age
-
+	
+	# Needed to keep track of how old children are, reproduction reasons
         if self.ticksSinceLastChild != 0: self.ticksSinceLastChild += 1
         
         self.checkMaturity()
@@ -36,17 +38,17 @@ class Manatee(Organism):
         neighborOrgs = self.ecosystem.getNeighbors(self)
         for org in neighborOrgs:
             if type(org) == type(self): # found a fellow manatee!
-                if org.sex != self.sex:
-                    if self.canReproduce(): 
-                        self.reproduce()
-                        self.ticksSinceLastChild += 1
+                if org.sex != self.sex: # opposite gender
+                    if self.canReproduce(): # if i am eligible
+                        self.reproduce() # go for it
+                        self.ticksSinceLastChild += 1 # reset child age
                     break
-            elif self.ecosystem.isEdible(self, org):
+            elif self.ecosystem.isEdible(self, org): # try and eat it
                 prey = org
                 break
-        if prey != None:
-            food = prey.beEaten()
-            self.hunger -= (food/15000)
+       	    if prey != None:
+            	food = prey.beEaten()
+            	self.hunger -= (food/15000) # decrease hunger
         
         self.hunger += 1 # every tick get 1 more hunger unit
 
