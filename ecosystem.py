@@ -3,7 +3,6 @@ import sys
 from location import Location
 from barrier import Barrier
 from seablock import SeaBlock
-from threading import Semaphore
 from threading import Lock
 from foodchain import Foodchain
 from coccolithophores import Coccolithophores
@@ -164,7 +163,8 @@ class Ecosystem():
     
     def startSimulation(self):
         self.simulationRunning = True
-        with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+
+        self.__setBarrier()
 
         # start all organism threads
         def startOrganisms():
@@ -193,9 +193,7 @@ class Ecosystem():
             self.__addAndStartNewborns()
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
 
-            # + 1 because ecosystem itself is being counted
-            numThreads = len(self.orgsList) + 1
-            with_lock(self.orgsListMutex, lambda : self.barrier.setN(numThreads))
+            self.__setBarrier()
 
             self.globalTicks += 1
 	    
@@ -253,8 +251,7 @@ class Ecosystem():
             self.addOrganism(newborn)
 
         # set barrier's n before starting threads so that they immediately block
-        numThreads = len(self.orgsList) + 1
-        with_lock(self.orgsListMutex, lambda : self.barrier.setN(numThreads))
+        self.__setBarrier()
 
         excessThreads = []
         def startThreadsUpToLimit():
@@ -271,8 +268,7 @@ class Ecosystem():
             self.reportDeath(thread, 'too many threads')
 
         # set barrier again because if there were excess threads, n is incorrect
-        numThreads = len(self.orgsList) + 1
-        with_lock(self.orgsListMutex, lambda : self.barrier.setN(numThreads))
+        self.__setBarrier()
 
         self.newborns = []
 
@@ -280,4 +276,10 @@ class Ecosystem():
         if len(self.orgsList) <= 0:
             print "No more organisms; ending simulation"
             self.simulationRunning = False
+
+    def __setBarrier(self):
+        # + 1 because ecosystem itself is being counted
+        numThreads = len(self.orgsList) + 1
+        with_lock(self.orgsListMutex, lambda : self.barrier.setN(numThreads))
+
 
