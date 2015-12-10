@@ -21,7 +21,6 @@ class Organism(threading.Thread):
         self.directionYImpact=0
         self.movementImpact=0 # this is actually "speed" 
         self.ecosystem = ecosystem
-        self.timeCounter = ecosystem.globalTicks
         self.survivalProbability = 0 # probability of surviving being eaten
 
     # calling (the built-in threading function) start on a thread runs the run()

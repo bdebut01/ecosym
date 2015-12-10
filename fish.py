@@ -1,19 +1,17 @@
 import random
 from organism import Organism
 
+# Defines behaviors common to most fish. Inherits from Organism.
 class Fish(Organism):
-    """ Defines behaviors common to most fish. Inherits from Organism. """
 
+    # Constructor for Fish
+    # lifespanYears: lifespan in years as an int or float of the Fish
+    # maturityYears: age in years as an int or float at which to reach maturity
     def __init__(self, ecosystem, lifespanYears, maturityYears, location = None,
             isNewborn = False):
-        """ Args:
-            lifespanYears -- lifespan, in years as an int or float, of the Fish
-            maturityYears -- age, in years as an int or float, at which the Fish
-                reaches maturity
-        """
         Organism.__init__(self, ecosystem, location)
 
-        self.lifespanTicks = lifespanYears * 365 * 24 * 60 # years * days * hours * mins
+        self.lifespanTicks = lifespanYears * 365 * 24 * 60 # convert to mins
         self.maturityTicks = maturityYears * 365 * 24 * 60
         self.hunger = 10
         self.starvationLevel = 20
@@ -21,8 +19,8 @@ class Fish(Organism):
         self.__initializeSex()
         self.__initializeAgeAndMaturity(isNewborn)
 
+    # Looks for prey and mates, moves, and does lifespan maintenance.
     def performStandardAction(self):
-        """ Looks for prey and mates, moves, and does lifespan maintenance. """
         if self.ticksAlive >= self.lifespanTicks:
             self.die('old age!') # die of old age
 
@@ -49,8 +47,8 @@ class Fish(Organism):
 
         self.isMature = self.ticksAlive >= self.maturityTicks
 
+    # Checks if Fish has matured and updates self.isMature accordingly
     def __updateMaturityLevel(self):
-        """ Checks if Fish has matured and updates self.isMature accordingly """
         if self.isMature == False and self.ticksAlive >= self.maturityTicks:
             self.isMature = True
 
@@ -68,8 +66,8 @@ class Fish(Organism):
                     self.hunger -= 1
                     break
 
+    # Checks if Fish has starved; if yes, dies else increments hunger.
     def __handleAndUpdateHunger(self):
-        """ Checks if Fish has starved; if yes, dies else increments hunger. """
         if self.hunger > self.starvationLevel:
             self.die('starvation!')
 

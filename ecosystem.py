@@ -21,11 +21,11 @@ import graphic_output
 global TICK_TIME
 
 class Ecosystem():
+
     # Creates an Ecosystem that can simulate a marine ecosystem
-    # Args:
-    # simMins -- maximum number of ticks to run simulation for
-    # hdim -- width of body of water (i.e. horizontal dimension)
-    # vdim -- height of body of water (i.e. vertical dimension)
+    # simMins: maximum number of ticks to run simulation for
+    # hdim: width of body of water (i.e. horizontal dimension)
+    # vdim: height of body of water (i.e. vertical dimension)
     def __init__(self, simMins, hdim, vdim):
         global TICK_TIME
         TICK_TIME = 1 # we're waiting one sec per tick
@@ -43,15 +43,15 @@ class Ecosystem():
         self.creatures = dict()
         self.creature_funcs = dict()
 
-        self.createOcean(hdim, vdim)
-        self.prepopulateCoccolithophores()
-        self.createFoodchain()
+        self.__createOcean(hdim, vdim)
+        self.__prepopulateCoccolithophores()
+        self.__createFoodchain()
 
         self.barrier = Barrier(0) # for synchronization between ticks
         self.stdoutLock = Lock()  # for printing to stdout
     
     # Creates a 2D array of Seablocks with parameters passed in
-    def createOcean(self, hdim, vdim):
+    def __createOcean(self, hdim, vdim):
         self.ocean = []
         for i in range(vdim):# vdim == rows
             row = []
@@ -62,14 +62,14 @@ class Ecosystem():
     
     # The "grass" of the ocean, the whole ocean is filled with
     #   coccolithophores, so prepopulate ocean with them in every block.
-    def prepopulateCoccolithophores(self):
+    def __prepopulateCoccolithophores(self):
         for i in range(self.vdim):
             for j in range(self.hdim):
                 plankton = Coccolithophores(self, Location(i,j))
                 self.addOrganism(plankton)
 
     # Add new organism food chain relationships here.
-    def createFoodchain(self):
+    def __createFoodchain(self):
         self.__foodchain = Foodchain()
 
         # we use types as keys and values
@@ -82,16 +82,13 @@ class Ecosystem():
         self.__foodchain.addRelationship(Starfish, Coccolithophores)
         self.__foodchain.addMultiRelationship(Herring, [Shrimp])
 
+    # Returns true if predator can eat prey
+    # predator and prey are instances of an Organism subclass
     def isEdible(self, predator, prey):
-        """ Returns true if predator can eat prey. 
-            Args:
-            predator -- an instance of an Organism subclass
-            prey -- an instance of an Organism subclass
-        """
         return self.__foodchain.isEdible(type(predator), type(prey))
 
+    # Returns a list of organisms in the same SeaBlock as org. 
     def getNeighbors(self, org):
-        """ Returns a list of organisms in the same SeaBlock as org. """
         return self.getSeaBlock(org.location).getOrganisms()
 
     def moveOrganism(self, org, oldLoc, newLoc):
@@ -141,28 +138,25 @@ class Ecosystem():
         self.getSeaBlock(org.location).addOrganism(org)
         with_lock(self.orgsListMutex, lambda : self.orgsList.add(org))
 
+    # Notifies ecosystem that newborn was born
+    # newborn: an instance of an Organism subclass
     def reportBirth(self, newborn):
-        """ Notifies ecosystem that newborn was born 
-            Args:
-            newborn -- an instance of an Organism subclass
-        """
         with_lock(self.newbornsMutex, lambda : self.newborns.append(newborn))
     
+    # Notifies ecosystem that organism died
+    # organism: the instance of an Organism subclass that died
+    # reason: reason for death as string
     def reportDeath(self, organism, reason):
-        """ Notifies ecosystem that organism died
-            Args:
-            organism -- the instance of an Organism subclass that died
-            reason -- reason for death as string
-        """
-        # remove from ocean block
         self.getSeaBlock(organism.location).removeOrganism(organism) 
-        # remove from private organism list
+
         def remove():
             if organism in self.orgsList:
                 self.orgsList.remove(organism)
         with_lock(self.orgsListMutex, remove)
+
         def printDeath():
-            print "A " + type(organism).__name__.lower() + " died because: " + reason
+            name = type(organism).__name__.lower()
+            print "A " + name + " died because: " + reason
         with_lock(self.stdoutLock, printDeath)
 
     def getSeaBlock(self, location):
@@ -179,10 +173,10 @@ class Ecosystem():
         with_lock(self.orgsListMutex, startOrganisms)
 
         # Start infinite control loop
-        self.loop() 
+        self.__loop() 
         sys.exit()
 
-    def loop(self):
+    def __loop(self):
         self.printDivider()
 
         while self.simulationRunning:
@@ -196,7 +190,7 @@ class Ecosystem():
             graphic_output.graphicsOutput(self.orgsList, "frame" + 
                     str(self.globalTicks) +".jpg", self.hdim, self.vdim)
             
-            self.addAndStartNewborns()
+            self.__addAndStartNewborns()
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
 
             # + 1 because ecosystem itself is being counted
@@ -209,7 +203,7 @@ class Ecosystem():
             if self.globalTicks % 10 == 0:
                 self.printRealStats()
 	    
-  	    # If exceed the number of ticks set by user initially, stop simulation
+  	    # If exceed the number of ticks set by user, stop simulation
             if self.globalTicks >= self.maxSimTicks:
                 self.simulationRunning = False
 
@@ -254,12 +248,13 @@ class Ecosystem():
         print '-----------------'
         print ''
 
-    def addAndStartNewborns(self):
+    def __addAndStartNewborns(self):
         for newborn in self.newborns:
             self.addOrganism(newborn)
 
-        # need to set barrier's n before starting threads so that they immediately block
-        with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+        # set barrier's n before starting threads so that they immediately block
+        numThreads = len(self.orgsList) + 1
+        with_lock(self.orgsListMutex, lambda : self.barrier.setN(numThreads))
 
         excessThreads = []
         def startThreadsUpToLimit():
@@ -275,15 +270,13 @@ class Ecosystem():
         for thread in excessThreads:
             self.reportDeath(thread, 'too many threads')
 
-        # set the barrier again because if there were excess threads, n is incorrect
-        with_lock(self.orgsListMutex, lambda : self.barrier.setN(len(self.orgsList) + 1))
+        # set barrier again because if there were excess threads, n is incorrect
+        numThreads = len(self.orgsList) + 1
+        with_lock(self.orgsListMutex, lambda : self.barrier.setN(numThreads))
 
         self.newborns = []
 
-    # terrible name for a function but i can't think of anything better. might
-    # refactor later.
     def endSimulationIfNoOrganisms(self):
-        # if there are no organisms alive, simulation is over
         if len(self.orgsList) <= 0:
             print "No more organisms; ending simulation"
             self.simulationRunning = False

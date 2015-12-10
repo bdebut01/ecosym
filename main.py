@@ -128,8 +128,9 @@ def inputCreatures():
     for c in creatures:
 	    print (str(c) + ": " + creatures[c])
     print ''
-    print "Input desired creatures ids & quantity \
-	   separated by newline, enter \'q' to stop input"
+    prompt = "Input desired creatures ids & quantity separated by newline,"
+    prompt += " enter 'q' to stop input"
+    print prompt
     print "Example input for 10 coccolithophores: "
     print "0 10"
     print ''
