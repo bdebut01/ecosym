@@ -12,68 +12,61 @@ from location import Location
 from herring import Herring
 import coccolithophores
 
-# Import global variables for entire simulation, (e,g: creature dictionary)
-#import variables 
-# ^ this wasn't working so i just pasted the variables into my inputCreatures func
+""" Three global dictionaries used for user input """
 global creatures
 global num_and_what_creatures
 global creature_funcs
 
 # ADD YOUR ORGANISM HERE, for recognition purposes
-# Look at bulbasaur for example, but it does mean don't repeat organism IDs
 def presetCreatures():
-	global creatures
-	global creature_funcs
-	creatures = dict()
-	global num_and_what_creatures
-	num_and_what_creatures = dict() # key is creature_id, value is quantity
-	global creature_funcs
-	creature_funcs = dict()
+    global creatures
+    global creature_funcs
+    global num_and_what_creatures
+    creatures = dict()
+    num_and_what_creatures = dict() # key is creature_id, value is quantity
+    creature_funcs = dict()
 
-
-	# List off creature pairings, add your organism HERE
-	creatures[0] = "Coccolithophores"
-	creature_funcs[0] = Coccolithophores # Halp
-	# creatures[1] = "Bulbasaur"
-	# creature_funcs[1] = Bulbasaur
-	creatures[1] = "Shrimp"
-	creature_funcs[1] = Shrimp
-	creatures[2] = "Shark"
-	creature_funcs[2] = Shark
-	creatures[3] = "Tuna"
-	creature_funcs[3] = Tuna
-	creatures[2] = "Shark"
-	creature_funcs[2] = Shark
-	creatures[3] = "Tuna"
-	creature_funcs[3] = Tuna
-	creatures[4] = "Manatee"
-	creature_funcs[4] = Manatee
-	creatures[5] = "Starfish"
-	creature_funcs[5] = Starfish
-	creatures[6] = "Grouper"
-	creature_funcs[6] = Grouper
-        creatures[7] = "Herring"
-        creature_funcs[7] = Herring
+    # List off creature pairings, add your organism HERE
+    creatures[0] = "Coccolithophores"
+    creature_funcs[0] = Coccolithophores
+    creatures[1] = "Shrimp"
+    creature_funcs[1] = Shrimp
+    creatures[2] = "Shark"
+    creature_funcs[2] = Shark
+    creatures[3] = "Tuna"
+    creature_funcs[3] = Tuna
+    creatures[2] = "Shark"
+    creature_funcs[2] = Shark
+    creatures[3] = "Tuna"
+    creature_funcs[3] = Tuna
+    creatures[4] = "Manatee"
+    creature_funcs[4] = Manatee
+    creatures[5] = "Starfish"
+    creature_funcs[5] = Starfish
+    creatures[6] = "Grouper"
+    creature_funcs[6] = Grouper
+    creatures[7] = "Herring"
+    creature_funcs[7] = Herring
 
 def userDeclareOceanSize():
-	print "--Input Ocean size--"
-	print "--------------------"
-	print "Example input: '10 10'"
-	while True:
-		user_input = raw_input()
-		if len(user_input.split(' ')) != 2: # Ignore inputs with anything but 2 values
-			print "Please input a valid ocean size, minimum 1 x 1, maximum block^2 is 900"
-			continue
-		else:
-			width, height = user_input.split(' ')
-			print "Height: " + str(height) + " Width: " + str(width)
-			if not width.isdigit() or not height.isdigit() or int(width) < 1 or int(height) < 1 or int(width) * int(height) > 900:
-				print "Minimum height and width is 1, max block^2 is 900, try again"
-			else:
-				print "OK, ocean width: " + str(width) + " ocean height: " + str(height)
-				print '\n' 
-				return (int(width), int(height))
-			continue
+    print "--Input Ocean size--"
+    print "--------------------"
+    print "Example input: '10 10'"
+    while True:
+	user_input = raw_input()
+	if len(user_input.split(' ')) != 2: # Ignore inputs with anything but 2 values
+	    print "Please input a valid ocean size, minimum 1 x 1, maximum block^2 is 900"
+	    continue
+	else:
+	    width, height = user_input.split(' ')
+	    print "Height: " + str(height) + " Width: " + str(width)
+	    if not width.isdigit() or not height.isdigit() or int(width) < 1 or int(height) < 1 or int(width) * int(height) > 900:
+		print "Minimum height and width is 1, max block^2 is 900, try again"
+	    else:
+		print "OK, ocean width: " + str(width) + " ocean height: " + str(height)
+		print '\n' 
+		return (int(width), int(height))
+	    #continue
 
 # Can ignore me, I loop in stdin/stdout receiving organism IDs and quantities
 #	Stop when 'q' is read in

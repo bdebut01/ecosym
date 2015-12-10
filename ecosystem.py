@@ -215,7 +215,7 @@ class Ecosystem():
             if self.simulationRunning:
                 divider = "-" * (54 + len(str(self.globalTicks)))
                 print divider
-                print "----------------------- Tick " + str(self.globalTicks)
+                print "----------------------- Tick " + str(self.globalTicks) \
 		  + " ------------------------"
                 print divider
 
