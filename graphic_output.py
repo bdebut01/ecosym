@@ -1,3 +1,12 @@
+#graphic_output module
+#handles printing of graphics from the ecosystem
+#Part of the EcoSym Project
+#Mostly written by Nathan Stocking (contact for questions)
+#with contributions from Reema Al-Marzoog and Ben DeButts
+#employs the Pillow module. If an import error results, use
+#sudo pip install Pillow
+
+#import each organism type for printing
 from coccolithophores import Coccolithophores
 from shrimp import Shrimp
 from tuna import Tuna
@@ -12,6 +21,7 @@ import random
 
 #colors for each organism are specified here.
 #If an organism is not mentioned, it may have a more sophisticated mechanism.
+#shapes are not specified, as more complex calculations are performed.
 shrimpColor = (236, 69, 240)
 tunaColor = (255, 251, 10)
 sharkColor = (235, 23, 17)
@@ -20,18 +30,25 @@ seastarColor = (238,128,21)
 grouperColor = (196,188,169)
 herringColor = (138, 215, 110)
 
+#call this function with a list of organisms, a width and height in blocks and a graphic will result
+
 def graphicsOutput(orgsList, filename, rows, cols):
+    #set up a blank image (all black)
     vdim = 51*rows
     hdim = 51*cols
     picture = Image.new("RGB", (hdim, vdim))
     pix_map = picture.load()
+    #draw white line barriers between blocks
     for i in range(hdim):
         if i%51 == 0 and i != 0:
             for j in range(vdim): pix_map[i,j] = (255, 255, 255)
         for j in range(vdim):
             if j % 51 == 0 and j != 0: pix_map[i,j] = (255, 255, 255)
+            #now handle printing of each organism in turn
     for org in orgsList:
-        if type(org) == Coccolithophores:
+        if type(org) == Coccolithophores:   #coccolithophores manifest as green dots
+        #the greater the population, the greener they are
+        
             loc = org.location
             cornerH, cornerV, width, height=graphics_location_block(loc)
             for i in range(cornerH, (cornerH+height)):
@@ -41,14 +58,19 @@ def graphicsOutput(orgsList, filename, rows, cols):
                         r, g, b = pix_map[i,j]
                         g = g+((255-g)*((2000000)/(255-g+1)))
                         pix_map[i,j] = (r, g, b)
+                        #most other organisms print either as squares/rectangles
+                        #or by pre-defined shapes
         if type(org) == Shrimp:
             loc = org.location
             x, y = graphics_location(loc)
-            
+            #the greater the population, the bigger the square
             squaresize=1
-            if org.population > 40: squaresize=3
+            if org.population > 20: squaresize=2
+            if org.population > 50: squaresize=3
+            if org.population > 80: squaresize=4
             if org.population > 120: squaresize=5
-            if org.population > 180: squaresize=7
+            if org.population > 160: squaresize=6
+            if org.population > 200: squaresize=7
             for i in range(x-squaresize, x+squaresize+1):
                 if i < 0: continue
                 if i >= vdim: continue
@@ -117,13 +139,21 @@ def graphicsOutput(orgsList, filename, rows, cols):
     #write_picture(pix_map, "test.csv", hdim, vdim)
 
 
-
+#return the pixel coordinates of the block in which the given location can be found
+#used to print something globally to the block
+#example: the coccolithophores print dots over the entire block, not just in one area
 def graphics_location_block(loc):
     return (int(loc.row)*51, int(loc.col)*51, 50, 50)
 
+#return the pixel best located for the given location
+#used to print an organism with more
+#specific location data
+#used in this simulation for all mobile organisms
 def graphics_location(loc):
     return (int(loc.row*51), int(loc.col*51))
 
+#function to print a vaguely fish-like shape
+#used for shark because there are only so many rectangles
 def printFishShape(x, y, hdim, vdim):
     pixels = []
     colLengths = [1, 1, 1, 2, 2, 3, 3, 2, 2, 1, 1, 0, 0]
@@ -138,22 +168,11 @@ def printFishShape(x, y, hdim, vdim):
     return pixels
 
 
-def printCircle(x, y, size, hdim, vdim):
-    pixels = []
-    semicircle = int(size/2)
-    decline = 1
-    colLength = 0
-    for i in range(x-semicircle, x+semicircle+1):
-        if i < 0: continue
-        if i >= hdim: break
-        for j in range(y-colLength, y+colLength+1):
-            pixels.append((i,j))
-    colLength += decline
-    if colLength == semicircle: decline = -1
-    return pixels
-
-
-
+#a debug function
+#takes a pixel map and dumps data to a csv file, which can be opened as a spreadsheet
+#this is not intended to be run
+#it was included because one of the original writers is blind
+#and used it as a testing module
 def write_picture(picture, filename, hdim, vdim):
     csv=open(filename, "w")
     for i in range(hdim):

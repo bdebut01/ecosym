@@ -1,3 +1,7 @@
+#organism module
+#the general superclass for all organisms in the simulation
+#Part of the EcoSym Project
+
 import threading
 import sys
 import random
@@ -5,7 +9,18 @@ from location import Location
 from helper_functions import random_pick
 from helper_functions import with_lock
 
+#this class represents one organism of some type
+#it includes two major components:
+#1. Functions for general initialization and running of an organism
+#and handling the concurrent nature of the organisms (which are also threads)
+#2. Functions useful for most if not all organisms
+#that are commonly used in most subclasses
+
 class Organism(threading.Thread):
+    #creates an organism
+    #given the host ecosystem
+    #and an optional location (useful if the creature is a newborn or specifically placed)
+    #if no location is provided, the organism will be randomly placed
     def __init__(self, ecosystem, location=None):
         threading.Thread.__init__(self)
         if location is None: # If called w/o specific location,
@@ -17,6 +32,10 @@ class Organism(threading.Thread):
         self.location = location
         self.wasEaten = False
         self.beEatenLock = threading.Lock()
+        #variables for motion
+        #the direction impacts mark the orientation of the creature and should be between -1 and 1
+        #the movement impact is the speed of the creature and should logically be positive
+        #although negative speeds and high/low directions will be calculated without errors
         self.directionXImpact = 0
         self.directionYImpact=0
         self.movementImpact=0 # this is actually "speed" 
@@ -44,12 +63,14 @@ class Organism(threading.Thread):
         self.directionXImpact = random.uniform(-1,1)
         self.directionYImpact = random.uniform(-1,1)
     
-    # Using private direction variables, move self in that direction
+    # Using previously-set direction variables, move self in that direction
     def move(self):
         newX = self.location.row+(self.directionXImpact*self.movementImpact)
         newY = self.location.col+(self.directionYImpact*self.movementImpact)
         self.location=self.ecosystem.moveOrganism(self, self.location, Location(newX, newY))
     
+    #beEaten is called by predators to attempt to consume this organism
+    #it returns data based on success or failure of the attempt
     def beEaten(self):
         def getEaten():
             if not self.wasEaten: # in case we've already been eaten
@@ -60,6 +81,8 @@ class Organism(threading.Thread):
                 return False # though you were eaten, the org calling beEaten wasn't the one who ate you
         return with_lock(self.beEatenLock, getEaten)
     
+    #to handle the death of the organism
+    #this function is meant only to be called internally
     def die(self, reason):
         # barrier push
         self.ecosystem.reportDeath(self, reason)
@@ -67,6 +90,8 @@ class Organism(threading.Thread):
                                       # barrier.wait(), we'll have deadlock
         sys.exit() # Close this thread
     
+    #a debug function to print data from this organism
+    #also used for output to the user
     def printStatus(self):
         # depends on type of organism
         print "Testing"

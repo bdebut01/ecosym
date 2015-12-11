@@ -1,3 +1,8 @@
+#coccolithophores module
+#a basic phytoplankton algae to serve as the lowest-level organism
+#Part of the EcoSym Project
+
+
 import ecosystem
 import seablock
 import location
@@ -8,6 +13,7 @@ class Coccolithophores(Organism):
     def __init__(self, ecosystem, location=None):
         Organism.__init__(self, ecosystem, location)
         self.population = 10000000
+        #coccolithophores fight an interminable war with viruses:
         self.virusWaxWane = -1 #starts waning strength virus
         self.virusEfficiency = 5000 #relatively weak
     
@@ -16,18 +22,14 @@ class Coccolithophores(Organism):
         if loc.getSunlight() > 0:
             self.population += (self.population * (1/loc.getSunlight())) #reproduce photosynthetically
         
-        ## commenting out virus stuff to simplify things until we get basic
-        ## simulation working. just decreasing population by constant amount
-        ## for now instead
         self.population -= self.virusEfficiency
         self.virusEfficiency += (self.virusWaxWane * (self.virusEfficiency/2)) #simple power-growth expand?
         #the tables turn
         if self.virusEfficiency <= 100:
             self.virusWaxWane = 1
-        elif self.virusEfficiency >= 100000:
+        elif self.virusEfficiency >= 1000000:
             self.virusWaxWane = -1
         
-        #possible: affect viruses in adjacent cells?
         if self.population <= 0:
             #print "Dying"
             self.die('population gone')

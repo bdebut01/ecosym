@@ -1,3 +1,7 @@
+#ecosystem module
+#handles the high-level mechanisms of the simulation
+#Part of the EcoSym Project
+
 from sets import Set
 import sys
 from location import Location
