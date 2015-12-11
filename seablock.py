@@ -1,8 +1,17 @@
+#seablock module
+#stores the unit of location used by the simulation
+#which stores aspects of the ocean at the given location
+#and coordinates the many creatures that can be resident therein
+#Part of the EcoSym Project
+
 from sets import Set
 from helper_functions import with_lock
 from threading import Lock
 
 class SeaBlock :
+    #SeaBlock initializer
+    #takes optional arguments for attributes
+    #which can also be set using provided functions
     def __init__(self, salinity = 1, sun = 0, oxygen = 0, pressure = 0, currentXImpact=0, currentYImpact=0) :
         self.__salinity  = salinity
         self.__sunlight  = sun
@@ -11,17 +20,27 @@ class SeaBlock :
         self.__currentXImpact = currentXImpact
         self.__currentYImpact = currentYImpact
         self.__organisms = Set()
+        #stores which organisms are locally available
+        #to be used by organisms to see what is available to eat or mate with
         self.__orgsLock = Lock()
 
+#remove function
+#clears an organism ffrom the block
+#to be used if the organism dies or travels to a different block
     def removeOrganism(self, organism) :
         def remove():
             if organism in self.__organisms:
                 self.__organisms.remove(organism)
         with_lock(self.__orgsLock, remove)
 
+#add organism
+#adds this organism only to the block
+#used when an organism enters the area or
+#when a new one is added (called by ecosystem's functions
     def addOrganism(self, Creature) :
         with_lock(self.__orgsLock, lambda : self.__organisms.add(Creature))
 
+#getters and setters for the attributes of the block
     def setSunlight(self, val) :
         self.__sunlight = val
 
