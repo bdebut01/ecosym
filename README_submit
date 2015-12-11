@@ -19,7 +19,7 @@ In the terminal, run:
 Then follow the onscreen prompts to choose the number of ticks the simulation should run for, the size of the ocean, and how many of each organism to populate the ocean with.
 
 [optional arguments]
--g f # outputs graphics to files starting frame0.jpg - frameI.jpg
+-g f # outputs graphics to files starting frame0.jpg - frameN.jpg
 -g s # generates temp files that open as the simulation runs
 -g d # outputs a large csv file of all pixel rgb values
 
