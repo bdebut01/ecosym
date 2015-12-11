@@ -1,7 +1,7 @@
-#fish module
-#an abstract superclass for various types of fish
-#that implements standard behaviors
-#Part of the EcoSym Project
+# Fish module
+# An abstract superclass for various types of fish that implements standard 
+#   behaviors
+# Part of the EcoSym Project
 
 import random
 from organism import Organism

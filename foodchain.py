@@ -1,7 +1,8 @@
-#foodchain module
-#a system to coordinate what organisms can be eaten by each organism
-#Part of the EcoSym Project
-
+# Foodchain module
+# A system to coordinate what organisms can be eaten by each organism
+# Organisms can be represented by any type the user chooses (e.g. strings, ints,
+#   Organism class instances, types, etc)
+# Part of the EcoSym Project
 
 class Foodchain():
     def __init__(self):

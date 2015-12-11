@@ -1,6 +1,6 @@
-#ecosystem module
-#handles the high-level mechanisms of the simulation
-#Part of the EcoSym Project
+# Ecosystem module
+# Handles the high-level mechanisms of the simulation
+# Part of the EcoSym Project
 
 from sets import Set
 import sys
@@ -92,48 +92,48 @@ class Ecosystem():
     def getNeighbors(self, org):
         return self.getSeaBlock(org.location).getOrganisms()
 
-#moves an organism from its old location to the new one
-#the organism itself has to decide where it will go
-#and this function will move it and report the new location
-
+    # Moves an organism from its old location to the new one
+    # The organism itself has to decide where it will go
+    # and this function will move it and report the new location
     def moveOrganism(self, org, oldLoc, newLoc):
-        #remove from oldLoc
+        # remove from oldLoc
         self.getSeaBlock(oldLoc).removeOrganism(org)
         
-        #we are simulating a globe ocean
-        #therefore, if an organism moves across a boundary, that organism appears on the other side of the world
-        
-        while int(newLoc.col < 0): #off west
+        # we are simulating a globe ocean, therefore if an organism moves across
+        # a boundary, that organism appears on the other side of the world
+        while int(newLoc.col < 0): # off west
             newLoc.col += self.vdim
-        while int(newLoc.col) >= self.vdim: #off east
+        while int(newLoc.col) >= self.vdim: # off east
             newLoc.col -= self.vdim
-        while int(newLoc.row < 0): #off north
-            newLoc.row = 0-newLoc.row
-            newLoc.col = newLoc.col + (self.hdim/2)
+        while int(newLoc.row < 0): # off north
+            newLoc.row = 0 - newLoc.row
+            newLoc.col = newLoc.col + (self.hdim / 2)
             if newLoc.col >= self.vdim:
                 newLoc.col -= self.vdim
-        while newLoc.row >= self.hdim: #off south
-            newLoc.row = self.hdim-newLoc.row #over the pole
-            newLoc.col = newLoc.col + (self.hdim/2)
+        while newLoc.row >= self.hdim: # off south
+            newLoc.row = self.hdim - newLoc.row # over the pole
+            newLoc.col = newLoc.col + (self.hdim / 2)
             if newLoc.col >= self.vdim:
                 newLoc.col -= self.vdim
+
         newLoc.col = newLoc.col % self.hdim
         newLoc.row = newLoc.row % self.vdim
         
-        #having calculated the correct destination, we just move it there
+        # having calculated the correct destination, we just move it there
         self.getSeaBlock(newLoc).addOrganism(org)
         return newLoc
 
-    # Called in main to load the creatures the user typed in before the simulation
-    #   starts running. 
+    # Called in main to load the creatures the user typed in before the 
+    # simulation starts running. 
     def loadCreatures(self, num_and_what_creatures, creature_funcs, creatures):
         self.creatures = creatures
         self.creature_funcs = creature_funcs
-        # Loop thru num_and_what_creatures dictionary for which species and quantities
+        # Loop thru num_and_what_creatures dict for which species and quantities
         for key in num_and_what_creatures:
-            for i in range(num_and_what_creatures[key]): # for every creature of that species
-                # Instantiate organism using creature function dict, no location passed
-                #   so random will be chosen by constructor
+            # for every creature of that species
+            for i in range(num_and_what_creatures[key]): 
+                # Instantiate organism using creature function dict, no location
+                #   passed so random will be chosen by constructor
                 newOrganism = creature_funcs[int(key)](self)
                 self.addOrganism(newOrganism)
 
@@ -145,6 +145,7 @@ class Ecosystem():
         with_lock(self.orgsListMutex, print_orgs)
         print str(len(self.orgsList)) + " organisms alive"
 
+    # Adds an organism to the Ecosystem's set of organisms
     def addOrganism(self, org):
         self.getSeaBlock(org.location).addOrganism(org)
         with_lock(self.orgsListMutex, lambda : self.orgsList.add(org))
@@ -170,14 +171,12 @@ class Ecosystem():
             print "A " + name + " died because: " + reason
         with_lock(self.stdoutLock, printDeath)
 
-#returns a SeaBlock given a location
-#used by organism to see its surrounding environment
-#can take decimal locations, as mobile creatures store this
+    # Returns a SeaBlock given a location
+    # Can take decimal locations, as mobile creatures store this
     def getSeaBlock(self, location):
         return self.ocean[int(location.row)][int(location.col)]
     
-    #used to initiate the simulation
-    #when all parameters have been set
+    # Used to initiate the simulation when all parameters have been set
     def startSimulation(self):
         self.simulationRunning = True
 
@@ -193,6 +192,11 @@ class Ecosystem():
         self.__loop() 
         sys.exit()
 
+    # Control loop
+    # Helps with synchronization, updates organisms list and starts newborn
+    # threads as necessary, ends the simulation when the simulation is over
+    # (either after self.globalTics ticks of time or when all organisms are
+    # gone)
     def __loop(self):
         self.printDivider()
 
@@ -228,7 +232,7 @@ class Ecosystem():
 
         self.printFinalStats()
 
-	# End all threads
+	# End all remaining threads
         def endThreads():
             for org in self.orgsList:
                 org.join()
@@ -236,6 +240,7 @@ class Ecosystem():
 
         return 
 
+    # Prints a divider that contains the current tick number
     def printDivider(self):
         divider = "-" * (54 + len(str(self.globalTicks)))
         print divider
@@ -243,12 +248,14 @@ class Ecosystem():
           + " ------------------------"
         print divider
 
+    # Prints an appropriate divider and stats about the state of the simulation
     def printFinalStats(self):
         print "------------------------------------------------------"
         print "------------------- Final Results --------------------"
         print "------------------------------------------------------"
         self.printRealStats()
 
+    # Prints stats about the number of each type of organism alive
     def printRealStats(self):
         print '----- DEETS -----'
         for c in self.creature_funcs:
@@ -261,6 +268,10 @@ class Ecosystem():
         print '-----------------'
         print ''
 
+    # Adds newborn organisms to the ecosystem's set of organisms and starts the
+    #   threads
+    # If the thread limit is reached, some newborns will not be started and will
+    #   instead be removed from the ecosystem
     def __addAndStartNewborns(self):
         for newborn in self.newborns:
             self.addOrganism(newborn)
@@ -291,6 +302,7 @@ class Ecosystem():
             print "No more organisms; ending simulation"
             self.simulationRunning = False
 
+    # Sets the value of the barrier to the appropriate number
     def __setBarrier(self):
         # + 1 because ecosystem itself is being counted
         numThreads = len(self.orgsList) + 1
