@@ -1,3 +1,6 @@
+#EcoSym main file
+#Part of the EcoSym Project
+
 import sys
 from ecosystem import Ecosystem
 from coccolithophores import Coccolithophores
@@ -10,7 +13,7 @@ from starfish import Starfish
 from seablock import SeaBlock
 from location import Location
 from herring import Herring
-import coccolithophores
+
 
 """ Three global dictionaries used for user input """
 global creatures
