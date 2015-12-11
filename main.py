@@ -13,7 +13,7 @@ from starfish import Starfish
 from seablock import SeaBlock
 from location import Location
 from herring import Herring
-
+import graphic_output
 
 """ Three global dictionaries used for user input """
 global creatures
@@ -71,6 +71,8 @@ def userDeclareOceanSize():
 		print '\n' 
 		return (int(width), int(height))
 
+#this function gets input for organisms and places those organisms in the simulation
+
 # Can ignore me, I loop in stdin/stdout receiving organism IDs and quantities
 #	Stop when 'q' is read in
 def inputLoop():
@@ -83,7 +85,7 @@ def inputLoop():
 	else:
 	    key, value = user_input.split(' ')
 	    if not key.isdigit() or not value.isdigit():
-		    print 'Plz give a digit, tanks'
+		    print 'Input not recognized. Please give a digit.'
 		    continue
 	if int(key) not in creatures:
 	    print "That key not found, ignoring"
@@ -141,6 +143,13 @@ def inputCreatures():
     return simMins, width, height
 
 def main(argv):
+    for i in range(len(argv)):
+        if argv[i] == "-g":
+            if len(argv)-i == 1: #last argument
+                graphic_output.graphics_init("f")
+            else:
+                graphic_output.graphics_init(argv[i+1])
+    
     simMins, width, height = inputCreatures()
     ecosystem = Ecosystem(simMins, width, height)
     ecosystem.loadCreatures(num_and_what_creatures, creature_funcs, creatures)

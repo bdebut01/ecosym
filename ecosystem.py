@@ -92,9 +92,17 @@ class Ecosystem():
     def getNeighbors(self, org):
         return self.getSeaBlock(org.location).getOrganisms()
 
+#moves an organism from its old location to the new one
+#the organism itself has to decide where it will go
+#and this function will move it and report the new location
+
     def moveOrganism(self, org, oldLoc, newLoc):
         #remove from oldLoc
         self.getSeaBlock(oldLoc).removeOrganism(org)
+        
+        #we are simulating a globe ocean
+        #therefore, if an organism moves across a boundary, that organism appears on the other side of the world
+        
         while int(newLoc.col < 0): #off west
             newLoc.col += self.vdim
         while int(newLoc.col) >= self.vdim: #off east
@@ -110,7 +118,9 @@ class Ecosystem():
             if newLoc.col >= self.vdim:
                 newLoc.col -= self.vdim
         newLoc.col = newLoc.col % self.hdim
-        newLoc.row = newLoc.row % self.vdim 
+        newLoc.row = newLoc.row % self.vdim
+        
+        #having calculated the correct destination, we just move it there
         self.getSeaBlock(newLoc).addOrganism(org)
         return newLoc
 
@@ -160,9 +170,14 @@ class Ecosystem():
             print "A " + name + " died because: " + reason
         with_lock(self.stdoutLock, printDeath)
 
+#returns a SeaBlock given a location
+#used by organism to see its surrounding environment
+#can take decimal locations, as mobile creatures store this
     def getSeaBlock(self, location):
         return self.ocean[int(location.row)][int(location.col)]
     
+    #used to initiate the simulation
+    #when all parameters have been set
     def startSimulation(self):
         self.simulationRunning = True
 

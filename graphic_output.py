@@ -30,9 +30,31 @@ seastarColor = (238,128,21)
 grouperColor = (196,188,169)
 herringColor = (138, 215, 110)
 
+#these variables store which types of graphics output are enabled
+gOutputToFile = False
+gOutputToDefault = False
+gOutputToDebug = False
+
+#this function takes a string provided via command line argument
+#and sets various parameters of the graphics system
+def graphics_init(params):
+    global gOutputToFile
+    global gOutputToDefault
+    global gOutputToDebug
+    for c in list(params):
+        if c == 'f':
+            gOutputToFile = True
+        if c == 's':
+            gOutputToDefault = True
+        if c == 'd':
+            gOutputToDebug = True
+
+
 #call this function with a list of organisms, a width and height in blocks and a graphic will result
 
 def graphicsOutput(orgsList, filename, rows, cols):
+    #check if graphics are desired at all
+    if not(gOutputToFile or gOutputToDefault or gOutputToDebug): return
     #set up a blank image (all black)
     vdim = 51*rows
     hdim = 51*cols
@@ -134,9 +156,9 @@ def graphicsOutput(orgsList, filename, rows, cols):
                     if j < 0: continue
                     if j >= hdim: break
                     pix_map[i,j] = herringColor
-    picture.save(filename)
-    #picture.show()
-    #write_picture(pix_map, "test.csv", hdim, vdim)
+    if gOutputToFile: picture.save(filename)
+    if gOutputToDefault: picture.show()
+    if gOutputToDebug: write_picture(pix_map, "test.csv", hdim, vdim)
 
 
 #return the pixel coordinates of the block in which the given location can be found
