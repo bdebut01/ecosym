@@ -7,7 +7,7 @@ Bugs:
 - Needed to call barrier.wait() when a organism died before it ended the thread
 - Were trying to override start() function when we actually needed to override 
 run() function
-- Not exactly a bug, but had to get the order of stuff write with organisms
+- Not exactly a bug, but had to get the order of stuff right with organisms
 getting to the barrier and the ecosystem printing statuses (ended up using
 phase1 v phase2)
 - Size of orgsList Set was getting changed in the middle of loop, so we added

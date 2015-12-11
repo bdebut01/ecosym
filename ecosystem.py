@@ -17,8 +17,6 @@ from helper_functions import with_lock
 import time
 import graphic_output
 
-global TICK_TIME
-
 class Ecosystem():
 
     # Creates an Ecosystem that can simulate a marine ecosystem
@@ -192,9 +190,7 @@ class Ecosystem():
             
             self.__addAndStartNewborns()
             with_lock(self.orgsListMutex, self.endSimulationIfNoOrganisms)
-
             self.__setBarrier()
-
             self.globalTicks += 1
 	    
 	    # Print world stats every 10 ticks
@@ -250,8 +246,7 @@ class Ecosystem():
         for newborn in self.newborns:
             self.addOrganism(newborn)
 
-        # set barrier's n before starting threads so that they immediately block
-        self.__setBarrier()
+        self.__setBarrier() # so that new threads started immediately block
 
         excessThreads = []
         def startThreadsUpToLimit():
@@ -260,6 +255,7 @@ class Ecosystem():
                     try:
                         org.start()
                     except Exception as e:
+                        # we've reached the thread limit
                         excessThreads.append(org)
         with_lock(self.orgsListMutex, startThreadsUpToLimit)
 
@@ -267,8 +263,7 @@ class Ecosystem():
         for thread in excessThreads:
             self.reportDeath(thread, 'too many threads')
 
-        # set barrier again because if there were excess threads, n is incorrect
-        self.__setBarrier()
+        self.__setBarrier() # if there were excess threads, n is incorrect
 
         self.newborns = []
 

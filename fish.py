@@ -66,7 +66,7 @@ class Fish(Organism):
                     self.hunger -= 1
                     break
 
-    # Checks if Fish has starved; if yes, dies else increments hunger.
+    # Checks if Fish has starved; if yes dies, else increments hunger.
     def __handleAndUpdateHunger(self):
         if self.hunger > self.starvationLevel:
             self.die('starvation!')

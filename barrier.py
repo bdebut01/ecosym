@@ -40,3 +40,4 @@ class Barrier:
     def wait(self) :
         self.phase1()
         self.phase2()
+
