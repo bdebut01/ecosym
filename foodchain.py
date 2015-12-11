@@ -1,6 +1,8 @@
+#foodchain module
+#a system to coordinate what organisms can be eaten by each organism
+#Part of the EcoSym Project
 
-# Foodchain class can be used to represent predator-prey relationships.
-# Doesn't expect input of any particular type, but it should be consistent.
+
 class Foodchain():
     def __init__(self):
         self.__foodchain = {}
