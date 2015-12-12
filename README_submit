@@ -52,7 +52,7 @@ you for input and provide examples. Follow all instructions to launch the
 simulation.
 
 Note:
-The prompts will as you to choose how many minutes of marine life you'd like to
+The prompts will ask you to choose how many minutes of marine life you'd like to
 simulate. This is because we consider each tick of time to approximate one 
 minute's worth of an organism's actions. In real time, each tick will last for
 about a second (so, a real world second approximates a minute of simulated 
