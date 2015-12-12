@@ -16,8 +16,6 @@ class Grouper(Fish):
         self.ecosystem.reportBirth(newGrouper)
 
     def printStatus(self):
-        #print "Grouper here"
-        # print "Grouper at " + str(self.location.row) + ", " + str(self.location.col)
         return
                 
 

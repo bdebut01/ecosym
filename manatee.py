@@ -1,4 +1,5 @@
-# Primary predator of coccolithophores, tho in real life, they eat plants not plankton
+# Primary predator of coccolithophores, tho in real life, they eat plants not 
+# plankton
 import random
 from organism import Organism
 
@@ -65,17 +66,20 @@ class Manatee(Organism):
     def checkMaturity(self):
         # Reach maturity at 5 years for females, 9 years for male
         if self.sex == "M":
-            self.isMature = True if self.ticksAlive > (9 * 365 * 24 * 60) else False
+            maturityAge = 9 * 365 * 24 * 60
+            self.isMature = True if self.ticksAlive > maturityAge else False
         else:
-            self.isMature = True if self.ticksAlive > (5 * 365 * 24 * 60) else False
+            maturityAge = 5 * 365 * 24 * 60
+            self.isMature = True if self.ticksAlive > maturityAge else False
 
-    # So there are a lot details to manatee reproduction, I'm going to do a simplification that 
-    #    attempts to prevent mana-mania.
-    # Also can only produce a new baby manatee every 2 years after reached mature.
+    # So there are a lot details to manatee reproduction, I'm going to do a 
+    #    simplification that attempts to prevent mana-mania.
+    # Can only produce a new baby manatee every 2 years after reached mature.
     def canReproduce(self):
         if self.isMature:
             if self.sex == "F": # Female?
-                if self.ticksSinceLastChild > (2 * 365 * 24 * 60): # How long since last child?
+                # How long since last child?
+                if self.ticksSinceLastChild > (2 * 365 * 24 * 60): 
                     return True
             else:
                 # male, so can always reproduce when mature
@@ -85,3 +89,4 @@ class Manatee(Organism):
     def printStatus(self):
         #print "Manatee here"
         return
+

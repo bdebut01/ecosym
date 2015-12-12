@@ -1,5 +1,5 @@
-#EcoSym main file
-#Part of the EcoSym Project
+# EcoSym main file
+# Part of the EcoSym Project
 
 import sys
 from ecosystem import Ecosystem
@@ -56,51 +56,61 @@ def userDeclareOceanSize():
     print "--------------------"
     print "Example input: '10 10'"
     while True:
-	user_input = raw_input()
-	if len(user_input.split(' ')) != 2: # Ignore inputs with anything but 2 values
-	    print "Please input a valid ocean size, minimum 1 x 1, maximum block^2 is 900"
-	    continue
-	else:
-	    width, height = user_input.split(' ')
-	    print "Height: " + str(height) + " Width: " + str(width)
-	    if not width.isdigit() or not height.isdigit() or int(width) < 1 \
-	       or int(height) < 1  or int(width) * int(height) > 900:
-		print "Minimum height and width is 1, max block^2 is 900, try again"
-	    else:
-		print "OK, ocean width: " + str(width) + " ocean height: " + str(height)
-		print '\n' 
-		return (int(width), int(height))
+        user_input = raw_input()
+        # Ignore inputs with anything but 2 values
+        if len(user_input.split(' ')) != 2:
+            prompt = "Please input a valid ocean size, minimum 1 x 1, "
+            prompt += "maximum block^2 is 900"
+            print prompt
+            continue
+        else:
+            width, height = user_input.split(' ')
+            print "Height: " + str(height) + " Width: " + str(width)
+            if not width.isdigit() or not height.isdigit() or int(width) < 1 \
+               or int(height) < 1  or int(width) * int(height) > 900:
+                prompt = "Minimum height and width is 1, max block^2 is 900, "
+                prompt += "try again"
+                print prompt
+            else:
+                confirmation = "OK, ocean width: " + str(width)
+                confirmation += " ocean height: " + str(height)
+                print confirmation
+                print '\n' 
+                return (int(width), int(height))
 
-#this function gets input for organisms and places those organisms in the simulation
-
-# Can ignore me, I loop in stdin/stdout receiving organism IDs and quantities
-#	Stop when 'q' is read in
+# This function gets input for organisms and places those organisms in the 
+#   simulation
+# Loop in stdin/stdout receiving organism IDs and quantities
+# Stop when 'q' is read in
 def inputLoop():
     while True:
-	user_input = raw_input()
-	if user_input == 'q':
-	    break
-	if len(user_input.split(' ')) != 2: # Ignore inputs with anything but 2 values
-	    continue
-	else:
-	    key, value = user_input.split(' ')
-	    if not key.isdigit() or not value.isdigit():
-		    print 'Input not recognized. Please give a digit.'
-		    continue
-	if int(key) not in creatures:
-	    print "That key not found, ignoring"
-	else:
-	    # [0] is key, [1] is quantity
-	    value = int(value)
-	    if int(key) in num_and_what_creatures: # already added so we're going to just increment
-		res = int(num_and_what_creatures[int(key)])
-		value += res
-	    # Add the key and the value (whether it was affected or not by if statement)
-	    num_and_what_creatures[int(key)] = value
-	    if creatures[int(key)][-1] == 'r' or creatures[int(key)][-1] == 'k' or creatures[int(key)][-1] == 'e':
-		print str(value) + " " + creatures[int(key)] + "s added"	
-	    else:
-		print str(value) + " " + creatures[int(key)] + " added"
+        user_input = raw_input()
+        if user_input == 'q':
+            break
+        # Ignore inputs with anything but 2 values
+        if len(user_input.split(' ')) != 2:
+            continue
+        else:
+            key, value = user_input.split(' ')
+            if not key.isdigit() or not value.isdigit():
+                    print 'Input not recognized. Please give a digit.'
+                    continue
+        if int(key) not in creatures:
+            print "That key not found, ignoring"
+        else:
+            # [0] is key, [1] is quantity
+            value = int(value)
+            if int(key) in num_and_what_creatures: 
+                # already added so we're going to just increment
+                res = int(num_and_what_creatures[int(key)])
+                value += res
+
+            num_and_what_creatures[int(key)] = value
+            if creatures[int(key)][-1] == 'r' or creatures[int(key)][-1] == 'k'\
+                or creatures[int(key)][-1] == 'e':
+                print str(value) + " " + creatures[int(key)] + "s added"        
+            else:
+                print str(value) + " " + creatures[int(key)] + " added"
 
 def getSimulationLengthFromUser():
     print "-------------------------------------------------------------------"
@@ -118,20 +128,23 @@ def getSimulationLengthFromUser():
 def inputCreatures():
     # User input simulation duration in ticks
     simMins = getSimulationLengthFromUser()
+
     # Have user input ocean size
     width, height = userDeclareOceanSize()
+
     # Load data structures with preset data
     print "---Input Creatures---"
     print "---------------------"
-    print '\n'
     presetCreatures()
+
     # Redeclare because we are modifying them in this function
     global creatures
     global num_and_what_creatures
+
     # Rattle off the dictionary of known creature-name pairings
     print "Known creatures:"
     for c in creatures:
-	    print (str(c) + ": " + creatures[c])
+            print (str(c) + ": " + creatures[c])
     print ''
     prompt = "Input desired creatures ids & quantity separated by newline,"
     prompt += " enter 'q' to stop input"
@@ -145,7 +158,7 @@ def inputCreatures():
 def main(argv):
     for i in range(len(argv)):
         if argv[i] == "-g":
-            if len(argv)-i == 1: #last argument
+            if len(argv)-i == 1: # last argument
                 graphic_output.graphics_init("f")
             else:
                 graphic_output.graphics_init(argv[i+1])
