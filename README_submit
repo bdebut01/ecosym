@@ -37,7 +37,7 @@ the way in which the graphics will be implemented, as follows:
     the -g flag, which can contain any of the following characters:
     a. f - enables output to image files in the current directory
     b. s - automatically opens the default image viewer with the current frame
-    c. d - debug output of the last frame to a csv file (not really intended for 
+    c. d - debug output of the last frame to a csv file (not really intended for
         use)
 
 Examples:
